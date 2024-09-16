@@ -1,0 +1,60 @@
+<div class=" bg-bright-gray">
+    <nav
+        class="bg-verdigris shadow-[0_30px_60px_rgba(118,_171,_174,_1)] lg:hidden flex items-center justify-center py-32 rounded-b-full">
+        <h1 class="text-3xl font-bold mb-6 text-white text-center">Login</h1>
+    </nav>
+    <div class="flex h-[calc(100vh-316px)] lg:h-screen">
+        <div class="w-full lg:w-1/2 flex items-center justify-center">
+            <div class="max-w-lg w-full p-6 rounded-xl">
+                <h1 class="text-3xl font-bold mb-6 text-black text-center hidden lg:block">Login</h1>
+                <form>
+                    <div class="mb-8">
+                        <div class="relative">
+                            <input type="email" id="email" name="email" placeholder="Email"
+                                class="bg-bright-gray w-full text-gray-800 text-base px-3 py-3 border-b border-dark-gunmetal outline-none focus:bg-gray-200"
+                                autocomplete="off">
+                            <div class="absolute inset-y-0 right-4 flex items-center">
+                                <img width="20" height="20"
+                                    src="https://img.icons8.com/ios-filled/50/secured-letter--v1.png" alt="mail"
+                                    class="text-gray-600" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="relative">
+                            <input type="password" id="password" name="password" placeholder="Password"
+                                class="bg-bright-gray w-full text-gray-800 text-base px-3 py-3 border-b border-dark-gunmetal outline-none focus:bg-gray-200"
+                                autocomplete="off">
+                            <div class="absolute inset-y-0 right-4 flex items-center">
+                                <img width="20" height="20" src="https://img.icons8.com/ios-filled/50/lock.png"
+                                    alt="lock" class="text-gray-600" />
+                            </div>
+                        </div>
+                        <div class="flex justify-between"><label class="block text-gray-500 font-bold my-4"><input
+                                    type="checkbox" class="leading-loose text-pink-600"> <span
+                                    class="py-2 text-sm text-gray-600 leading-snug"> Remember
+                                    Me </span></label> <label class="block text-gray-500 font-bold my-4"><a href="#"
+                                    class="cursor-pointer tracking-tighter text-black border-b-2 border-gray-200 hover:border-gray-400"><span>Forgot
+                                        Password?</span></a></label>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="submit"
+                            class="w-full bg-dark-gunmetal text-white p-2 rounded-md hover:bg-charcoal  transition-colors duration-200">
+                            Sign In</button>
+                    </div>
+                </form>
+                <div class="mt-4 text-sm text-gray-600 text-center">
+                    <p>Don’t have an account? <a href="#" class="text-black font-bold hover:underline">Register here</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div
+            class="hidden lg:flex items-center justify-center flex-1 bg-verdigris shadow-[0_20px_50px_rgba(118,_171,_174,_1)] text-black rounded-bl-full">
+            <div class="max-w-md text-center">
+                <img src="../../../assets/login.svg" alt="login" class="h-96">
+            </div>
+        </div>
+    </div>
+</div>
