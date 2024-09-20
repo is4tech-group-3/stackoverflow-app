@@ -22,9 +22,8 @@ export class EmailComponent {
   onSubmit() {
     if (this.emailForm.valid) {
       const email = this.emailForm.get('email')?.value;
-      this.router.navigate(['/auth/forgot-password/password-change', { email }]);
+      this.router.navigate(['/auth/forgot-password/reset', { email }]);
     } else {
-      // Trigger validation messages if the form is invalid
       this.emailForm.markAllAsTouched();
     }
   }
