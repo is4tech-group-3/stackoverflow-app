@@ -1,8 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/**/*.{html,ts}",
-  ],
+  content: ['./src/**/*.{html,ts}'],
   theme: {
     extend: {
       colors: {
@@ -10,8 +8,9 @@ module.exports = {
         'charcoal': '#31363F',
         'verdigris': '#76ABAE',
         'bright-gray': '#EEEEEE',
-
-      }
+        'red-white': '#FEF3F2',
+        'garnet': '#821E13'
+      },
     },
   },
   plugins: [],
