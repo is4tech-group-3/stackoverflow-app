@@ -7,18 +7,28 @@ import { PasswordChangeComponent } from './forgot-password/password-change/passw
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 const routes: Routes = [
-    { path: 'login', component: LoginComponent },
+    {
+        path: 'login',
+        component: LoginComponent,
+        data: { showNavbar: false }
+    },
     {
         path: 'forgot-password',
         component: ForgotPasswordComponent,
+        data: { showNavbar: true },
         children: [
             { path: '', redirectTo: 'email', pathMatch: 'full' },
-            { path: 'email', component: EmailComponent },
-            { path: 'reset', component: PasswordChangeComponent }
+            { path: 'email', component: EmailComponent, },
+            { path: 'reset', component: PasswordChangeComponent, }
         ]
     },
-    { path: 'reset-password', component: ResetPasswordComponent }
-]
+    {
+        path: 'reset-password',
+        component: ResetPasswordComponent,
+        data: { showNavbar: false }
+    }
+];
+
 
 @NgModule({
     imports: [RouterModule.forChild(routes)],

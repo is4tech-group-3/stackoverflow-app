@@ -1,0 +1,80 @@
+<header class="sticky top-0 z-50 bg-dark-gunmetal backdrop-blur-lg">
+    <nav class="mx-auto flex max-w-6xl gap-8 px-6 transition-all duration-200 ease-in-out lg:px-12 py-2">
+        <div class="relative flex items-center">
+            <a href="/">
+                <img src="../../../assets/img/Logo.svg" loading="lazy" style="color:transparent" width="32"
+                    height="32"></a>
+        </div>
+        <ul class="hidden items-center justify-center gap-6 md:flex">
+            <li>
+                <a href="#"
+                    class="text-white relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:w-full after:origin-bottom after:scale-x-0 after:bg-verdigris after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] hover:after:origin-bottom hover:after:scale-x-100">
+                    Home
+                </a>
+            </li>
+            <li>
+                <a href="#"
+                    class="text-white relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:w-full after:origin-bottom after:scale-x-0 after:bg-verdigris after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] hover:after:origin-bottom hover:after:scale-x-100">
+                    About
+                </a>
+            </li>
+            <li>
+                <a href="#"
+                    class="text-white relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:w-full after:origin-bottom after:scale-x-0 after:bg-verdigris after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] hover:after:origin-bottom hover:after:scale-x-100">
+                    Blogs
+                </a>
+            </li>
+        </ul>
+        <div class="flex-grow"></div>
+        <div class="hidden items-center justify-center space-x-2 md:flex">
+            <div class="relative">
+                <input type="text"
+                    class="block w-full pl-10 pr-3 py-1.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-verdigris focus:border-transparent"
+                    placeholder="Search...">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-4.35-4.35M9.5 17a7.5 7.5 0 1 1 7.5-7.5 7.5 7.5 0 0 1-7.5 7.5z"></path>
+                    </svg>
+                </div>
+            </div>
+            <div *ngIf="!isLoggedIn">
+                <a href="/auth/login"
+                    class="bg-transparent rounded hover:opacity-90 text-verdigris font-medium py-1.5 px-3 border border-verdigris cursor-pointer">
+                    Sing-in
+                </a>
+            </div>
+            <div *ngIf="!isLoggedIn">
+                <a
+                    class="group relative inline-flex py-1.5 items-center justify-center overflow-hidden rounded bg-verdigris px-3 font-medium text-white">
+                    Sign-up
+                    <div
+                        class="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-100%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(100%)]">
+                        <div class="relative h-full w-8 bg-white/20"></div>
+                    </div>
+                </a>
+            </div>
+            <div *ngIf="isLoggedIn" class="flex items-center justify-center">
+                <button class="focus:outline-none" [matMenuTriggerFor]="menu">
+                    <img src="https://randomuser.me/api/portraits/women/50.jpg"
+                        class="object-cover w-8 h-8 bg-cover rounded-full transition transform hover:scale-105 active:scale-95" />
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item>Item 1</button>
+                    <button mat-menu-item>Item 2</button>
+                </mat-menu>
+            </div>
+
+        </div>
+        <div class="relative flex items-center justify-center md:hidden">
+            <button type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" aria-hidden="true" class="h-6 w-auto text-slate-900">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+                </svg>
+            </button>
+        </div>
+    </nav>
+</header>
