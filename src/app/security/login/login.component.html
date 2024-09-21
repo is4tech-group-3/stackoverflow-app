@@ -1,60 +1,70 @@
-<div class="">
-    <nav
-        class="bg-verdigris shadow-[0_30px_60px_rgba(118,_171,_174,_1)] lg:hidden flex items-center justify-center py-32 rounded-b-full">
-        <h1 class="text-3xl font-bold mb-6 text-white text-center">Login</h1>
-    </nav>
-    <div class="flex h-[calc(100vh-316px)] lg:h-screen">
-        <div class="w-full lg:w-1/2 flex items-center justify-center">
-            <div class="max-w-lg w-full p-6 rounded-xl">
-                <h1 class="text-3xl font-bold mb-6 text-black text-center hidden lg:block">Login</h1>
-                <form>
-                    <div class="mb-8">
-                        <div class="relative">
-                            <input type="email" id="email" name="email" placeholder="Email"
-                                class="bg-bright-gray w-full text-gray-800 text-base px-3 py-3 border-b border-dark-gunmetal outline-none focus:bg-gray-200"
-                                autocomplete="off">
-                            <div class="absolute inset-y-0 right-4 flex items-center">
-                                <img width="20" height="20"
-                                    src="https://img.icons8.com/ios-filled/50/secured-letter--v1.png" alt="mail"
-                                    class="text-gray-600" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="relative">
-                            <input type="password" id="password" name="password" placeholder="Password"
-                                class="bg-bright-gray w-full text-gray-800 text-base px-3 py-3 border-b border-dark-gunmetal outline-none focus:bg-gray-200"
-                                autocomplete="off">
-                            <div class="absolute inset-y-0 right-4 flex items-center">
-                                <img width="20" height="20" src="https://img.icons8.com/ios-filled/50/lock.png"
-                                    alt="lock" class="text-gray-600" />
-                            </div>
-                        </div>
-                        <div class="flex justify-between"><label class="block text-gray-500 font-bold my-4"><input
-                                    type="checkbox" class="leading-loose text-pink-600"> <span
-                                    class="py-2 text-sm text-gray-600 leading-snug"> Remember
-                                    Me </span></label> <label class="block text-gray-500 font-bold my-4"><a routerLink="/auth/forgot-password"
-                                    class="cursor-pointer tracking-tighter text-black "><span>Forgot
-                                        Password?</span></a></label>
-                        </div>
-                    </div>
-                    <div>
-                        <button type="submit"
-                            class="w-full bg-dark-gunmetal text-white p-2 rounded-md hover:bg-charcoal  transition-colors duration-200">
-                            Sign In</button>
-                    </div>
-                </form>
-                <div class="mt-4 text-sm text-gray-600 text-center">
-                    <p>Don’t have an account? <a href="#" class="text-black font-bold hover:underline">Register here</a>
-                    </p>
-                </div>
+<div class="flex h-screen">
+    <div class="w-full bg-gray-100 lg:w-1/2 flex items-center justify-center">
+      <div class="max-w-lg w-full p-6">
+        <h1 class="text-3xl font-semibold mb-6 text-black text-center">Login</h1>
+        <h1 class="text-sm font-medium mb-6 tracking-wide text-gray-500 text-center">
+          Welcome back! Please log in to your account to continue.
+        </h1>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
+          <div class="relative">
+            <input type="email" id="email" formControlName="email" placeholder="Email"
+              class="bg-light-gray w-full text-gray-800 text-base px-3 py-3 border-b border-dark-gunmetal outline-none focus:bg-gray-200"
+              autocomplete="off">
+            <div class="absolute inset-y-0 right-4 flex items-center">
+              <mat-icon aria-label="Email icon">email</mat-icon>
             </div>
-        </div>
-        <div
-            class="hidden lg:flex items-center justify-center flex-1 bg-verdigris shadow-[0_20px_50px_rgba(118,_171,_174,_1)] text-black rounded-bl-full">
-            <div class="max-w-md text-center">
-                <img src="../../../assets/login.svg" alt="login" class="h-96">
+            <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="text-red-600 text-sm">
+              <div *ngIf="email?.errors?.['required']">Email is required.</div>
+              <div *ngIf="email?.errors?.['email']">Please enter a valid email.</div>
             </div>
+          </div>
+          <div class="relative">
+            <input [type]="hide ? 'password' : 'text'" id="password" formControlName="password" placeholder="Password"
+              class="bg-light-gray w-full text-gray-800 text-base px-3 py-3 border-b border-dark-gunmetal outline-none focus:bg-gray-200"
+              autocomplete="off">
+            <div class="absolute inset-y-0 right-4 flex items-center">
+              <button type="button" (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hide">
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+            </div>
+            <div *ngIf="password?.invalid && (password?.dirty || password?.touched)" class="text-red-600 text-sm">
+              <div *ngIf="password?.errors?.['required']">Password is required.</div>
+              <div *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters long.</div>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center">
+              <input id="remember-me" name="remember-me" type="checkbox"
+                class="h-4 w-4 shrink-0 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
+              <label for="remember-me" class="ml-3 block text-sm text-gray-800">Remember me</label>
+            </div>
+            <div class="text-sm">
+              <a routerLink="/auth/forgot-password" class="text-blue-600 hover:underline font-medium">Forgot your
+                password?</a>
+            </div>
+          </div>
+          <div>
+            <button type="submit" [disabled]="loginForm.invalid"
+              class="w-full p-3 rounded transition-colors duration-200  text-white font-medium"
+              [ngClass]="{
+                'bg-dark-gunmetal cursor-not-allowed': loginForm.invalid,
+                'bg-sunset-orange hover:bg-charcoal': loginForm.valid
+              }">
+              Login
+            </button>
+          </div>
+        </form>
+        <div class="mt-4 text-sm text-gray-600 text-center">
+          <p>Don't have an account yet? <a href="#" class="text-black hover:underline">Sign up here</a></p>
         </div>
+      </div>
     </div>
-</div>
+  
+    <div class="hidden lg:flex items-center justify-center flex-1 bg-dark-gunmetal text-black">
+      <div class="max-w-md text-center">
+        <img src="../../../assets/svg/illustrationLogin.svg" class="h-128" alt="">
+      </div>
+    </div>
+  </div>
+  
