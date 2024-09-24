@@ -2,8 +2,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { UsersComponent } from './users.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatPaginatorModule } from '@angular/material/paginator'; 
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { of } from 'rxjs';
+import { MatTableModule } from '@angular/material/table';
 
 describe('UsersComponent', () => {
   let component: UsersComponent;
@@ -13,7 +15,9 @@ describe('UsersComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         MatButtonModule,
-        MatDialogModule
+        MatDialogModule,
+        MatPaginatorModule,
+        MatTableModule
       ],
       declarations: [UsersComponent],
       providers: [
@@ -36,6 +40,6 @@ describe('UsersComponent', () => {
   });
 
   it('should open the dialog', () => {
- 
+
   });
 });

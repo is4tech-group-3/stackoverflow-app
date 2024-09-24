@@ -1,14 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { UserModalComponent } from './user-modal/user-modal.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss']
 })
-export class UsersComponent {
+export class UsersComponent implements AfterViewInit {
+  isSmallScreen: boolean = false;
+
+  dataSource = new MatTableDataSource<User>([
+    { name: 'Cristian Calderon', email: 'cristian@gmail.com', type: 'Admin', status: 'Online' },
+  ]);
+
+  displayedColumns: string[] = ['name', 'email', 'type', 'status'];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   dialogWidth = '400px';
 
   constructor(
@@ -17,11 +29,8 @@ export class UsersComponent {
   ) {
     this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
       .subscribe(result => {
-        if (result.matches) {
-          this.dialogWidth = '100%';
-        } else {
-          this.dialogWidth = '400px'; 
-        }
+        this.isSmallScreen = result.matches;
+        this.dialogWidth = this.isSmallScreen ? '100%' : '400px'; 
       });
   }
 
@@ -35,4 +44,15 @@ export class UsersComponent {
       console.log('El modal fue cerrado', result);
     });
   }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+}
+
+export interface User {
+  name: string;
+  email: string;
+  type: string;
+  status: string;
 }
