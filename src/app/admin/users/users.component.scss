@@ -1,0 +1,16 @@
+.users-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    text-align: center;
+  
+    h1 {
+      margin-bottom: 20px;
+    }
+  
+    button {
+      margin-top: 10px;
+    }
+}

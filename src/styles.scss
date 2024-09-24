@@ -1,7 +1,6 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
-// Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -9,40 +8,37 @@
 @include mat.core();
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
 $stack-overflow-primary: mat.define-palette(mat.$indigo-palette);
 $stack-overflow-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
 $stack-overflow-warn: mat.define-palette(mat.$red-palette);
 
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$stack-overflow-theme: mat.define-light-theme((color: (primary: $stack-overflow-primary,
-        accent: $stack-overflow-accent,
-        warn: $stack-overflow-warn,
-      )));
+// Create the theme object.
+$stack-overflow-theme: mat.define-light-theme((
+  color: (
+    primary: $stack-overflow-primary,
+    accent: $stack-overflow-accent,
+    warn: $stack-overflow-warn,
+  )
+));
 
 // Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
 @include mat.all-component-themes($stack-overflow-theme);
 
+// Tailwind base, components, and utilities should come after Angular Material theming.
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+// Custom body styling
 body {
   background-color: #dddd;
-}
-
-html,
-body {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  margin: 0;
   height: 100%;
 }
 
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+html, body {
+  height: 100%;
 }
