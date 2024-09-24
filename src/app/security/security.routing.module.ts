@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
-import { EmailComponent } from './forgot-password/components/email/email.component';
-import { PasswordChangeComponent } from './forgot-password/components/password-change/password-change.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 const routes: Routes = [
@@ -15,12 +13,7 @@ const routes: Routes = [
     {
         path: 'forgot-password',
         component: ForgotPasswordComponent,
-        data: { showNavbar: true },
-        children: [
-            { path: '', redirectTo: 'email', pathMatch: 'full' },
-            { path: 'email', component: EmailComponent, },
-            { path: 'reset', component: PasswordChangeComponent, }
-        ]
+        data: { showNavbar: false },
     },
     {
         path: 'reset-password',
