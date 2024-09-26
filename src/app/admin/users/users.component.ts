@@ -12,12 +12,21 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class UsersComponent implements AfterViewInit {
   isSmallScreen: boolean = false;
+  selectedUser: User | null = null;
 
   dataSource = new MatTableDataSource<User>([
     { name: 'Cristian Calderon', email: 'cristian@gmail.com', type: 'Admin', status: 'Online' },
+    { name: 'Sebastian Ramirez', email: 'sebastian@gmail.com', type: 'user', status: 'Online' },
+    { name: 'Eduardo Urbina', email: 'eduardo@gmail.com', type: 'user', status: 'offline' },
+    { name: 'Cerbero Rodriguez', email: 'cerbero@gmail.com', type: 'Admin', status: 'Online' },
+    { name: 'Patroclo Hernandez', email: 'patroclo@gmail.com', type: 'user', status: 'offline' },
+    { name: 'Brandon Gomez', email: 'brandon@gmail.com', type: 'Admin', status: 'Online' },
+    { name: 'Herlin Gomez', email: 'herlin@gmail.com', type: 'user', status: 'Online' },
+    { name: 'Hermes Batres', email: 'hermes@gmail.com', type: 'Admin', status: 'Online' },
+    { name: 'Gerson Emmanuel', email: 'gerson@gmail.com', type: 'user', status: 'offline' },
   ]);
 
-  displayedColumns: string[] = ['name', 'email', 'type', 'status'];
+  displayedColumns: string[] = ['name', 'email', 'type', 'status', 'edit', 'delete'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -48,6 +57,23 @@ export class UsersComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
+
+  toggleCard(user: User): void {
+    if(this.selectedUser === user) {
+      this.selectedUser = null;
+    } else {
+      this.selectedUser = user;
+    }
+  }
+
+  deleteUser(user: User): void { 
+    console.log('Eliminar usuario', user);
+  }
+
+  editUser(user: User): void {
+    console.log('Editar usuario', user);
+  }
+
 }
 
 export interface User {
