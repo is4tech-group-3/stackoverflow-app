@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ProfilesComponent } from './profiles/profiles.component';
 import { UsersComponent } from './users/users.component';
+import { AuditComponent } from './audit/audit.component';
 
 const routes: Routes = [
     {
@@ -10,6 +11,9 @@ const routes: Routes = [
     {
         path: 'users', component: UsersComponent, data: { showNavbar: true }
     },
+    {
+        path: 'audit', component: AuditComponent, data: { showNavbar: true }
+    }
 ]
 
 @NgModule({

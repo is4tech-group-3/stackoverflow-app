@@ -16,13 +16,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { UsersComponent } from './users/users.component';
 import { UserModalComponent } from './users/user-modal/user-modal.component';
+import { AuditComponent } from './audit/audit.component';
 
 
 @NgModule({
 
 declarations: [
   UsersComponent,
-  UserModalComponent
+  UserModalComponent,
+  AuditComponent
 ],
   imports: [
     CommonModule,
@@ -40,6 +42,7 @@ declarations: [
     MatInputModule,
     MatSelectModule,
     MatOptionModule, 
+    
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
