@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
+import { AuthService } from '../service/auth/auth.service';  // Importa el servicio de autenticación
 
 @Component({
   selector: 'app-login',
@@ -21,34 +22,38 @@ export class LoginComponent {
     password: ['', [Validators.required, Validators.minLength(8)]],
   });
 
-
-
-  constructor(private validatorForm: FormBuilder) { }
+  constructor(private validatorForm: FormBuilder, private authService: AuthService) { }  // Inyecta el AuthService
 
   onSubmit() {
     if (this.loginForm.valid) {
       console.log('Formulario enviado', this.loginForm.value);
+
+      this.authService.login(this.loginForm.value).subscribe(
+        (response) => {
+          console.log('Login successful:', response);
+        },
+        (error) => {
+          console.error('Login error:', error);
+        }
+      );
     } else {
       console.log('Formulario no válido');
     }
   }
-
-
 
   getErrorMessage(controlName: string) {
     const control = this.loginForm.get(controlName);
     const messages: { [key: string]: string } = {
       required: this.errorMessages.required,
       email: this.errorMessages.invalidEmail,
-      minlength: this.errorMessages.minLength
+      minlength: this.errorMessages.minLength,
     };
     if (control && control.errors) {
-      const errorKey = Object.keys(control.errors).find(key => control.errors![key]);
+      const errorKey = Object.keys(control.errors).find((key) => control.errors![key]);
       if (errorKey) {
         return messages[errorKey] || '';
       }
     }
     return '';
   }
-
 }

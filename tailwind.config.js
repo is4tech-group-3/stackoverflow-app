@@ -5,8 +5,10 @@ module.exports = {
   theme: {
     extend: {
       spacing: {
-        'full-screen': 'calc(100vh - 50px)',
         '128': '32rem',
+      },
+      height: {
+        'full-screen': 'calc(100vh - 50px)',
       },
       colors: {
         'dark-gunmetal': '#222831',// nuevo
