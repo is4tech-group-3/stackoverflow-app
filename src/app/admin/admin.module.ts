@@ -14,9 +14,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input'; 
 import { MatSelectModule } from '@angular/material/select';
-import { UsersComponent } from './users/users.component';
-import { UserModalComponent } from './users/user-modal/user-modal.component';
-import { AuditComponent } from './audit/audit.component';
+import { UsersComponent } from './components/users/users.component';
+import { UserModalComponent } from './components/users/user-modal/user-modal.component';
+import { AuditComponent } from './components/audit/audit.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
 
