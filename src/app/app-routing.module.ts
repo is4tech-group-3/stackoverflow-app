@@ -1,14 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ProfilesComponent } from './pages/profiles/profiles.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { CalendarComponent } from './pages/calendar/calendar.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/', pathMatch: 'full' },
-  { path: 'auth', loadChildren: () => import('./security/security.module').then(m => m.SecurityModule) },
-  { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) }
+  { path: '', pathMatch: 'full', redirectTo: 'profiles' },
+  { path: 'profiles', component: ProfilesComponent },
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'calendar', component: CalendarComponent }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

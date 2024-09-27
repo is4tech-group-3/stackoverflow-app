@@ -1,0 +1,20 @@
+{
+  "Profiles": "Perfiles",
+  "Search": "Buscar",
+  "Save": "Guardar",
+  "Name": "Nombre*",
+  "Access": "Acceso",
+  "Administration": "Administración General",
+  "UserManagement": "Gestión de Usuarios",
+  "ReviewandControl": "Revisión y Control",
+  "Administrator": "Administrador",
+  "Moderator": "Moderador",
+  "RegisteredUser": "Usuario Registrado",
+  "AnonymousUser": "Usuario Anónimo",
+  "Reviser": "Revisor",
+  "Settings": "Configuraciones",
+  "SignOut": "Cerrar Sesión",
+  "Dashboard": "Tablero",
+  "English": "Inglés",
+  "Spanish": "Español"
+}

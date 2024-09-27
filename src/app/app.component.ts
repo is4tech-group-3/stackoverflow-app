@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Component, computed, signal } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -7,26 +7,33 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  showNavbar = true;
+  collapsed = signal(true);
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.updateNavbarVisibility();
-      }
-    });
+  sidenavWidth = computed(() => (this.collapsed() ? '65px' : '260px'));
+
+  expandSidenav() {
+    this.collapsed.set(false);
   }
 
-  updateNavbarVisibility() {
-    let route = this.activatedRoute.firstChild;
-    while (route?.firstChild) {
-      route = route.firstChild;
-    }
+  collapseSidenav() {
+    this.collapsed.set(true);
+  }
 
-    if (route?.snapshot.data['showNavbar'] !== undefined) {
-      this.showNavbar = route.snapshot.data['showNavbar'];
-    } else {
-      this.showNavbar = true;
-    }
+  constructor(private translate: TranslateService) {
+    this.translate.setDefaultLang('en');
+  }
+
+  switchLanguage(lenguage: string) {
+    this.translate.use(lenguage);
+  }
+
+  isLanguageDropdownOpen = false;
+
+  toggleLanguageDropdown() {
+    this.isLanguageDropdownOpen = !this.isLanguageDropdownOpen;
+  }
+
+  closeLanguageDropdown() {
+    this.isLanguageDropdownOpen = false;
   }
 }

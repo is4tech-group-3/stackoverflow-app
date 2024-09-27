@@ -1,2 +1,84 @@
-<app-navbar *ngIf="showNavbar"></app-navbar>
-<router-outlet></router-outlet>
+<mat-toolbar class="flex justify-between items-center p-4 bg-gray-100 dark:bg-gray-800">
+    <img src="../assets/img/Logo2.svg" alt="" draggable="false">
+    <div class="flex items-center space-x-4">
+        <div class="relative">
+            <button (click)="toggleLanguageDropdown()"
+                class="flex items-center text-sm font-medium text-white rounded-full hover:text-blue-600 dark:hover:text-blue-500 cursor-pointer">
+
+                {{ 'English' | translate }} (US)
+                <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="m1 1 4 4 4-4" />
+                </svg>
+            </button>
+            <div *ngIf="isLanguageDropdownOpen"
+                class="absolute left-0 mt-2 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                <ul class="py-2 font-medium" role="none">
+                    <li>
+                        <button (click)="switchLanguage('es'); closeLanguageDropdown()"
+                            class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white">
+                            {{ 'Spanish' | translate }} (ES)
+                        </button>
+                    </li>
+                    <li>
+                        <button (click)="switchLanguage('en'); closeLanguageDropdown()"
+                            class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white">
+                            {{ 'English' | translate }} (US)
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="relative">
+            <input type="checkbox" id="dropdown-toggle" class="hidden peer" />
+            <label for="dropdown-toggle"
+                class="flex items-center text-sm pe-1 font-medium text-gray-900 rounded-full hover:text-blue-600 dark:hover:text-blue-500 md:me-0 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-white cursor-pointer">
+                <img class="me-2 rounded-full object-cover max-w-[2rem] max-h-[2rem]" src="../assets/img/Profile2.jpg"
+                    alt="user photo">
+                Hermes
+                <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="m1 1 4 4 4-4" />
+                </svg>
+            </label>
+
+            <div id="dropdownAccountName"
+                class="hidden peer-checked:block absolute right-0 mt-2 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                    <div class="font-medium">Hermes Batres</div>
+                    <div class="truncate">hbatres-2022143@kinal.edu.gt</div>
+                </div>
+                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownAccountNameButton">
+                    <li>
+                        <a href="#"
+                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{
+                            'Dashboard' | translate }}</a>
+                    </li>
+                    <li>
+                        <a href="#"
+                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{
+                            'Settings' | translate }}</a>
+                    </li>
+
+                </ul>
+                <div class="py-2">
+                    <a href="#"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">{{'SignOut'
+                        | translate }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-toolbar>
+
+<mat-sidenav-container>
+    <mat-sidenav mode="side" opened [style.width]="sidenavWidth()" (mouseenter)="expandSidenav()"
+        (mouseleave)="collapseSidenav()">
+        <app-sidenav></app-sidenav>
+    </mat-sidenav>
+    <mat-sidenav-content class="content" [style.margin-left]="sidenavWidth()">
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>
