@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +10,8 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 export class AppComponent {
   showNavbar = true;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private translate: TranslateService) {
+    this.translate.setDefaultLang('us');
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.updateNavbarVisibility();

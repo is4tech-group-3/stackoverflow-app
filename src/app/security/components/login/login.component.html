@@ -11,9 +11,9 @@
 
     <div class="flex items-center lg:p-0 p-8 justify-center bg-white h-screen">
       <div
-        class="max-w-lg w-full lg:shadow-[0_3px_10px_rgb(0,0,0,0.2)] min-h-[60vh]  px-0 lg:px-10 py-0 lg:py-10 content-center rounded-xl">
+        class="max-w-lg w-full lg:shadow-[0_3px_10px_rgb(0,0,0,0.2)] min-h-[60vh] z-50  px-0 lg:px-10 py-0 lg:py-10 content-center rounded-xl">
         <div class="mb-12">
-          <h3 class="text-gray-800 text-4xl font-extrabold">Sing - in</h3>
+          <h3 class="text-gray-800 text-4xl font-extrabold">{{ 'SignIn' | translate }}</h3>
           <p class="text-sm font-medium mb-6 tracking-wide text-gray-500">
             Welcome back! Please log in to your account to continue.
           </p>
@@ -34,21 +34,22 @@
             </p>
 
           </div>
-          <div class="relative">
-            <input [type]="hide ? 'password' : 'text'" id="password" formControlName="password" placeholder="Password"
-              class="bg-light-gray w-full text-gray-800 text-base px-3 py-3 border-b border-dark-gunmetal outline-none focus:bg-gray-200"
-              autocomplete="off">
-            <div class="absolute inset-y-0 right-4 flex items-center">
-              <button type="button" (click)="hide = !hide" [attr.aria-label]="'Hide password'"
-                [attr.aria-pressed]="hide">
-                <mat-icon class="text-">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-              </button>
+          <div>
+            <div class="relative">
+              <input [type]="hide ? 'password' : 'text'" id="password" formControlName="password" placeholder="Password"
+                class="bg-light-gray w-full text-gray-800 text-base px-3 py-3 border-b border-dark-gunmetal outline-none focus:bg-gray-200"
+                autocomplete="off">
+              <div class="absolute inset-y-0 right-4 flex items-center">
+                <button type="button" (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                  [attr.aria-pressed]="hide">
+                  <mat-icon class="text-">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+              </div>
             </div>
             <p *ngIf="loginForm.get('password')?.errors && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)"
               class="text-red-500 text-xs text-center mt-1 h-5">
               {{ getErrorMessage('password') }}
             </p>
-
           </div>
           <div class="flex flex-wrap items-center justify-between gap-4">
             <div class="flex items-center">

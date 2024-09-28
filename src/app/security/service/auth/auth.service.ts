@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { API_URL } from 'src/app/shared/utils/constants.utility';
 import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +13,12 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   signup(data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/signup`, data);
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post(`${this.baseUrl}/signup`, data, { headers});
   }
 
   login(data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/login`, data);
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post(`${this.baseUrl}/login`,  data, { headers});
   }
 }

@@ -31,6 +31,7 @@ $stack-overflow-theme: mat.define-light-theme((
 @tailwind components;
 @tailwind utilities;
 
+@import "/node_modules/flag-icons/css/flag-icons.min.css";
 // Custom body styling
 body {
   background-color: #dddd;
