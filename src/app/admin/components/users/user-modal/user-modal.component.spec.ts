@@ -6,7 +6,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog'; 
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ReactiveFormsModule } from '@angular/forms'; 
 
 describe('UserModalComponent', () => {
   let component: UserModalComponent;
@@ -20,7 +21,9 @@ describe('UserModalComponent', () => {
         MatSelectModule,
         MatButtonModule,
         MatDialogModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        NoopAnimationsModule
       ],
       declarations: [UserModalComponent],
       providers: [

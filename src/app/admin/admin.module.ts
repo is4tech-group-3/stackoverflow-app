@@ -7,6 +7,7 @@ import { ProfilesComponent } from './components/profiles/profiles.component';
 import { UserModalComponent } from './components/users/user-modal/user-modal.component';
 import { UsersComponent } from './components/users/users.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
   imports: [
     SharedModule,
     AdminRoutingModule,
+    HttpClientModule
    
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

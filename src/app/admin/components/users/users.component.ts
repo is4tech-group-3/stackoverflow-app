@@ -4,6 +4,7 @@ import { UserModalComponent } from './user-modal/user-modal.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { UserService } from '../../service/user.service'; 
 
 @Component({
   selector: 'app-users',
@@ -13,18 +14,7 @@ import { MatTableDataSource } from '@angular/material/table';
 export class UsersComponent implements AfterViewInit {
   isSmallScreen: boolean = false;
   selectedUser: User | null = null;
-
-  dataSource = new MatTableDataSource<User>([
-    { name: 'Cristian Calderon', email: 'cristian@gmail.com', type: 'Admin', status: 'Online' },
-    { name: 'Sebastian Ramirez', email: 'sebastian@gmail.com', type: 'user', status: 'Online' },
-    { name: 'Eduardo Urbina', email: 'eduardo@gmail.com', type: 'user', status: 'offline' },
-    { name: 'Cerbero Rodriguez', email: 'cerbero@gmail.com', type: 'Admin', status: 'Online' },
-    { name: 'Patroclo Hernandez', email: 'patroclo@gmail.com', type: 'user', status: 'offline' },
-    { name: 'Brandon Gomez', email: 'brandon@gmail.com', type: 'Admin', status: 'Online' },
-    { name: 'Herlin Gomez', email: 'herlin@gmail.com', type: 'user', status: 'Online' },
-    { name: 'Hermes Batres', email: 'hermes@gmail.com', type: 'Admin', status: 'Online' },
-    { name: 'Gerson Emmanuel', email: 'gerson@gmail.com', type: 'user', status: 'offline' },
-  ]);
+  dataSource = new MatTableDataSource<User>([]);
 
   displayedColumns: string[] = ['name', 'email', 'type', 'status', 'edit', 'delete'];
 
@@ -34,13 +24,22 @@ export class UsersComponent implements AfterViewInit {
 
   constructor(
     public dialog: MatDialog,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private userService: UserService
   ) {
     this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
       .subscribe(result => {
         this.isSmallScreen = result.matches;
         this.dialogWidth = this.isSmallScreen ? '100%' : '400px'; 
       });
+
+    this.getUsers();
+  }
+
+  getUsers(): void {
+    this.userService.getUsers().subscribe(users => {
+      this.dataSource.data = users;
+    });
   }
 
   openDialog(): void {
@@ -50,7 +49,11 @@ export class UsersComponent implements AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('El modal fue cerrado', result);
+      if (result) {
+        this.userService.addUser(result).subscribe(() => {
+          this.getUsers();
+        });
+      }
     });
   }
 
@@ -59,24 +62,22 @@ export class UsersComponent implements AfterViewInit {
   }
 
   toggleCard(user: User): void {
-    if(this.selectedUser === user) {
-      this.selectedUser = null;
-    } else {
-      this.selectedUser = user;
-    }
+    this.selectedUser = this.selectedUser === user ? null : user;
   }
 
-  deleteUser(user: User): void { 
-    console.log('Eliminar usuario', user);
+  deleteUser(user: User): void {
+    this.userService.deleteUser(user.id).subscribe(() => {
+      this.getUsers();
+    });
   }
 
   editUser(user: User): void {
     console.log('Editar usuario', user);
   }
-
 }
 
 export interface User {
+  id: number;
   name: string;
   email: string;
   type: string;
