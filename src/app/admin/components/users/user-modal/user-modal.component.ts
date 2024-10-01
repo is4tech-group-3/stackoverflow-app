@@ -18,7 +18,11 @@ export class UserModalComponent {
     this.userForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       name: ['', Validators.required],
-      type: ['', Validators.required]
+      surname: ['', Validators.required],
+      username: ['', Validators.required],
+      // Campo 'type' comentado en el formulario.
+      // type: ['', Validators.required],
+      status: [true, Validators.required]
     });
   }
 

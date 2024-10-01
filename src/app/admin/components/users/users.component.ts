@@ -4,7 +4,7 @@ import { UserModalComponent } from './user-modal/user-modal.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { UserService } from '../../service/user.service'; 
+import { UserService } from '../../service/user.service';
 
 @Component({
   selector: 'app-users',
@@ -16,7 +16,7 @@ export class UsersComponent implements AfterViewInit {
   selectedUser: User | null = null;
   dataSource = new MatTableDataSource<User>([]);
 
-  displayedColumns: string[] = ['name', 'email', 'type', 'status', 'edit', 'delete'];
+  displayedColumns: string[] = ['name', 'surname', 'username', 'email', 'status', 'edit', 'delete'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -66,20 +66,38 @@ export class UsersComponent implements AfterViewInit {
   }
 
   deleteUser(user: User): void {
-    this.userService.deleteUser(user.id).subscribe(() => {
-      this.getUsers();
-    });
-  }
+    const confirmation = confirm(`¿Estás seguro de que deseas eliminar al usuario ${user.name} ${user.surname}?`);
+    
+    if (confirmation) {
+      this.userService.deleteUser(user.id).subscribe(() => {
+        this.getUsers();
+      }, error => {
+        console.error('Error al eliminar el usuario:', error);
+      });
+    }
+  }  
 
   editUser(user: User): void {
-    console.log('Editar usuario', user);
-  }
+    const dialogRef = this.dialog.open(UserModalComponent, {
+      width: this.dialogWidth,
+      data: { ...user }
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.userService.updateUser(result.id, result).subscribe(() => {
+          this.getUsers(); 
+        });
+      }
+    });
+  }  
 }
 
 export interface User {
   id: number;
   name: string;
+  surname: string;
+  username: string;
   email: string;
-  type: string;
   status: string;
 }

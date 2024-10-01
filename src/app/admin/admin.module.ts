@@ -8,6 +8,7 @@ import { UserModalComponent } from './components/users/user-modal/user-modal.com
 import { UsersComponent } from './components/users/users.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpClientModule } from '@angular/common/http';
+import { UserModalPostComponent } from './components/users/user-modal-post/user-modal-post.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
     ProfilesComponent,
     UsersComponent,
     UserModalComponent,
+    UserModalPostComponent,
     AuditComponent,
     DashboardComponent
   ],
