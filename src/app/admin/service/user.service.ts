@@ -7,23 +7,25 @@ import { User } from '../components/users/users.component';
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://3.144.33.186:8080/api/v1/user'; 
+
+  private userApiUrl = 'http://3.144.33.186:8080/api/v1/user';
+  private authApiUrl = 'http://3.144.33.186:8080/api/v1/auth/signup';
 
   constructor(private http: HttpClient) {}
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl);
+    return this.http.get<User[]>(this.userApiUrl); // GET
   }
 
   addUser(user: User): Observable<User> {
-    return this.http.post<User>(this.apiUrl, user); // POST
+    return this.http.post<User>(this.authApiUrl, user); // POST
   }
 
   deleteUser(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`); // DELETE
+    return this.http.delete<void>(`${this.userApiUrl}/${id}`); // DELETE
   }
 
   updateUser(id: number, user: Partial<User>): Observable<User> {
-    return this.http.put<User>(`${this.apiUrl}/${id}`, user); // PUT
+    return this.http.put<User>(`${this.userApiUrl}/${id}`, user); // PUT
   }
 }

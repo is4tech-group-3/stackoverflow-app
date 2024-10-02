@@ -20,8 +20,7 @@ export class UserModalComponent {
       name: ['', Validators.required],
       surname: ['', Validators.required],
       username: ['', Validators.required],
-      // Campo 'type' comentado en el formulario.
-      // type: ['', Validators.required],
+      password: ['', Validators.required],
       status: [true, Validators.required]
     });
   }

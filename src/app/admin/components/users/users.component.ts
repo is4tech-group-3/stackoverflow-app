@@ -38,9 +38,12 @@ export class UsersComponent implements AfterViewInit {
 
   getUsers(): void {
     this.userService.getUsers().subscribe(users => {
+      console.log('Usuarios cargados:', users);
       this.dataSource.data = users;
     });
   }
+  
+  
 
   openDialog(): void {
     const dialogRef = this.dialog.open(UserModalComponent, {
@@ -64,10 +67,10 @@ export class UsersComponent implements AfterViewInit {
   toggleCard(user: User): void {
     this.selectedUser = this.selectedUser === user ? null : user;
   }
-
+  
   deleteUser(user: User): void {
     const confirmation = confirm(`¿Estás seguro de que deseas eliminar al usuario ${user.name} ${user.surname}?`);
-    
+  
     if (confirmation) {
       this.userService.deleteUser(user.id).subscribe(() => {
         this.getUsers();
@@ -75,7 +78,9 @@ export class UsersComponent implements AfterViewInit {
         console.error('Error al eliminar el usuario:', error);
       });
     }
-  }  
+  }
+  
+  
 
   editUser(user: User): void {
     const dialogRef = this.dialog.open(UserModalComponent, {
