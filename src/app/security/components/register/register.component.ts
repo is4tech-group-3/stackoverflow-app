@@ -1,36 +1,37 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from '../../service/auth/auth.service'; // Importa el servicio de autenticación
+import { AuthService } from '../../service/auth/auth.service';
 import { TranslateService } from '@ngx-translate/core';
+
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.scss']
 })
-export class LoginComponent {
-  hide = true;
-
-  loginForm = this.validatorForm.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(8)]]
-  });
-
+export class RegisterComponent {
   constructor(
-    private validatorForm: FormBuilder,
+    private formBuilder: FormBuilder,
     private authService: AuthService,
     private translate: TranslateService
   ) {}
 
-  onSubmit() {
-    if (this.loginForm.valid) {
-      console.log('Formulario enviado', this.loginForm.value);
+  registerForm = this.formBuilder.group({
+    name: ['', [Validators.required]],
+    surname: ['', [Validators.required]],
+    email: ['', [Validators.required, Validators.email]],
+    username: ['', [Validators.required]]
+  });
 
-      this.authService.login(this.loginForm.value).subscribe(
+  onSubmit() {
+    if (this.registerForm.valid) {
+      console.log('Formulario enviado', this.registerForm.value);
+
+      this.authService.signup(this.registerForm.value).subscribe(
         response => {
-          console.log('Login successful:', response);
+          console.log('Registro exitoso:', response);
         },
         error => {
-          console.error('Login error:', error);
+          console.error('Error en el registro:', error);
         }
       );
     } else {
@@ -39,7 +40,7 @@ export class LoginComponent {
   }
 
   getErrorMessage(controlName: string) {
-    const control = this.loginForm.get(controlName);
+    const control = this.registerForm.get(controlName);
     const messages: { [key: string]: string } = {
       required: this.translate.instant('errors.required'),
       email: this.translate.instant('errors.invalidEmail'),

@@ -10,15 +10,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class AuthService {
   private baseUrl: string = API_URL + 'auth';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   signup(data: any): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(`${this.baseUrl}/signup`, data, { headers});
+    return this.http.post(`${this.baseUrl}/signup`, data);
   }
 
   login(data: any): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(`${this.baseUrl}/login`,  data, { headers});
+    return this.http.post(`${this.baseUrl}/login`, data);
   }
 }
