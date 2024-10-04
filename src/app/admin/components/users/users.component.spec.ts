@@ -6,6 +6,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { of } from 'rxjs';
 import { MatTableModule } from '@angular/material/table';
+import { HttpClientModule } from '@angular/common/http'; 
+import { UserService } from '../../service/user.service';  
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('UsersComponent', () => {
   let component: UsersComponent;
@@ -17,10 +20,13 @@ describe('UsersComponent', () => {
         MatButtonModule,
         MatDialogModule,
         MatPaginatorModule,
-        MatTableModule
+        MatTableModule,
+        HttpClientModule,
+        BrowserAnimationsModule
       ],
       declarations: [UsersComponent],
       providers: [
+        UserService,
         {
           provide: BreakpointObserver,
           useValue: {

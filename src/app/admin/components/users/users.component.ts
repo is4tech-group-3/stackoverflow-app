@@ -4,6 +4,7 @@ import { UserModalComponent } from './user-modal/user-modal.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { UserService } from '../../service/user.service';
 
 @Component({
   selector: 'app-users',
@@ -13,20 +14,9 @@ import { MatTableDataSource } from '@angular/material/table';
 export class UsersComponent implements AfterViewInit {
   isSmallScreen: boolean = false;
   selectedUser: User | null = null;
+  dataSource = new MatTableDataSource<User>([]);
 
-  dataSource = new MatTableDataSource<User>([
-    { name: 'Cristian Calderon', email: 'cristian@gmail.com', type: 'Admin', status: 'Online' },
-    { name: 'Sebastian Ramirez', email: 'sebastian@gmail.com', type: 'user', status: 'Online' },
-    { name: 'Eduardo Urbina', email: 'eduardo@gmail.com', type: 'user', status: 'offline' },
-    { name: 'Cerbero Rodriguez', email: 'cerbero@gmail.com', type: 'Admin', status: 'Online' },
-    { name: 'Patroclo Hernandez', email: 'patroclo@gmail.com', type: 'user', status: 'offline' },
-    { name: 'Brandon Gomez', email: 'brandon@gmail.com', type: 'Admin', status: 'Online' },
-    { name: 'Herlin Gomez', email: 'herlin@gmail.com', type: 'user', status: 'Online' },
-    { name: 'Hermes Batres', email: 'hermes@gmail.com', type: 'Admin', status: 'Online' },
-    { name: 'Gerson Emmanuel', email: 'gerson@gmail.com', type: 'user', status: 'offline' },
-  ]);
-
-  displayedColumns: string[] = ['name', 'email', 'type', 'status', 'edit', 'delete'];
+  displayedColumns: string[] = ['name', 'surname', 'username', 'email', 'status', 'edit', 'delete'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -34,13 +24,23 @@ export class UsersComponent implements AfterViewInit {
 
   constructor(
     public dialog: MatDialog,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private userService: UserService
   ) {
     this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
       .subscribe(result => {
         this.isSmallScreen = result.matches;
         this.dialogWidth = this.isSmallScreen ? '100%' : '400px'; 
       });
+
+    this.getUsers();
+  }
+
+  getUsers(): void {
+    this.userService.getUsers().subscribe(users => {
+      console.log('Usuarios cargados:', users);
+      this.dataSource.data = users;
+    });
   }
 
   openDialog(): void {
@@ -50,35 +50,71 @@ export class UsersComponent implements AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('El modal fue cerrado', result);
+      if (result) {
+        this.userService.addUser(result).subscribe(() => {
+          this.getUsers();
+        });
+      }
     });
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+  
+    this.paginator.page.subscribe(() => {
+      if (this.isSmallScreen) {
+        const pageIndex = this.paginator.pageIndex;
+        const pageSize = this.paginator.pageSize;
+        const startIndex = pageIndex * pageSize;
+        const endIndex = startIndex + pageSize;
+  
+        this.dataSource.filteredData = this.dataSource.data.slice(startIndex, endIndex);
+      }
+    });
   }
 
   toggleCard(user: User): void {
-    if(this.selectedUser === user) {
-      this.selectedUser = null;
-    } else {
-      this.selectedUser = user;
+    this.selectedUser = this.selectedUser === user ? null : user;
+  }
+
+  deleteUser(user: User): void {
+    if (!user.id) {  // Verificar si el id está disponible
+      console.error('El usuario no tiene un ID válido:', user);
+      return;
+    }
+
+    const confirmation = confirm(`¿Estás seguro de que deseas eliminar al usuario ${user.name} ${user.surname}?`);
+  
+    if (confirmation) {
+      this.userService.deleteUser(user.id).subscribe(() => {
+        this.getUsers();
+      }, error => {
+        console.error('Error al eliminar el usuario:', error);
+      });
     }
   }
 
-  deleteUser(user: User): void { 
-    console.log('Eliminar usuario', user);
-  }
-
   editUser(user: User): void {
-    console.log('Editar usuario', user);
+    const dialogRef = this.dialog.open(UserModalComponent, {
+      width: this.dialogWidth,
+      data: { ...user }
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.userService.updateUser(result.id, result).subscribe(() => {
+          this.getUsers(); 
+        });
+      }
+    });
   }
-
 }
 
 export interface User {
+  id: number;
   name: string;
+  surname: string;
+  username: string;
   email: string;
-  type: string;
   status: string;
 }
