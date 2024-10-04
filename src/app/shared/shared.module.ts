@@ -3,6 +3,7 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 import { NavbarComponent } from './components/navbar/navbar.component';
 
 // Angular Material Modules
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -27,11 +28,10 @@ import { HttpClientModule } from '@angular/common/http';
 
 // Reactive Forms Module
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ToastComponent } from './components/toast/toast.component';
 
 @NgModule({
-  declarations: [
-    NavbarComponent
-  ],
+  declarations: [NavbarComponent, ToastComponent],
   imports: [
     CommonModule,
     HttpClientModule,
@@ -39,7 +39,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     AsyncPipe,
-    
+
     // Angular Material Modules
     MatMenuModule,
     MatButtonModule,
@@ -56,7 +56,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatInputModule,
     MatSelectModule,
     MatOptionModule,
-    MatStepperModule
+    MatStepperModule,
+    MatProgressSpinnerModule
   ],
   exports: [
     CommonModule,
@@ -66,7 +67,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     AsyncPipe,
     NavbarComponent,
-    
+    ToastComponent,
+
     // Angular Material Modules
     MatMenuModule,
     MatButtonModule,
@@ -86,4 +88,4 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatStepperModule
   ]
 })
-export class SharedModule { }
+export class SharedModule {}

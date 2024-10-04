@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../service/auth/auth.service'; // Importa el servicio de autenticación
 import { TranslateService } from '@ngx-translate/core';
+import { ToastService } from 'src/app/shared/services/toast.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -9,6 +10,8 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class LoginComponent {
   hide = true;
+  toastMessage: string = '';
+  toastType: 'success' | 'error' | 'warning' | 'info' = 'info';
 
   loginForm = this.validatorForm.group({
     email: ['', [Validators.required, Validators.email]],
@@ -18,21 +21,23 @@ export class LoginComponent {
   constructor(
     private validatorForm: FormBuilder,
     private authService: AuthService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private toastService: ToastService
   ) {}
 
   onSubmit() {
     if (this.loginForm.valid) {
-      console.log('Formulario enviado', this.loginForm.value);
-
-      this.authService.login(this.loginForm.value).subscribe(
-        response => {
-          console.log('Login successful:', response);
+      this.authService.login(this.loginForm.value).subscribe({
+        next: (response: any) => {
+          this.toastService.showToast(
+            this.translate.instant('success.Login'),
+            'success'
+          );
         },
-        error => {
-          console.error('Login error:', error);
-        }
-      );
+          error: error => {
+            this.toastService.showToast(this.translate.instant('errors.badCredentials'), 'error');
+          }
+      });
     } else {
       console.log('Formulario no válido');
     }

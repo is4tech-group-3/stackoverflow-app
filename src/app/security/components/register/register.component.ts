@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../service/auth/auth.service';
 import { TranslateService } from '@ngx-translate/core';
-
+import { Router } from '@angular/router';
+import { ToastService } from 'src/app/shared/services/toast.service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -12,7 +13,9 @@ export class RegisterComponent {
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private router: Router,
+    private toastService: ToastService
   ) {}
 
   registerForm = this.formBuilder.group({
@@ -24,19 +27,36 @@ export class RegisterComponent {
 
   onSubmit() {
     if (this.registerForm.valid) {
-      console.log('Formulario enviado', this.registerForm.value);
-
-      this.authService.signup(this.registerForm.value).subscribe(
-        response => {
-          console.log('Registro exitoso:', response);
+      this.authService.signup(this.registerForm.value).subscribe({
+        next: (response: any) => {
+          this.toastService.showToast(
+            this.translate.instant('success.Registered'),
+            'success'
+          );
+          this.registerForm.reset();
+          setTimeout(() => {
+            this.router.navigate(['/auth/login']);
+          }, 500);
         },
-        error => {
-          console.error('Error en el registro:', error);
+        error: error => {
+          const errorMessage = this.getBackendErrorMessage(error.error);
+          this.toastService.showToast(errorMessage, 'error');
         }
-      );
+      });
     } else {
-      console.log('Formulario no válido');
+      // this.toastService.showToast(this.translate.instant('errors.required'), 'error');
     }
+  }
+
+  getBackendErrorMessage(error: any): string {
+    console.error(error?.detail);
+    
+    if (error?.detail) {
+      if (error.detail.includes('Email is already in use')) {
+        return this.translate.instant('errors.emailInUse');
+      }
+    }
+    return this.translate.instant('errors.internalServerError');
   }
 
   getErrorMessage(controlName: string) {

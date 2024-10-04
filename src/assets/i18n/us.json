@@ -32,15 +32,23 @@
     "SignIn": "Sign in",
     "rememberMe": "Remember me",
     "forgotPassword": "Forgot your password?",
-    "description": "Welcome back! Please log in to your account to continue. ",
+    "description": "Welcome back! Please log in to your account to continue.",
     "haveAccount": "Don't have an account yet?",
     "link": "Sign up here"
   },
   "errors": {
-    "required": "Thois field is required.",
+    "required": "This field is required.",
     "invalidEmail": "Please enter a valid email address.",
     "minLength": "The password must be at least 8 characters long.",
-    "pattern": "Please enter numbers only."
+    "pattern": "Please enter numbers only.",
+    "badCredentials": "Incorrect email or password.",
+    "emailInUse": "Email is already in use.",
+    "internalServerError": "Internal server error.",
+    "unknownError": "An unknown error occurred. Please try again later."
+  },
+  "success": {
+    "Registered": "Registration successful",
+    "Login": "Login successful"
   },
   "input": {
     "name": {

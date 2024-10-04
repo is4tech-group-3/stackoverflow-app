@@ -41,7 +41,15 @@
     "required": "Este campo es obligatorio.",
     "invalidEmail": "Por favor ingresa un correo válido.",
     "minLength": "La contraseña debe tener al menos 8 caracteres.",
-    "pattern": "Por favor ingresa sólo números."
+    "pattern": "Por favor ingresa sólo números.",
+    "badCredentials": "Correo o contraseña incorrectos.",
+    "emailInUse": "El correo electrónico ya está en uso.",
+    "internalServerError": "Error interno del servidor.",
+    "unknownError": "Ocurrió un error desconocido. Por favor intenta nuevamente más tarde."
+  },
+  "success": {
+    "Registered": "Registro exitoso",
+    "Login": "Inicio de sesión exitoso"
   },
   "input": {
     "name": {
