@@ -7,6 +7,7 @@ $bright-gray: #EEEEEE;
 $red-white: #FEF3F2;
 $garnet: #821E13;
 
+
 .users-container {
   display: flex;
   justify-content: center;
@@ -48,12 +49,12 @@ $garnet: #821E13;
     }
 
     .users-content-container {
-      flex-grow: 1; 
+      flex-grow: 1;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      width: 100%; 
-      align-items: center; 
+      width: 100%;
+      align-items: center;
     }
 
     .users-table-container {
@@ -63,75 +64,82 @@ $garnet: #821E13;
       flex-grow: 1;
     }
 
-    .paginator-container {
+    /* Aquí se ajusta solo el paginator */
+    mat-paginator {
       display: flex;
       justify-content: center;
-      align-items: center;
-      position: absolute;
-      bottom: 20px;  
-      width: 100%;  
+      width: 100%;
+      margin-top: 20px; /* Espacio arriba del paginator */
     }
 
     @media (max-width: 430px) {
-      padding: 10px;
-      flex-direction: column;
+      padding: 20px;
+      height: auto;
 
-      .users-title {
-        font-size: 20px;
-        margin-bottom: 10px; 
+      mat-paginator {
+        width: 100%; /* El paginator ocupará el 100% del contenedor */
+        margin-top: 10px; /* Ajustamos el margen superior */
       }
-
-      .add-user-button {
-        margin-bottom: 10px;
-      }
-
-      .users-table-container {
-        display: none;
-      }
-
-      .user-profile-list {
-        display: block;
-        width: 100%; 
-        list-style-type: none;
-        padding: 0;
-        margin-top: 20px;
-      }
-
-      .user-profile-list li {
-        margin: 10px 0;
-        background-color: white;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        width: 100%;
-      }
-
-      .user-details-card {
-        display: none;
-        margin-top: 10px;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-      }
-
-      .user-details-card.active {
-        display: block;
-      }
-    }
-  }
-
-  .action-icon {
-    width: 24px;
-    height: 24px;
-    transition: transform 0.2s ease;
-
-    &:hover {
-      transform: scale(1.1);
-    }
-
-    @media (max-width: 430px) {
-      width: 18px;
-      height: 18px;
     }
   }
 }
+
+/* Estilos para las cards sin modificar su lógica */
+.user-profile-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    margin: 10px 0;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: all 0.3s ease;
+
+    &.active .user-details-card {
+      max-height: 500px;
+      padding: 10px;
+      margin-top: 10px;
+      display: block;
+      overflow: visible;
+    }
+
+    .user-details-card {
+      display: none;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-in-out;
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .action-icon {
+      width: 24px;
+      height: 24px;
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+
+      @media (max-width: 430px) {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+}
+
+
+

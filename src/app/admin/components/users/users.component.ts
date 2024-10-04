@@ -42,8 +42,6 @@ export class UsersComponent implements AfterViewInit {
       this.dataSource.data = users;
     });
   }
-  
-  
 
   openDialog(): void {
     const dialogRef = this.dialog.open(UserModalComponent, {
@@ -62,13 +60,29 @@ export class UsersComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+  
+    this.paginator.page.subscribe(() => {
+      if (this.isSmallScreen) {
+        const pageIndex = this.paginator.pageIndex;
+        const pageSize = this.paginator.pageSize;
+        const startIndex = pageIndex * pageSize;
+        const endIndex = startIndex + pageSize;
+  
+        this.dataSource.filteredData = this.dataSource.data.slice(startIndex, endIndex);
+      }
+    });
   }
 
   toggleCard(user: User): void {
     this.selectedUser = this.selectedUser === user ? null : user;
   }
-  
+
   deleteUser(user: User): void {
+    if (!user.id) {  // Verificar si el id está disponible
+      console.error('El usuario no tiene un ID válido:', user);
+      return;
+    }
+
     const confirmation = confirm(`¿Estás seguro de que deseas eliminar al usuario ${user.name} ${user.surname}?`);
   
     if (confirmation) {
@@ -79,8 +93,6 @@ export class UsersComponent implements AfterViewInit {
       });
     }
   }
-  
-  
 
   editUser(user: User): void {
     const dialogRef = this.dialog.open(UserModalComponent, {
@@ -95,7 +107,7 @@ export class UsersComponent implements AfterViewInit {
         });
       }
     });
-  }  
+  }
 }
 
 export interface User {
