@@ -2,13 +2,17 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../service/auth/auth.service'; // Importa el servicio de autenticación
 import { TranslateService } from '@ngx-translate/core';
-import { ToastService } from 'src/app/shared/services/toast.service';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { ToastService } from 'src/app/shared/services/toast/toast.service';
+import { DecodeTokenService } from 'src/app/shared/services/token/decode-token.service';
+import { CookieUtil } from 'src/app/shared/utils/CookieUtil';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
+  @BlockUI() blockUI!: NgBlockUI;
   hide = true;
   toastMessage: string = '';
   toastType: 'success' | 'error' | 'warning' | 'info' = 'info';
@@ -22,21 +26,37 @@ export class LoginComponent {
     private validatorForm: FormBuilder,
     private authService: AuthService,
     private translate: TranslateService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private decodeTokenService: DecodeTokenService
   ) {}
 
   onSubmit() {
     if (this.loginForm.valid) {
+      this.blockUI.start('Loading...'); // Bloquea la UI con un mensaje opcional
+
       this.authService.login(this.loginForm.value).subscribe({
         next: (response: any) => {
+          const decodedToken = this.decodeTokenService.DecodeToken(
+            response?.token
+          );
+          CookieUtil.setValue('token', response?.token);
+          CookieUtil.setValue('expiration', decodedToken?.exp);
+          CookieUtil.setValue('iat', decodedToken?.iat);
+          CookieUtil.setValue('sub', decodedToken?.sub);
+          CookieUtil.setValue('roles', decodedToken?.roles);
+
           this.toastService.showToast(
             this.translate.instant('success.Login'),
             'success'
           );
+          this.blockUI.stop();
         },
-          error: error => {
-            this.toastService.showToast(this.translate.instant('errors.badCredentials'), 'error');
-          }
+        error: error => {
+          this.toastService.showToast(
+            this.translate.instant('errors.badCredentials'),
+            'error'
+          );
+        }
       });
     } else {
       console.log('Formulario no válido');

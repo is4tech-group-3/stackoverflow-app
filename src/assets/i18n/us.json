@@ -22,6 +22,7 @@
   "Dashboard": "Dashboard",
   "English": "English",
   "Spanish": "Spanish",
+  "Description": "Description",
   "register": {
     "SignUp": "Sign up",
     "description": "Welcome! Let's get you started by creating an account.",
@@ -47,7 +48,7 @@
     "unknownError": "An unknown error occurred. Please try again later."
   },
   "success": {
-    "Registered": "Registration successful",
+    "Registered": "Registration successful. Please check your email for the password to access the platform.",
     "Login": "Login successful"
   },
   "input": {

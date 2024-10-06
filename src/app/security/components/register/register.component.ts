@@ -3,13 +3,16 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../service/auth/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
-import { ToastService } from 'src/app/shared/services/toast.service';
+import { ToastService } from 'src/app/shared/services/toast/toast.service';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
+  @BlockUI() blockUI!: NgBlockUI;
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
@@ -27,12 +30,14 @@ export class RegisterComponent {
 
   onSubmit() {
     if (this.registerForm.valid) {
+      this.blockUI.start('Loading...');
       this.authService.signup(this.registerForm.value).subscribe({
         next: (response: any) => {
           this.toastService.showToast(
             this.translate.instant('success.Registered'),
             'success'
           );
+          this.blockUI.stop(); 
           this.registerForm.reset();
           setTimeout(() => {
             this.router.navigate(['/auth/login']);
@@ -50,7 +55,7 @@ export class RegisterComponent {
 
   getBackendErrorMessage(error: any): string {
     console.error(error?.detail);
-    
+
     if (error?.detail) {
       if (error.detail.includes('Email is already in use')) {
         return this.translate.instant('errors.emailInUse');

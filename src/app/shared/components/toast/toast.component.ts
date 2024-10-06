@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastService } from '../../services/toast.service';
+import { ToastService } from '../../services/toast/toast.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
@@ -38,7 +38,7 @@ export class ToastComponent implements OnInit {
         this.type = toast.type;
         this.isVisible = true;
 
-        setTimeout(() => this.closeToast(), 3000);
+        setTimeout(() => this.closeToast(), 4000);
       }
     });
   }

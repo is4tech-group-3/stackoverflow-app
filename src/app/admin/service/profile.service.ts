@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_URL } from 'src/app/shared/utils/constants.utility';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -35,5 +34,10 @@ export class ProfileService {
   // DELETE: Eliminar un perfil por ID
   deleteProfile(id: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${id}`);
+  }
+
+  // PUT: Deshabilitar o habilitar un perfil
+  toggleProfileStatus(id: number, status: boolean): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${id}/status`, { status });
   }
 }

@@ -10,7 +10,11 @@ import { TranslateService } from '@ngx-translate/core';
 export class AppComponent {
   showNavbar = true;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private translate: TranslateService) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private translate: TranslateService
+  ) {
     this.translate.setDefaultLang('es');
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {

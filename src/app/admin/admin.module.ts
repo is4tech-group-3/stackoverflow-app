@@ -7,6 +7,9 @@ import { ProfilesComponent } from './components/profiles/profiles.component';
 import { UserModalComponent } from './components/users/user-modal/user-modal.component';
 import { UsersComponent } from './components/users/users.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { QuestionsComponent } from './components/questions/questions.component';
 import { HttpClientModule } from '@angular/common/http';
 import { UserModalPostComponent } from './components/users/user-modal-post/user-modal-post.component';
 
@@ -18,14 +21,16 @@ import { UserModalPostComponent } from './components/users/user-modal-post/user-
     UserModalComponent,
     UserModalPostComponent,
     AuditComponent,
-    DashboardComponent
+    DashboardComponent,
+    QuestionsComponent
   ],
   imports: [
+    MatMenuModule,
+    MatIconModule,
     SharedModule,
     AdminRoutingModule,
     HttpClientModule
-   
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class AdminModule { }
+export class AdminModule {}

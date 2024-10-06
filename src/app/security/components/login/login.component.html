@@ -3,7 +3,8 @@
     <div class="flex relative justify-center items-center p-6 h-screen w-full">
       <img
         src="assets/img/wave3.png"
-        class="absolute top-0 h-full -right-16 rotate-180 hidden lg:block object-contain"
+        class="absolute top-0 h-full -right-16 rotate-180 hidden lg:block object-contain "
+        style="filter: drop-shadow(-5px 5px 10px #000000);"
         alt="wave-image"
       />
       <form
@@ -34,7 +35,6 @@
                 formControlName="email"
                 name="email"
                 type="text"
-                required
                 class="w-full bg-transparent text-sm border-b-2 border-gray-300 focus:border-dark-gunmetal px-2 py-3 outline-none"
                 placeholder="{{ 'input.email.placeholder' | translate }}"
               />

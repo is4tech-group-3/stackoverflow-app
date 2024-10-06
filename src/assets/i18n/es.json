@@ -23,6 +23,7 @@
   "Dashboard": "Panel de Control",
   "English": "Inglés",
   "Spanish": "Español",
+  "Description": "Descripción",
   "register": {
     "SignUp": "Crear cuenta",
     "description": "¡Bienvenido! Comencemos creando tu cuenta.",
@@ -48,7 +49,7 @@
     "unknownError": "Ocurrió un error desconocido. Por favor intenta nuevamente más tarde."
   },
   "success": {
-    "Registered": "Registro exitoso",
+    "Registered": "Registro exitoso. Por favor, revise su correo electrónico, donde encontrará su contraseña para acceder a la plataforma.",
     "Login": "Inicio de sesión exitoso"
   },
   "input": {
