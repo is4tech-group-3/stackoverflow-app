@@ -1,9 +1,7 @@
 <header
   [ngClass]="{
-    'bg-dark-gunmetal': hasScrolled,
-    'bg-transparent': !hasScrolled,
-    'fixed w-full': isFixed,
-    'sticky ': !isFixed
+    'fixed w-full bg-transparent': isFixed,
+    'sticky bg-dark-gunmetal ': !isFixed
   }"
   class="top-0 z-50 transition-colors duration-300 ease-in-out"
 >
