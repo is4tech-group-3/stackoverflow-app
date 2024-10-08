@@ -24,8 +24,9 @@ export class ProfilesComponent implements OnInit {
   getProfiles(): void {
     this.profileService.getProfiles().subscribe(
       data => {
-        this.profiles = data;
-        this.filteredProfiles = data;
+        console.log(data);
+        this.profiles = data.content;
+        this.filteredProfiles = this.profiles;
         this.updatePagedProfiles();
       },
       error => {

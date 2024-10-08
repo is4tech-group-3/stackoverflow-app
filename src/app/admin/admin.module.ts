@@ -9,6 +9,7 @@ import { UserModalPostComponent } from './components/users/user-modal-post/user-
 import { UserModalComponent } from './components/users/user-modal/user-modal.component';
 import { UsersComponent } from './components/users/users.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { RolesComponent } from './components/roles/roles.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     UserModalPostComponent,
     AuditComponent,
     DashboardComponent,
-    QuestionsComponent
+    QuestionsComponent,
+    RolesComponent
   ],
   imports: [SharedModule, AdminRoutingModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

@@ -30,10 +30,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastComponent } from './components/toast/toast.component';
 
-// service
-
 @NgModule({
-  declarations: [NavbarComponent, ToastComponent],
+  declarations: [NavbarComponent, ToastComponent, ],
   imports: [
     CommonModule,
     HttpClientModule,
