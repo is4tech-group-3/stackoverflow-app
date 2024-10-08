@@ -2,6 +2,7 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { RouterLink, RouterLinkActive, RouterModule } from '@angular/router';
+import { LottieModule } from 'ngx-lottie';
 
 // Angular Material Modules
 import { MatButtonModule } from '@angular/material/button';
@@ -30,8 +31,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastComponent } from './components/toast/toast.component';
 
+// service
+
 @NgModule({
-  declarations: [NavbarComponent, ToastComponent, ],
+  declarations: [NavbarComponent, ToastComponent],
   imports: [
     CommonModule,
     HttpClientModule,
@@ -41,7 +44,7 @@ import { ToastComponent } from './components/toast/toast.component';
     AsyncPipe,
     RouterModule,
     RouterLink,
-
+    LottieModule,
     // Angular Material Modules
     MatMenuModule,
     MatButtonModule,
@@ -72,6 +75,7 @@ import { ToastComponent } from './components/toast/toast.component';
     ToastComponent,
     RouterLink,
     RouterModule,
+    LottieModule,
 
     // Angular Material Modules
     MatMenuModule,

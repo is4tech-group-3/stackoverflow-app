@@ -1,4 +1,5 @@
 {
+  "NamePage": "BugStack",
   "Home": "Inicio",
   "About": "Acerca de",
   "Blogs": "Blogs",
@@ -53,6 +54,11 @@
     "Login": "Inicio de sesión exitoso",
     "PasswordRecovery": "Se ha enviado un correo electrónico con el código de recuperación de la contraseña. Por favor, revise su correo electrónico y siga las instrucciones para restablecer su contraseña.",
     "PasswordReset": "Se ha restablecido la contraseña. Por favor, inicie sesión para continuar."
+  },
+  "home": {
+    "title": "Bienvenido a",
+    "description": "Encuentre soluciones, comparta conocimiento y conecte con expertos en el depurador!",
+    "join": "Únete a nuestra Comunidad"
   },
   "input": {
     "name": {

@@ -10,9 +10,14 @@ import { SharedModule } from './shared/shared.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptorInterceptor } from './interceptors/jwt-interceptor.interceptor';
 import { BlockUIModule } from 'ng-block-ui';
+import { LottieModule } from 'ngx-lottie';
+import player from 'lottie-web';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
+}
+export function playerFactory() {
+  return player;
 }
 @NgModule({
   declarations: [AppComponent],
@@ -21,8 +26,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppRoutingModule,
     BrowserAnimationsModule,
     SharedModule,
-    BlockUIModule.forRoot(),
     HttpClientModule,
+    BlockUIModule.forRoot(),
+    LottieModule.forRoot({ player: playerFactory }),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

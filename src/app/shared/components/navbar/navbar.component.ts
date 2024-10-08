@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { SessionService } from 'src/app/shared/services/sesion/session.service';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -12,6 +13,8 @@ export class NavbarComponent implements OnInit {
   isMobileMenuOpen = false;
   isLoggedIn = false;
   activeLanguage = 'us';
+  hasScrolled = false;
+  isFixed: boolean = false;
 
   constructor(
     private translate: TranslateService,
@@ -27,6 +30,27 @@ export class NavbarComponent implements OnInit {
     });
 
     this.isLoggedIn = this.sessionService.isLoggedIn();
+
+    // Establecer el estado del navbar sticky según la ruta actual
+    this.router.events.subscribe(() => {
+      this.checkStickyNavbar();
+    });
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    const scrollPosition =
+      window.scrollY ||
+      document.documentElement.scrollTop ||
+      document.body.scrollTop ||
+      0;
+    this.hasScrolled = scrollPosition > 0; 
+  }
+
+  checkStickyNavbar() {
+    const fixedRoutes = ['/home']; // Añade las rutas que deseas que sean fixed
+
+    this.isFixed = fixedRoutes.includes(this.router.url);
   }
 
   toggleLanguageDropdown() {

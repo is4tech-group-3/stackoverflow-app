@@ -73,18 +73,16 @@ export class ForgotPasswordComponent {
 
   onSubmit() {
     if (this.emailForm.valid) {
-      const email = this.emailForm.get('email')?.value;
-      this.passwordChangeForm.patchValue({ email: email });
-
       this.authService.recoveryPassword(this.emailForm.value).subscribe({
         next: (response: any) => {
           this.toastService.showSuccessToast(
             this.translate.instant('success.PasswordRecovery')
           );
+          const email = this.emailForm.get('email')?.value;
+          this.passwordChangeForm.patchValue({ email: email });
           this.nextStep();
         },
         error: error => {
-          this.nextStep();
           console.error('Error al enviar el email:', error);
           this.toastService.showErrorToast('Eror al enviar el email');
         }
@@ -113,7 +111,7 @@ export class ForgotPasswordComponent {
 
   onVerificationCodeChange(code: string) {
     if (code && code.length === 6) {
-      // Ejemplo: asume que el código es de 6 
+      // Ejemplo: asume que el código es de 6
       this.authService.verifyCode(code).subscribe({
         next: (response: any) => {
           if (response.isValid) {

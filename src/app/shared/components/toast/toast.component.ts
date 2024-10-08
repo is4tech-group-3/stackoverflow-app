@@ -38,7 +38,7 @@ export class ToastComponent implements OnInit {
         this.type = toast.type;
         this.isVisible = true;
 
-        setTimeout(() => this.closeToast(), 4000);
+        setTimeout(() => this.closeToast(), 6000);
       }
     });
   }

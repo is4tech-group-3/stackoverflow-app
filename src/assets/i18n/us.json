@@ -1,4 +1,5 @@
 {
+  "NamePage": "BugStack",
   "Home": "Home",
   "About": "About",
   "Blogs": "Blogs",
@@ -52,6 +53,11 @@
     "Login": "Login successful",
     "PasswordRecovery": "An email with the password recovery code has been sent. Please check your email and follow the instructions to reset your password.",
     "PasswordReset": "Password reset successful. Please log in to continue."
+  },
+  "home": {
+    "title": "Welcome to",
+    "description": "Find solutions, share knowledge, and connect with experts in debugging!",
+    "join": "Join our Community"
   },
   "input": {
     "name": {
