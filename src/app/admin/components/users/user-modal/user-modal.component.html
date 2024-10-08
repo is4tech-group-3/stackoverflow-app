@@ -1,52 +1,56 @@
-<div class="user-modal-container">
-  <h2>Agregar Usuario</h2>
-  <form [formGroup]="userForm">
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Correo electrónico</mat-label>
-      <input matInput type="email" placeholder="Ingresa el correo" formControlName="email" required />
-    </mat-form-field>
+<div class="p-5 max-w-lg w-full mx-auto bg-white rounded-lg shadow-lg">
+  <h2 class="text-center text-2xl font-semibold mb-6">Agregar Usuario</h2>
+  
+  <form [formGroup]="userForm" class="space-y-4">
+    <div>
+      <label for="email" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+      <input id="email" type="email" formControlName="email" placeholder="Ingresa el correo"
+        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-sunset-orange focus:border-sunset-orange" required>
+    </div>
+    
+    <div>
+      <label for="name" class="block text-sm font-medium text-gray-700">Nombre</label>
+      <input id="name" type="text" formControlName="name" placeholder="Ingresa el nombre"
+        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-sunset-orange focus:border-sunset-orange" required>
+    </div>
 
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Nombre</mat-label>
-      <input matInput type="text" placeholder="Ingresa el nombre" formControlName="name" required />
-    </mat-form-field>
+    <div>
+      <label for="surname" class="block text-sm font-medium text-gray-700">Apellido</label>
+      <input id="surname" type="text" formControlName="surname" placeholder="Ingresa el apellido"
+        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-sunset-orange focus:border-sunset-orange" required>
+    </div>
 
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Apellido</mat-label>
-      <input matInput type="text" placeholder="Ingresa el apellido" formControlName="surname" required />
-    </mat-form-field>
+    <div>
+      <label for="username" class="block text-sm font-medium text-gray-700">Usuario</label>
+      <input id="username" type="text" formControlName="username" placeholder="Ingresa el nombre de usuario"
+        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-sunset-orange focus:border-sunset-orange" required>
+    </div>
 
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Usuario</mat-label>
-      <input matInput type="text" placeholder="Ingresa el nombre de usuario" formControlName="username" required />
-    </mat-form-field>
+    <div>
+      <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+      <input id="password" type="password" formControlName="password" placeholder="Ingresa la contraseña"
+        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-sunset-orange focus:border-sunset-orange" required>
+    </div>
 
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Contraseña</mat-label>
-      <input matInput type="password" placeholder="Ingresa la contraseña" formControlName="password" required />
-    </mat-form-field>
+    <div>
+      <label for="status" class="block text-sm font-medium text-gray-700">Estado</label>
+      <select id="status" formControlName="status" 
+        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-sunset-orange focus:border-sunset-orange">
+        <option [value]="true">Activo</option>
+        <option [value]="false">Inactivo</option>
+      </select>
+    </div>
 
-    <!--
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Tipo de usuario</mat-label>
-      <mat-select formControlName="type">
-        <mat-option value="admin">Admin</mat-option>
-        <mat-option value="user">User</mat-option>
-      </mat-select>
-    </mat-form-field>
-    -->
-
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Estado</mat-label>
-      <mat-select formControlName="status">
-        <mat-option [value]="true">Activo</mat-option>
-        <mat-option [value]="false">Inactivo</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <div class="modal-buttons">
-      <button mat-button (click)="onCancel()">Cancelar</button>
-      <button mat-raised-button color="primary" [disabled]="!userForm.valid" (click)="onSave()">Guardar</button>
+    <div class="flex justify-end space-x-3 mt-6">
+      <button type="button" class="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-100"
+              (click)="onCancel()">
+        Cancelar
+      </button>
+      <button type="button" [disabled]="!userForm.valid"
+              class="px-4 py-2 bg-sunset-orange text-white rounded-md hover:bg-dark-gunmetal transition"
+              (click)="onSave()">
+        Guardar
+      </button>
     </div>
   </form>
 </div>

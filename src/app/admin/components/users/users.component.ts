@@ -5,6 +5,8 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { UserService } from '../../service/user.service';
+import { PageEvent } from '@angular/material/paginator';
+import { UserModalPostComponent } from './user-modal-post/user-modal-post.component';
 
 @Component({
   selector: 'app-users',
@@ -14,9 +16,13 @@ import { UserService } from '../../service/user.service';
 export class UsersComponent implements AfterViewInit {
   isSmallScreen: boolean = false;
   selectedUser: User | null = null;
+  users: User[] = [];
   dataSource = new MatTableDataSource<User>([]);
 
-  displayedColumns: string[] = ['name', 'surname', 'username', 'email', 'status', 'edit', 'delete'];
+  pageSize = 8;
+  currentPage = 0;
+
+  displayedColumns: string[] = ['id', 'name', 'surname', 'username', 'email', 'status', 'edit', 'delete'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -36,11 +42,32 @@ export class UsersComponent implements AfterViewInit {
     this.getUsers();
   }
 
-  getUsers(): void {
-    this.userService.getUsers().subscribe(users => {
-      console.log('Usuarios cargados:', users);
-      this.dataSource.data = users;
-    });
+  getUsers(page: number = 0, size: number = this.pageSize): void {
+    this.userService.getUsersPaginated(page, size).subscribe(
+      response => {
+        console.log('Usuarios recibidos:', response);
+        this.users = response.content;
+        this.dataSource.data = this.users;
+        this.paginator.length = response.totalElements;
+        this.paginator.pageIndex = response.number;
+        this.paginator.pageSize = response.size;
+      },
+      error => {
+        console.error('Error al obtener los usuarios', error);
+      }
+    );
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.currentPage = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.getUsers(this.currentPage, this.pageSize); 
+  }
+
+  filterUsers(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    const filterValue = inputElement.value ? inputElement.value.trim().toLowerCase() : '';
+    this.dataSource.filter = filterValue; 
   }
 
   openDialog(): void {
@@ -51,62 +78,72 @@ export class UsersComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.userService.addUser(result).subscribe(() => {
-          this.getUsers();
+        this.userService.createUser(result).subscribe((createdUser: User) => {
+          this.users.push(createdUser);
+          this.dataSource.data = this.users;
         });
+      }
+    });
+  }
+
+  deleteUser(user: User): void {
+    if (!user.id) {
+      console.error('El usuario no tiene un ID válido:', user);
+      return;
+    }
+
+    const confirmation = confirm(`¿Estás seguro de que deseas eliminar al usuario ${user.name} ${user.surname}?`);
+
+    if (confirmation) {
+      this.userService.deleteUser(user.id).subscribe(
+        () => {
+          console.log('Usuario eliminado');
+          this.users = this.users.filter(u => u.id !== user.id);
+          this.dataSource.data = this.users;
+        },
+        error => {
+          console.error('Error al eliminar el usuario:', error);
+        }
+      );
+    }
+  }
+
+  editUser(user: User): void {
+    const dialogRef = this.dialog.open(UserModalPostComponent, {
+      width: this.dialogWidth,
+      data: { ...user }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.userService.updateUser(user.id, {
+          name: result.name,
+          surname: result.surname,
+          username: result.username
+        }).subscribe(
+          (updatedUser: User) => {
+            console.log('Usuario actualizado:', updatedUser);
+            const index = this.users.findIndex(u => u.id === updatedUser.id);
+            if (index !== -1) {
+              this.users[index] = updatedUser;
+              this.dataSource.data = this.users;
+            }
+          },
+          error => {
+            console.error('Error al actualizar el usuario:', error);
+          }
+        );
       }
     });
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-  
-    this.paginator.page.subscribe(() => {
-      if (this.isSmallScreen) {
-        const pageIndex = this.paginator.pageIndex;
-        const pageSize = this.paginator.pageSize;
-        const startIndex = pageIndex * pageSize;
-        const endIndex = startIndex + pageSize;
-  
-        this.dataSource.filteredData = this.dataSource.data.slice(startIndex, endIndex);
-      }
-    });
+    this.getUsers();
   }
 
   toggleCard(user: User): void {
     this.selectedUser = this.selectedUser === user ? null : user;
-  }
-
-  deleteUser(user: User): void {
-    if (!user.id) {  // Verificar si el id está disponible
-      console.error('El usuario no tiene un ID válido:', user);
-      return;
-    }
-
-    const confirmation = confirm(`¿Estás seguro de que deseas eliminar al usuario ${user.name} ${user.surname}?`);
-  
-    if (confirmation) {
-      this.userService.deleteUser(user.id).subscribe(() => {
-        this.getUsers();
-      }, error => {
-        console.error('Error al eliminar el usuario:', error);
-      });
-    }
-  }
-
-  editUser(user: User): void {
-    const dialogRef = this.dialog.open(UserModalComponent, {
-      width: this.dialogWidth,
-      data: { ...user }
-    });
-  
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.userService.updateUser(result.id, result).subscribe(() => {
-          this.getUsers(); 
-        });
-      }
-    });
   }
 }
 

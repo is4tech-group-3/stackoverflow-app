@@ -13,16 +13,13 @@ export class UserModalPostComponent {
 
   constructor(
     public dialogRef: MatDialogRef<UserModalPostComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: User,
+    @Inject(MAT_DIALOG_DATA) public data: Partial<User>, 
     private fb: FormBuilder
   ) {
     this.userForm = this.fb.group({
-      id: [data.id],
-      email: [data.email, [Validators.required, Validators.email]],
       name: [data.name, Validators.required],
       surname: [data.surname, Validators.required],
       username: [data.username, Validators.required],
-      status: [data.status, Validators.required]
     });
   }
 
@@ -31,6 +28,7 @@ export class UserModalPostComponent {
       this.dialogRef.close(this.userForm.value);
     }
   }
+  
 
   onCancel(): void {
     this.dialogRef.close();

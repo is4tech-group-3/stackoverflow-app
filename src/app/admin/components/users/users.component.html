@@ -1,56 +1,61 @@
-<div class="users-container">
-  <div class="users-card">
-    <h1 class="users-title">Usuarios</h1>
+<div class="flex justify-center items-center h-full-full-screen p-5">
+  <div class="bg-white p-10 rounded-lg shadow-lg w-full max-w-full sm:max-w-lg md:max-w-xl lg:max-w-2xl h-3/5 flex flex-col justify-start items-center">
+    <h1 class="self-start mb-5 text-dark-gunmetal text-2xl sm:text-xl">Usuarios</h1>
 
-    <button mat-raised-button class="add-user-button" (click)="openDialog()">
+    <button (click)="openDialog()" class="self-end mb-5 bg-sunset-orange text-white rounded-md px-4 py-2 hover:bg-dark-gunmetal transition">
       <span *ngIf="!isSmallScreen">Agregar Usuario</span>
       <span *ngIf="isSmallScreen">+</span>
     </button>
 
-    <div class="users-content-container">
+    <div class="flex-grow w-full flex flex-col justify-between items-center">
       <!-- Vista para pantallas grandes -->
-      <div class="users-table-container" *ngIf="!isSmallScreen">
-        <table mat-table [dataSource]="dataSource" class="users-table">
+      <div *ngIf="!isSmallScreen" class="w-full overflow-x-auto mt-14 flex-grow">
+        <table mat-table [dataSource]="dataSource" class="min-w-full divide-y divide-light-gray">
           <!-- Columnas de la tabla -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef class="text-left">ID</th>
+            <td mat-cell *matCellDef="let user">{{ user.id }}</td>
+          </ng-container>
+
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef> NAME </th>
-            <td mat-cell *matCellDef="let user"> {{ user.name }} </td>
+            <th mat-header-cell *matHeaderCellDef class="text-left">NAME</th>
+            <td mat-cell *matCellDef="let user">{{ user.name }}</td>
           </ng-container>
 
           <ng-container matColumnDef="surname">
-            <th mat-header-cell *matHeaderCellDef> SURNAME </th>
-            <td mat-cell *matCellDef="let user"> {{ user.surname }} </td>
+            <th mat-header-cell *matHeaderCellDef class="text-left">SURNAME</th>
+            <td mat-cell *matCellDef="let user">{{ user.surname }}</td>
           </ng-container>
 
           <ng-container matColumnDef="username">
-            <th mat-header-cell *matHeaderCellDef> USERNAME </th>
-            <td mat-cell *matCellDef="let user"> {{ user.username }} </td>
+            <th mat-header-cell *matHeaderCellDef class="text-left">USERNAME</th>
+            <td mat-cell *matCellDef="let user">{{ user.username }}</td>
           </ng-container>
 
           <ng-container matColumnDef="email">
-            <th mat-header-cell *matHeaderCellDef> EMAIL </th>
-            <td mat-cell *matCellDef="let user"> {{ user.email }} </td>
+            <th mat-header-cell *matHeaderCellDef class="text-left">EMAIL</th>
+            <td mat-cell *matCellDef="let user">{{ user.email }}</td>
           </ng-container>
 
           <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef> STATUS </th>
-            <td mat-cell *matCellDef="let user"> {{ user.status }} </td>
+            <th mat-header-cell *matHeaderCellDef class="text-left">STATUS</th>
+            <td mat-cell *matCellDef="let user">{{ user.status }}</td>
           </ng-container>
 
           <ng-container matColumnDef="edit">
-            <th mat-header-cell *matHeaderCellDef> EDIT </th>
+            <th mat-header-cell *matHeaderCellDef class="text-left">EDIT</th>
             <td mat-cell *matCellDef="let user">
               <button mat-icon-button (click)="editUser(user)">
-                <img src="assets/img/IconEdit.png" alt="Editar" class="action-icon edit-icon">
+                <img src="assets/img/IconEdit.png" alt="Editar" class="w-6 h-6">
               </button>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="delete">
-            <th mat-header-cell *matHeaderCellDef> DELETE </th>
+            <th mat-header-cell *matHeaderCellDef class="text-left">DELETE</th>
             <td mat-cell *matCellDef="let user">
               <button mat-icon-button (click)="deleteUser(user)">
-                <img src="assets/img/IconDelete.png" alt="Eliminar" class="action-icon delete-icon">
+                <img src="assets/img/IconDelete.png" alt="Eliminar" class="w-6 h-6">
               </button>
             </td>
           </ng-container>
@@ -61,29 +66,40 @@
       </div>
 
       <!-- Vista para pantallas móviles -->
-      <ul class="user-profile-list" *ngIf="isSmallScreen">
-        <li *ngFor="let user of dataSource.filteredData" [ngClass]="{ 'active': selectedUser === user }" (click)="toggleCard(user)">
+      <ul class="list-none p-0 m-0 w-full" *ngIf="isSmallScreen">
+        <li *ngFor="let user of dataSource.filteredData" 
+            (click)="toggleCard(user)" 
+            [ngClass]="{ 'bg-gray-100': selectedUser === user }" 
+            class="my-2 p-3 border border-gray-300 rounded-lg transition cursor-pointer">
           {{ user.name }} {{ user.surname }}
-          <div class="user-details-card" [ngClass]="{ 'active': selectedUser === user }">
+          <!-- Detalles de usuario desplegable -->
+          <div class="user-details-card overflow-hidden transition-all duration-300" 
+               [ngClass]="{'max-h-40': selectedUser === user, 'max-h-0': selectedUser !== user}">
             <p><strong>STATUS:</strong> {{ user.status }}</p>
             <p><strong>NAME:</strong> {{ user.name }}</p>
             <p><strong>SURNAME:</strong> {{ user.surname }}</p>
             <p><strong>USERNAME:</strong> {{ user.username }}</p>
             <p><strong>EMAIL:</strong> {{ user.email }}</p>
-            <div class="options">
+            <div class="flex justify-between w-full mt-2">
               <button mat-icon-button color="warn" (click)="deleteUser(user)">
-                <img src="assets/img/IconDelete.png" alt="Eliminar" class="action-icon delete-icon">
+                <img src="assets/img/IconDelete.png" alt="Eliminar" class="w-6 h-6">
               </button>
               <button mat-icon-button color="primary" (click)="editUser(user)">
-                <img src="assets/img/IconEdit.png" alt="Editar" class="action-icon edit-icon">
+                <img src="assets/img/IconEdit.png" alt="Editar" class="w-6 h-6">
               </button>
             </div>
           </div>
         </li>
       </ul>
 
-      <!-- Paginación -->
-      <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+      <!-- Paginación dentro del contenedor -->
+      <div class="mt-5 w-full flex justify-center">
+        <mat-paginator 
+          [pageSizeOptions]="[5, 10, 25]" 
+          showFirstLastButtons 
+          (page)="onPageChange($event)">
+        </mat-paginator>
+      </div>
     </div>
   </div>
 </div>
