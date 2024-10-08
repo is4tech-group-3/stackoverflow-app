@@ -28,11 +28,12 @@ import { HttpClientModule } from '@angular/common/http';
 // Reactive Forms Module
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastComponent } from './components/toast/toast.component';
+import { ProfileListComponent } from './components/profile-list/profile-list.component';
 
 // service
 
 @NgModule({
-  declarations: [NavbarComponent, ToastComponent],
+  declarations: [NavbarComponent, ToastComponent, ProfileListComponent],
   imports: [
     CommonModule,
     HttpClientModule,

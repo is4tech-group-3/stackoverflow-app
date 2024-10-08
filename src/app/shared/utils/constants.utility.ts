@@ -1,3 +1,4 @@
-import { environment } from "src/environments/environment.development";
+import { environment } from 'src/environments/environment.development';
 
 export const API_URL = environment.apiUrl;
+export const DATA_URL = environment.dataUrl;

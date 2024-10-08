@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { QuestionsComponent } from './components/questions/questions.component';
 import { HttpClientModule } from '@angular/common/http';
 import { UserModalPostComponent } from './components/users/user-modal-post/user-modal-post.component';
+import { RolesComponent } from './components/roles/roles.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { UserModalPostComponent } from './components/users/user-modal-post/user-
     UserModalPostComponent,
     AuditComponent,
     DashboardComponent,
-    QuestionsComponent
+    QuestionsComponent,
+    RolesComponent
   ],
   imports: [
     MatMenuModule,
