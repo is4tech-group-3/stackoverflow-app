@@ -8,15 +8,29 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl: string = API_URL + 'auth';
+  private baseUrl: string = API_URL;
 
   constructor(private http: HttpClient) {}
 
   signup(data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/signup`, data);
+    return this.http.post(`${this.baseUrl}auth/signup`, data);
   }
 
   login(data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/login`, data);
+    return this.http.post(`${this.baseUrl}auth/login`, data);
   }
+
+  recoveryPassword(data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}user/password-recovery`, data);
+  }
+
+  verifyCode(data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}user/verify-code`, data);
+  } 
+
+  resetPassword(data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}user/reset-password`, data);
+  }
+
+
 }

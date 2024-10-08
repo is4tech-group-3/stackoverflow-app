@@ -5,15 +5,19 @@ module.exports = {
   theme: {
     extend: {
       spacing: {
-        '128': '32rem',
+        128: '32rem',
       },
       height: {
-        'full-screen': 'calc(100vh - 50px)',
+        'full-screen': 'calc(100vh - 56px)',
       },
+      backgroundImage: {
+        'galaxy': 'url(assets/img/home.jpg)',
+      },
+
       colors: {
-        'dark-gunmetal': '#222831',// nuevo
-        'metallic-blue': '#30475E',// nuevo
-        'sunset-orange': '#F05454',// nuevo
+        'dark-gunmetal': '#222831', // nuevo
+        'metallic-blue': '#30475E', // nuevo
+        'sunset-orange': '#F05454', // nuevo
         'light-gray': '#DDDDDD', // nuevo
       },
     },

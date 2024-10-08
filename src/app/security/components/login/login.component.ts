@@ -6,6 +6,7 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ToastService } from 'src/app/shared/services/toast/toast.service';
 import { DecodeTokenService } from 'src/app/shared/services/token/decode-token.service';
 import { CookieUtil } from 'src/app/shared/utils/CookieUtil';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -33,7 +34,7 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       this.blockUI.start('Loading...'); // Bloquea la UI con un mensaje opcional
-
+console.log('🚀 ~ LoginComponent ~ onSubmit ~ this.loginForm.value:', this.loginForm.value)
       this.authService.login(this.loginForm.value).subscribe({
         next: (response: any) => {
           const decodedToken = this.decodeTokenService.DecodeToken(
@@ -45,16 +46,14 @@ export class LoginComponent {
           CookieUtil.setValue('sub', decodedToken?.sub);
           CookieUtil.setValue('roles', decodedToken?.roles);
 
-          this.toastService.showToast(
-            this.translate.instant('success.Login'),
-            'success'
+          this.toastService.showSuccessToast(
+            this.translate.instant('success.Login')
           );
           this.blockUI.stop();
         },
-        error: error => {
-          this.toastService.showToast(
-            this.translate.instant('errors.badCredentials'),
-            'error'
+        error: () => {
+          this.toastService.showErrorToast(
+            this.translate.instant('errors.badCredentials')
           );
         }
       });

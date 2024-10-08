@@ -1,6 +1,7 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { RouterLink, RouterLinkActive, RouterModule } from '@angular/router';
 
 // Angular Material Modules
 import { MatButtonModule } from '@angular/material/button';
@@ -40,6 +41,8 @@ import { ToastComponent } from './components/toast/toast.component';
     FormsModule,
     ReactiveFormsModule,
     AsyncPipe,
+    RouterModule,
+    RouterLink,
 
     // Angular Material Modules
     MatMenuModule,
@@ -69,6 +72,8 @@ import { ToastComponent } from './components/toast/toast.component';
     AsyncPipe,
     NavbarComponent,
     ToastComponent,
+    RouterLink,
+    RouterModule,
 
     // Angular Material Modules
     MatMenuModule,

@@ -21,7 +21,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppRoutingModule,
     BrowserAnimationsModule,
     SharedModule,
-    BlockUIModule.forRoot(),  
+    BlockUIModule.forRoot(),
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {

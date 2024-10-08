@@ -33,9 +33,8 @@ export class RegisterComponent {
       this.blockUI.start('Loading...');
       this.authService.signup(this.registerForm.value).subscribe({
         next: (response: any) => {
-          this.toastService.showToast(
+          this.toastService.showSuccessToast(
             this.translate.instant('success.Registered'),
-            'success'
           );
           this.blockUI.stop(); 
           this.registerForm.reset();
@@ -45,7 +44,7 @@ export class RegisterComponent {
         },
         error: error => {
           const errorMessage = this.getBackendErrorMessage(error.error);
-          this.toastService.showToast(errorMessage, 'error');
+          this.toastService.showErrorToast(errorMessage);
         }
       });
     } else {

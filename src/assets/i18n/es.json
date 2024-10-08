@@ -50,7 +50,9 @@
   },
   "success": {
     "Registered": "Registro exitoso. Por favor, revise su correo electrónico, donde encontrará su contraseña para acceder a la plataforma.",
-    "Login": "Inicio de sesión exitoso"
+    "Login": "Inicio de sesión exitoso",
+    "PasswordRecovery": "Se ha enviado un correo electrónico con el código de recuperación de la contraseña. Por favor, revise su correo electrónico y siga las instrucciones para restablecer su contraseña.",
+    "PasswordReset": "Se ha restablecido la contraseña. Por favor, inicie sesión para continuar."
   },
   "input": {
     "name": {

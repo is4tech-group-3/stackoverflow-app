@@ -1,20 +1,22 @@
-<div class="font-[sans-serif] bg-white lg:h-screen">
+<div class=" bg-white lg:h-screen">
+  <a [routerLink]="['/']" class="absolute top-4 left-4 z-10">
+    <mat-icon>arrow_back</mat-icon>
+  </a>
   <div class="grid lg:grid-cols-2 items-center gap-8 h-full">
     <div class="flex relative justify-center items-center p-6 h-screen w-full">
       <img
         src="assets/img/wave3.png"
-        class="absolute top-0 h-full -right-16 rotate-180 hidden lg:block object-contain "
-        style="filter: drop-shadow(-5px 5px 10px #000000);"
+        class="absolute top-0 h-full -right-16 rotate-180 hidden lg:block object-contain"
         alt="wave-image"
       />
       <form
         [formGroup]="loginForm"
         (ngSubmit)="onSubmit()"
-        class="max-w-md w-full mx-auto"
+        class="max-w-sm w-full mx-auto"
       >
         <div class="mb-10">
           <h3
-            class="text-sunset-orange md:text-3xl text-2xl font-extrabold max-md:text-center"
+            class="text-sunset-orange md:text-3xl text-2xl font-bold max-md:text-center"
           >
             {{ 'login.SignIn' | translate }}
           </h3>
@@ -27,7 +29,7 @@
 
         <div class="mt-6 relative">
           <div>
-            <label class="text-gray-800 font-bold text-sm block">
+            <label class="text-gray-800 font-semibold text-sm block">
               {{ 'input.email.label' | translate }}
             </label>
             <div class="relative flex items-center group">
@@ -59,7 +61,7 @@
 
         <div class="mt-6 relative">
           <div>
-            <label class="text-gray-800 font-bold text-sm block">
+            <label class="text-gray-800 font-semibold text-sm block">
               {{ 'input.password.label' | translate }}
             </label>
             <div class="relative flex items-center group">

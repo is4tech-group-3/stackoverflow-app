@@ -49,7 +49,9 @@
   },
   "success": {
     "Registered": "Registration successful. Please check your email for the password to access the platform.",
-    "Login": "Login successful"
+    "Login": "Login successful",
+    "PasswordRecovery": "An email with the password recovery code has been sent. Please check your email and follow the instructions to reset your password.",
+    "PasswordReset": "Password reset successful. Please log in to continue."
   },
   "input": {
     "name": {
