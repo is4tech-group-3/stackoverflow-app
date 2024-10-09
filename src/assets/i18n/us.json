@@ -43,6 +43,7 @@
     "invalidEmail": "Please enter a valid email address.",
     "minLength": "The password must be at least 8 characters long.",
     "pattern": "Please enter numbers only.",
+    "mismatch": "Passwords do not match.",
     "badCredentials": "Incorrect email or password.",
     "emailInUse": "Email is already in use.",
     "internalServerError": "Internal server error.",
@@ -58,6 +59,16 @@
     "title": "Welcome to",
     "description": "Find solutions, share knowledge, and connect with experts in debugging!",
     "join": "Join our Community"
+  },
+  "forgotPassword": {
+    "title": "Forgot password",
+    "success": "Password Changed Successfully!",
+    "label-1": "recovery",
+    "label-2": "Password",
+    "label-3": "Confirmation",
+    "descriptionEmail": "Enter your email address to receive a verification link to reset your password.",
+    "descriptionCode": "Enter the verification code sent to your email and set a new password.",
+    "descriptionConfirm": "Your password has been changed. You can now log in with your new password."
   },
   "input": {
     "name": {
@@ -79,6 +90,36 @@
     "password": {
       "label": "Password",
       "placeholder": "Enter password"
+    },
+    "code": {
+      "label": "Verification Code",
+      "placeholder": "Enter verification code"
+    },
+    "newPassword": {
+      "label": "New Password",
+      "placeholder": "Enter new password"
+    },
+    "confirmPassword": {
+      "label": "Confirm Password",
+      "placeholder": "Confirm password"
     }
+  },
+  "button": {
+    "continue": "Continue",
+    "back": "Back",
+    "change": "Change",
+    "send": "Send",
+    "reset": "Reset",
+    "submit": "Submit",
+    "update": "Update",
+    "create": "Create",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "close": "Close",
+    "save": "Save",
+    "register": "Register",
+    "login": "Login",
+    "logout": "Logout",
+    "forgotPassword": "Forgot password"
   }
 }

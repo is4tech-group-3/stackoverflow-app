@@ -6,6 +6,7 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ToastService } from 'src/app/shared/services/toast/toast.service';
 import { DecodeTokenService } from 'src/app/shared/services/token/decode-token.service';
 import { CookieUtil } from 'src/app/shared/utils/CookieUtil';
+import { FormErrorService } from 'src/app/shared/services/formError/form-error.service';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,15 @@ import { CookieUtil } from 'src/app/shared/utils/CookieUtil';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
+  constructor(
+    private validatorForm: FormBuilder,
+    private authService: AuthService,
+    private translate: TranslateService,
+    private toastService: ToastService,
+    private decodeTokenService: DecodeTokenService,
+    private formErrorService: FormErrorService
+  ) {}
+
   @BlockUI() blockUI!: NgBlockUI;
   hide = true;
   toastMessage: string = '';
@@ -23,18 +33,13 @@ export class LoginComponent {
     password: ['', [Validators.required, Validators.minLength(8)]]
   });
 
-  constructor(
-    private validatorForm: FormBuilder,
-    private authService: AuthService,
-    private translate: TranslateService,
-    private toastService: ToastService,
-    private decodeTokenService: DecodeTokenService
-  ) {}
-
   onSubmit() {
     if (this.loginForm.valid) {
       this.blockUI.start('Loading...'); // Bloquea la UI con un mensaje opcional
-console.log('🚀 ~ LoginComponent ~ onSubmit ~ this.loginForm.value:', this.loginForm.value)
+      console.log(
+        '🚀 ~ LoginComponent ~ onSubmit ~ this.loginForm.value:',
+        this.loginForm.value
+      );
       this.authService.login(this.loginForm.value).subscribe({
         next: (response: any) => {
           const decodedToken = this.decodeTokenService.DecodeToken(
@@ -63,21 +68,6 @@ console.log('🚀 ~ LoginComponent ~ onSubmit ~ this.loginForm.value:', this.log
   }
 
   getErrorMessage(controlName: string) {
-    const control = this.loginForm.get(controlName);
-    const messages: { [key: string]: string } = {
-      required: this.translate.instant('errors.required'),
-      email: this.translate.instant('errors.invalidEmail'),
-      minlength: this.translate.instant('errors.minLength'),
-      pattern: this.translate.instant('errors.pattern')
-    };
-    if (control && control.errors) {
-      const errorKey = Object.keys(control.errors).find(
-        key => control.errors![key]
-      );
-      if (errorKey) {
-        return messages[errorKey] || '';
-      }
-    }
-    return '';
+    return this.formErrorService.getErrorMessage(this.loginForm, controlName);
   }
 }

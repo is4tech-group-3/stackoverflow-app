@@ -22,27 +22,27 @@
     <ul class="hidden items-center justify-center gap-6 lg:flex">
       <li>
         <a
-          routerLinkActive="text-sunset-orange"
+          routerLinkActive="text-sunset-orange-500"
           [routerLink]="['/home']"
-          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange"
+          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-300"
         >
           {{ 'Home' | translate }}
         </a>
       </li>
       <li>
         <a
-          routerLinkActive="!text-sunset-orange"
+          routerLinkActive="!text-sunset-orange-500"
           [routerLink]="['/about']"
-          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange"
+          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-300"
         >
           {{ 'About' | translate }}
         </a>
       </li>
       <li>
         <a
-          routerLinkActive="!text-sunset-orange"
+          routerLinkActive="!text-sunset-orange-500"
           [routerLink]="['/blogs']"
-          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange"
+          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-300"
         >
           {{ 'Blogs' | translate }}
         </a>
@@ -104,7 +104,7 @@
       <div class="relative">
         <input
           type="text"
-          class="block w-full pl-10 pr-3 py-1.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sunset-orange focus:border-transparent"
+          class="block w-full pl-10 pr-3 py-1.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sunset-orange-500 focus:border-transparent"
           placeholder="{{ 'Search' | translate }}"
         />
         <div
@@ -131,7 +131,7 @@
       <div *ngIf="!isLoggedIn">
         <a
           [routerLink]="['/auth/login']"
-          class="group active:scale-105 relative inline-flex py-2 items-center justify-center overflow-hidden rounded bg-sunset-orange px-3 font-medium text-white"
+          class="group active:scale-105 relative inline-flex py-2 items-center justify-center overflow-hidden rounded bg-sunset-orange-500 px-3 font-medium text-white"
         >
           {{ 'login.SignIn' | translate }}
           <div
@@ -190,27 +190,27 @@
     <ul class="flex flex-col gap-2">
       <li>
         <a
-          routerLinkActive="!text-sunset-orange"
+          routerLinkActive="!text-sunset-orange-500"
           [routerLink]="['/home']"
-          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange"
+          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-500"
         >
           {{ 'Home' | translate }}
         </a>
       </li>
       <li>
         <a
-          routerLinkActive="!text-sunset-orange"
+          routerLinkActive="!text-sunset-orange-500"
           [routerLink]="['/about']"
-          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange"
+          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-500"
         >
           {{ 'About' | translate }}
         </a>
       </li>
       <li>
         <a
-          routerLinkActive="!text-sunset-orange"
+          routerLinkActive="!text-sunset-orange-500"
           [routerLink]="['/blogs']"
-          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange"
+          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-500"
         >
           {{ 'Blogs' | translate }}
         </a>
@@ -218,7 +218,7 @@
       <li *ngIf="!isLoggedIn">
         <a
           [routerLink]="['/auth/login']"
-          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange"
+          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-500"
         >
           {{ 'login.SignIn' | translate }}
         </a>
@@ -226,7 +226,7 @@
       <li *ngIf="!isLoggedIn">
         <a
           [routerLink]="['/auth/register']"
-          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange"
+          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-500"
         >
           {{ 'register.SignUp' | translate }}
         </a>
@@ -234,7 +234,7 @@
       <li *ngIf="isLoggedIn">
         <button
           (click)="logout()"
-          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange"
+          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-500"
         >
           Salir
         </button>

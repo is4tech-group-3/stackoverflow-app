@@ -44,6 +44,7 @@ import { ToastComponent } from './components/toast/toast.component';
     AsyncPipe,
     RouterModule,
     RouterLink,
+    RouterLinkActive,
     LottieModule,
     // Angular Material Modules
     MatMenuModule,
@@ -76,7 +77,7 @@ import { ToastComponent } from './components/toast/toast.component';
     RouterLink,
     RouterModule,
     LottieModule,
-
+    RouterLinkActive,
     // Angular Material Modules
     MatMenuModule,
     MatButtonModule,

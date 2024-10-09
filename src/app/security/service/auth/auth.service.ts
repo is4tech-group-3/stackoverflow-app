@@ -24,13 +24,7 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}user/password-recovery`, data);
   }
 
-  verifyCode(data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}user/verify-code`, data);
-  } 
-
   resetPassword(data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}user/reset-password`, data);
+    return this.http.patch(`${this.baseUrl}user/password-reset`, data);
   }
-
-
 }

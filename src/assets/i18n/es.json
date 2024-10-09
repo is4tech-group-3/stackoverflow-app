@@ -44,6 +44,7 @@
     "invalidEmail": "Por favor ingresa un correo válido.",
     "minLength": "La contraseña debe tener al menos 8 caracteres.",
     "pattern": "Por favor ingresa sólo números.",
+    "mismatch": "Las contraseñas no coinciden.",
     "badCredentials": "Correo o contraseña incorrectos.",
     "emailInUse": "El correo electrónico ya está en uso.",
     "internalServerError": "Error interno del servidor.",
@@ -59,6 +60,16 @@
     "title": "Bienvenido a",
     "description": "Encuentre soluciones, comparta conocimiento y conecte con expertos en el depurador!",
     "join": "Únete a nuestra Comunidad"
+  },
+  "forgotPassword": {
+    "title": "Olvidé mi contraseña",
+    "success": "¡Contraseña cambiada con éxito!",
+    "label-1": "Recuperar",
+    "label-2": "Contraseña",
+    "label-3": "Confirmacion",
+    "descriptionEmail": "Ingrese su correo electrónico para recibir un enlace de verificación para restablecer su contraseña.",
+    "descriptionCode": "Ingrese el código de verificación enviado a su correo electrónico y establezca una nueva contraseña.",
+    "descriptionConfirm": "Se ha cambiado la contraseña. Ahora puede iniciar sesión con su nueva contraseña."
   },
   "input": {
     "name": {
@@ -80,6 +91,36 @@
     "password": {
       "label": "Contraseña",
       "placeholder": "Ingrese su contraseña"
+    },
+    "code": {
+      "label": "Código de verificación",
+      "placeholder": "Ingrese su código de verificación"
+    },
+    "newPassword": {
+      "label": "Nueva contraseña",
+      "placeholder": "Ingrese su nueva contraseña"
+    },
+    "confirmPassword": {
+      "label": "Confirmar contraseña",
+      "placeholder": "Confirme su contraseña"
     }
+  },
+  "button": {
+    "continue": "Continuar",
+    "back": "Atrás",
+    "change": "Cambiar",
+    "send": "Enviar",
+    "reset": "Restablecer",
+    "submit": "Enviar",
+    "update": "Actualizar",
+    "create": "Crear",
+    "delete": "Eliminar",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "save": "Guardar",
+    "register": "Registrarse",
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "forgotPassword": "Olvidé mi contraseña"
   }
 }
