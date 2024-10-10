@@ -1,12 +1,8 @@
 import { Component, AfterViewInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { UserModalComponent } from './user-modal/user-modal.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { UserService } from '../../service/user.service';
-import { PageEvent } from '@angular/material/paginator';
-import { UserModalPostComponent } from './user-modal-post/user-modal-post.component';
 
 @Component({
   selector: 'app-users',
@@ -17,26 +13,31 @@ export class UsersComponent implements AfterViewInit {
   isSmallScreen: boolean = false;
   selectedUser: User | null = null;
   users: User[] = [];
-  dataSource = new MatTableDataSource<User>([]);
+  dataSource = new MatTableDataSource<User>([]); // Data source for paginated users
 
   pageSize = 8;
   currentPage = 0;
 
-  displayedColumns: string[] = ['id', 'name', 'surname', 'username', 'email', 'status', 'edit', 'delete'];
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  dialogWidth = '400px';
+  // Objeto para el nuevo usuario
+  newUser: User = {
+    id: 0, // Inicializar id en 0
+    name: '',
+    surname: '',
+    username: '',
+    email: '',
+    status: '',
+    isExpanded: false // Inicialización de isExpanded
+  };
 
   constructor(
-    public dialog: MatDialog,
     private breakpointObserver: BreakpointObserver,
     private userService: UserService
   ) {
     this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
       .subscribe(result => {
         this.isSmallScreen = result.matches;
-        this.dialogWidth = this.isSmallScreen ? '100%' : '400px'; 
       });
 
     this.getUsers();
@@ -46,7 +47,8 @@ export class UsersComponent implements AfterViewInit {
     this.userService.getUsersPaginated(page, size).subscribe(
       response => {
         console.log('Usuarios recibidos:', response);
-        this.users = response.content;
+        // Inicializa isExpanded en false para cada usuario
+        this.users = response.content.map((user: User) => ({ ...user, isExpanded: false })); // Especifica el tipo User
         this.dataSource.data = this.users;
         this.paginator.length = response.totalElements;
         this.paginator.pageIndex = response.number;
@@ -57,6 +59,7 @@ export class UsersComponent implements AfterViewInit {
       }
     );
   }
+  
 
   onPageChange(event: PageEvent): void {
     this.currentPage = event.pageIndex;
@@ -64,26 +67,34 @@ export class UsersComponent implements AfterViewInit {
     this.getUsers(this.currentPage, this.pageSize); 
   }
 
+  // Filtro de usuarios basado en la entrada del usuario
   filterUsers(event: Event): void {
-    const inputElement = event.target as HTMLInputElement;
-    const filterValue = inputElement.value ? inputElement.value.trim().toLowerCase() : '';
-    this.dataSource.filter = filterValue; 
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.dataSource.filter = filterValue;
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(UserModalComponent, {
-      width: this.dialogWidth,
-      data: {}
-    });
+  // Editar usuario directamente en el perfil
+  editUser(user: User): void {
+    user.isEditing = true;  // Activamos el modo edición para el usuario
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.userService.createUser(result).subscribe((createdUser: User) => {
-          this.users.push(createdUser);
-          this.dataSource.data = this.users;
-        });
+  // Guardar cambios después de editar
+  saveUser(user: User): void {
+    this.userService.updateUser(user.id, {
+      name: user.name,
+      surname: user.surname,
+      username: user.username,
+      email: user.email,
+      status: user.status
+    }).subscribe(
+      (updatedUser: User) => {
+        console.log('Usuario actualizado:', updatedUser);
+        user.isEditing = false;  // Desactivamos el modo edición
+      },
+      error => {
+        console.error('Error al actualizar el usuario:', error);
       }
-    });
+    );
   }
 
   deleteUser(user: User): void {
@@ -108,45 +119,32 @@ export class UsersComponent implements AfterViewInit {
     }
   }
 
-  editUser(user: User): void {
-    const dialogRef = this.dialog.open(UserModalPostComponent, {
-      width: this.dialogWidth,
-      data: { ...user }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.userService.updateUser(user.id, {
-          name: result.name,
-          surname: result.surname,
-          username: result.username
-        }).subscribe(
-          (updatedUser: User) => {
-            console.log('Usuario actualizado:', updatedUser);
-            const index = this.users.findIndex(u => u.id === updatedUser.id);
-            if (index !== -1) {
-              this.users[index] = updatedUser;
-              this.dataSource.data = this.users;
-            }
-          },
-          error => {
-            console.error('Error al actualizar el usuario:', error);
-          }
-        );
+  // Método para agregar un nuevo usuario
+  addUser(): void {
+    // Asignamos el status por defecto como "true"
+    const userToCreate = { ...this.newUser, status: 'true' };
+  
+    this.userService.createUser(userToCreate).subscribe(
+      (createdUser: User) => {
+        console.log('Usuario creado:', createdUser);
+        this.users.push(createdUser); // Agregar el nuevo usuario a la lista
+        this.dataSource.data = this.users; // Actualiza la fuente de datos
+        // Resetear el formulario
+        this.newUser = { id: 0, name: '', surname: '', username: '', email: '', status: '', isExpanded: false };
+      },
+      error => {
+        console.error('Error al crear el usuario:', error);
       }
-    });
+    );
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.getUsers();
   }
-
-  toggleCard(user: User): void {
-    this.selectedUser = this.selectedUser === user ? null : user;
-  }
 }
 
+// Interfaz User
 export interface User {
   id: number;
   name: string;
@@ -154,4 +152,6 @@ export interface User {
   username: string;
   email: string;
   status: string;
+  isEditing?: boolean;  // Añadido para el modo edición
+  isExpanded?: boolean;  // Añadir para el estado expandido
 }
