@@ -15,9 +15,9 @@ module.exports = {
       },
 
       colors: {
-        'dark-gunmetal': '#222831', // nuevo
-        'metallic-blue': '#30475E', // nuevo
-        'light-gray': '#DDDDDD', // nuevo
+        'dark-gunmetal': '#222831',
+        'metallic-blue': '#30475E',
+        'light-gray': '#DDDDDD',
         'sunset-orange': {
           100: '#fcdddd',
           200: '#f9bbbb',

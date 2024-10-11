@@ -1,99 +1,22 @@
-<div class="flex flex-col lg:flex-row gap-8">
+<div class="flex flex-col lg:flex-row gap-8 min-h-full relative">
     <div class="lg:w-3/4">
-        <div class="bg-white shadow rounded-lg mb-2 p-6">
+        <div *ngFor="let question of questions" class="bg-white shadow rounded-lg mb-2 p-6">
             <div class="flex items-start space-x-4">
-                <img src="../../../../assets/img/Profile2.jpg" alt="User" class="w-12 h-12 rounded-full">
                 <div class="flex-1">
-                    <div class="flex justify-between items-center">
-                        <h2 class="text-xl font-semibold mb-2">Issue with Redirecting After Successful Login and Signup
-                            in
-                            Next.js + Firebase with JWT Authentication</h2>
+                    <div class="flex justify-between items-center text-blue-500">
+                        <h2 class="text-xl font-semibold mb-2"><a href="">{{ question.title }}</a></h2>
                     </div>
-                    <p class="text-gray-600 mb-4">I’m using Next.js with Firebase Authentication and JWT to build a
-                        login/signup flow. Everything seems to be working fine
-                        — users can register and login successfully, and JWT tokens are generated...</p>
-                    <div class="flex items-center text-sm text-gray-500 space-x-4 mb-2">
-                        <span class="flex items-center">
-                            <mat-icon fontIcon="thumb_up" class="mr-1"></mat-icon>27 votes
-                        </span>
-                        <span class="flex items-center">
-                            <mat-icon fontIcon="language" class="mr-1"></mat-icon>Languages
-                        </span>
-                        <span class="flex items-center">
-                            <mat-icon fontIcon="calendar_today" class="mr-1"></mat-icon>4 years
-                        </span>
-                        <span class="flex items-center">
-                            <mat-icon fontIcon="question_answer" class="mr-1"></mat-icon>2 Answers
-                        </span>
-                        <span class="flex items-center">
-                            <mat-icon fontIcon="visibility" class="mr-1"></mat-icon>29067 views
-                        </span>
-                    </div>
+                    <p class="text-gray-600 mb-4">{{ question.description }}</p>
                 </div>
             </div>
-        </div>
-        <div class="bg-white shadow rounded-lg mb-2 p-6">
-            <div class="flex items-start space-x-4">
-                <img src="../../../../assets/img/Profile2.jpg" alt="User" class="w-12 h-12 rounded-full">
-                <div class="flex-1">
-                    <div class="flex justify-between items-center">
-                        <h2 class="text-xl font-semibold mb-2">Issue with Redirecting After Successful Login and Signup
-                            in
-                            Next.js + Firebase with JWT Authentication</h2>
-                    </div>
-                    <p class="text-gray-600 mb-4">I’m using Next.js with Firebase Authentication and JWT to build a
-                        login/signup flow. Everything seems to be working fine
-                        — users can register and login successfully, and JWT tokens are generated...</p>
-                    <div class="flex items-center text-sm text-gray-500 space-x-4 mb-2">
-                        <span class="flex items-center">
-                            <mat-icon fontIcon="thumb_up" class="mr-1"></mat-icon>27 votes
-                        </span>
-                        <span class="flex items-center">
-                            <mat-icon fontIcon="language" class="mr-1"></mat-icon>Languages
-                        </span>
-                        <span class="flex items-center">
-                            <mat-icon fontIcon="calendar_today" class="mr-1"></mat-icon>4 years
-                        </span>
-                        <span class="flex items-center">
-                            <mat-icon fontIcon="question_answer" class="mr-1"></mat-icon>2 Answers
-                        </span>
-                        <span class="flex items-center">
-                            <mat-icon fontIcon="visibility" class="mr-1"></mat-icon>29067 views
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="bg-white shadow rounded-lg mb-2 p-6">
-            <div class="flex items-start space-x-4">
-                <img src="../../../../assets/img/Profile2.jpg" alt="User" class="w-12 h-12 rounded-full">
-                <div class="flex-1">
-                    <div class="flex justify-between items-center">
-                        <h2 class="text-xl font-semibold mb-2">Issue with Redirecting After Successful Login and Signup
-                            in
-                            Next.js + Firebase with JWT Authentication</h2>
-                    </div>
-                    <p class="text-gray-600 mb-4">I’m using Next.js with Firebase Authentication and JWT to build a
-                        login/signup flow. Everything seems to be working fine
-                        — users can register and login successfully, and JWT tokens are generated...</p>
-                    <div class="flex items-center text-sm text-gray-500 space-x-4 mb-2">
-                        <span class="flex items-center">
-                            <mat-icon fontIcon="thumb_up" class="mr-1"></mat-icon>27 votes
-                        </span>
-                        <span class="flex items-center">
-                            <mat-icon fontIcon="language" class="mr-1"></mat-icon>Languages
-                        </span>
-                        <span class="flex items-center">
-                            <mat-icon fontIcon="calendar_today" class="mr-1"></mat-icon>4 years
-                        </span>
-                        <span class="flex items-center">
-                            <mat-icon fontIcon="question_answer" class="mr-1"></mat-icon>2 Answers
-                        </span>
-                        <span class="flex items-center">
-                            <mat-icon fontIcon="visibility" class="mr-1"></mat-icon>29067 views
-                        </span>
-                    </div>
-                </div>
+            <hr class="border-t border-gray-300 my-2">
+            <div class="flex items-center text-sm font-medium space-x-2 lowercase">
+                <span class="flex items-center" *ngFor="let tag of question.tags"
+                    [ngClass]="getTagClass(tag.name).class">
+                    <img *ngIf="getTagClass(tag.name).iconUrl" [src]="getTagClass(tag.name).iconUrl" alt="{{tag.name}}"
+                        class="w-4 h-4 tag-icon">
+                    <span class="first-letter:uppercase">{{ tag.name }}</span>
+                </span>
             </div>
         </div>
     </div>
@@ -102,4 +25,10 @@
             <h3 class="text-xl font-semibold mb-4">Etiquetas relacionadas</h3>
         </div>
     </div>
+</div>
+
+<div class="fixed bottom-4 right-4">
+    <button mat-fab class="bg-sunset-orange-500" (click)="openDialog()">
+        <mat-icon>add</mat-icon>
+    </button>
 </div>
