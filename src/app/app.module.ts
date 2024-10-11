@@ -12,6 +12,7 @@ import { JwtInterceptorInterceptor } from './interceptors/jwt-interceptor.interc
 import { BlockUIModule } from 'ng-block-ui';
 import { LottieModule } from 'ngx-lottie';
 import player from 'lottie-web';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -25,6 +26,7 @@ export function playerFactory() {
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    MatSnackBarModule,
     SharedModule,
     HttpClientModule,
     BlockUIModule.forRoot(),

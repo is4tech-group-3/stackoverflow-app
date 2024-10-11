@@ -3,6 +3,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { UserService } from '../../service/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-users',
@@ -13,27 +14,28 @@ export class UsersComponent implements AfterViewInit {
   isSmallScreen: boolean = false;
   selectedUser: User | null = null;
   users: User[] = [];
-  dataSource = new MatTableDataSource<User>([]); // Data source for paginated users
+  allUsers: User[] = [];
+  dataSource = new MatTableDataSource<User>([]);
 
   pageSize = 8;
   currentPage = 0;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  // Objeto para el nuevo usuario
   newUser: User = {
-    id: 0, // Inicializar id en 0
+    id: 0,
     name: '',
     surname: '',
     username: '',
     email: '',
     status: '',
-    isExpanded: false // Inicialización de isExpanded
+    isExpanded: false 
   };
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private userService: UserService
+    private userService: UserService,
+    private snackBar: MatSnackBar
   ) {
     this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
       .subscribe(result => {
@@ -43,97 +45,146 @@ export class UsersComponent implements AfterViewInit {
     this.getUsers();
   }
 
-  getUsers(page: number = 0, size: number = this.pageSize): void {
+  getUsers(page: number = this.currentPage, size: number = this.pageSize): void {
     this.userService.getUsersPaginated(page, size).subscribe(
       response => {
         console.log('Usuarios recibidos:', response);
-        // Inicializa isExpanded en false para cada usuario
-        this.users = response.content.map((user: User) => ({ ...user, isExpanded: false })); // Especifica el tipo User
+        this.users = response.content.map((user: User) => ({ ...user, isExpanded: false }));
         this.dataSource.data = this.users;
+        this.allUsers = response.content; 
         this.paginator.length = response.totalElements;
         this.paginator.pageIndex = response.number;
         this.paginator.pageSize = response.size;
       },
       error => {
         console.error('Error al obtener los usuarios', error);
+        this.snackBar.open('Error al obtener los usuarios', 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
       }
     );
   }
-  
 
   onPageChange(event: PageEvent): void {
     this.currentPage = event.pageIndex;
     this.pageSize = event.pageSize;
-    this.getUsers(this.currentPage, this.pageSize); 
+    this.getUsers(this.currentPage, this.pageSize);
   }
 
-  // Filtro de usuarios basado en la entrada del usuario
   filterUsers(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.dataSource.filter = filterValue;
+  
+    const filteredUsers = this.allUsers.filter(user => {
+      const nameMatch = `${user.name} ${user.surname}`.toLowerCase().includes(filterValue);
+      const emailMatch = user.email.toLowerCase().includes(filterValue);
+      return nameMatch || emailMatch;
+    });
+  
+    this.dataSource.data = filteredUsers; 
+  
+    if (!filterValue) {
+      this.dataSource.data = this.allUsers;
+    }
   }
+  
 
-  // Editar usuario directamente en el perfil
   editUser(user: User): void {
-    user.isEditing = true;  // Activamos el modo edición para el usuario
+    user.isEditing = true;
   }
 
-  // Guardar cambios después de editar
   saveUser(user: User): void {
-    this.userService.updateUser(user.id, {
+    if (!user.name || !user.surname || !user.username) {
+      this.snackBar.open('Todos los campos son obligatorios', 'Cerrar', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      });
+      return;
+    }
+
+    const userUpdatePayload = {
       name: user.name,
       surname: user.surname,
-      username: user.username,
-      email: user.email,
-      status: user.status
-    }).subscribe(
+      username: user.username
+    };
+
+    this.userService.updateUser(user.id, userUpdatePayload).subscribe(
       (updatedUser: User) => {
         console.log('Usuario actualizado:', updatedUser);
-        user.isEditing = false;  // Desactivamos el modo edición
+        user.isEditing = false;
+        this.snackBar.open('Usuario actualizado exitosamente', 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
       },
       error => {
         console.error('Error al actualizar el usuario:', error);
+        this.snackBar.open('Error al actualizar el usuario', 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
       }
     );
   }
 
-  deleteUser(user: User): void {
+  disableUser(user: User): void {
     if (!user.id) {
       console.error('El usuario no tiene un ID válido:', user);
       return;
     }
-
-    const confirmation = confirm(`¿Estás seguro de que deseas eliminar al usuario ${user.name} ${user.surname}?`);
-
+  
+    const confirmation = confirm(`¿Estás seguro de que deseas deshabilitar al usuario ${user.name} ${user.surname}?`);
+  
     if (confirmation) {
-      this.userService.deleteUser(user.id).subscribe(
+      // Cambiar el estado del usuario a "false"
+      this.userService.toggleUserStatus(user.id, false).subscribe(
         () => {
-          console.log('Usuario eliminado');
-          this.users = this.users.filter(u => u.id !== user.id);
-          this.dataSource.data = this.users;
+          console.log('Usuario deshabilitado');
+          this.getUsers(this.currentPage, this.pageSize); // Refresh the users after disabling
+          this.snackBar.open('Usuario deshabilitado exitosamente', 'Cerrar', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
         },
         error => {
-          console.error('Error al eliminar el usuario:', error);
+          console.error('Error al deshabilitar el usuario:', error);
+          this.snackBar.open('Error al deshabilitar el usuario', 'Cerrar', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
         }
       );
     }
   }
 
-  // Método para agregar un nuevo usuario
   addUser(): void {
-    // Asignamos el status por defecto como "true"
     const userToCreate = { ...this.newUser, status: 'true' };
-  
+
     this.userService.createUser(userToCreate).subscribe(
       (createdUser: User) => {
         console.log('Usuario creado:', createdUser);
-        this.users.push(createdUser); // Agregar el nuevo usuario a la lista
-        this.dataSource.data = this.users; // Actualiza la fuente de datos
-        // Resetear el formulario
-        this.newUser = { id: 0, name: '', surname: '', username: '', email: '', status: '', isExpanded: false };
+        this.getUsers(); // Refresh the users list
+        this.newUser = { id: 0, name: '', surname: '', email: '', username: '', status: '', isExpanded: false };
+
+        this.snackBar.open('Usuario creado exitosamente', 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
       },
       error => {
         console.error('Error al crear el usuario:', error);
+        this.snackBar.open('Error al crear el usuario', 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
       }
     );
   }
@@ -144,7 +195,6 @@ export class UsersComponent implements AfterViewInit {
   }
 }
 
-// Interfaz User
 export interface User {
   id: number;
   name: string;
@@ -152,6 +202,6 @@ export interface User {
   username: string;
   email: string;
   status: string;
-  isEditing?: boolean;  // Añadido para el modo edición
-  isExpanded?: boolean;  // Añadir para el estado expandido
+  isEditing?: boolean;
+  isExpanded?: boolean;
 }

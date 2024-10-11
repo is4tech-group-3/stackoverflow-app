@@ -9,6 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { HttpClientModule } from '@angular/common/http'; 
 import { UserService } from '../../service/user.service';  
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
 
 describe('UsersComponent', () => {
@@ -24,7 +25,8 @@ describe('UsersComponent', () => {
         MatTableModule,
         HttpClientModule,
         BrowserAnimationsModule,
-        FormsModule
+        FormsModule,
+        MatSnackBarModule
       ],
       declarations: [UsersComponent],
       providers: [
