@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from '../components/users/users.component';
@@ -15,7 +15,14 @@ export class UserService {
 
   // GET
   getUsersPaginated(page: number, size: number): Observable<any> {
-    return this.http.get<any>(`${this.userApiUrl}?page=${page}&size=${size}`);
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get(`${this.userApiUrl}`, { params }); // Cambiar baseUrl a userApiUrl
+  }
+  
+  findUserByEmail(email: string): Observable<User> {
+    return this.http.get<User>(`${this.userApiUrl}/findByEmail/${email}`);
   }
 
   // GETID
