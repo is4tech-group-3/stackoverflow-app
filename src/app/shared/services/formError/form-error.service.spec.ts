@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { FormErrorService } from './form-error.service';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 describe('FormErrorService', () => {
   let service: FormErrorService;

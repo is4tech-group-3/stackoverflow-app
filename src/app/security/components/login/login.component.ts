@@ -35,11 +35,7 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      this.blockUI.start('Loading...'); // Bloquea la UI con un mensaje opcional
-      console.log(
-        '🚀 ~ LoginComponent ~ onSubmit ~ this.loginForm.value:',
-        this.loginForm.value
-      );
+      this.blockUI.start('Cargando...');
       this.authService.login(this.loginForm.value).subscribe({
         next: (response: any) => {
           const decodedToken = this.decodeTokenService.DecodeToken(
@@ -57,6 +53,8 @@ export class LoginComponent {
           this.blockUI.stop();
         },
         error: () => {
+          this.blockUI.stop();
+
           this.toastService.showErrorToast(
             this.translate.instant('errors.badCredentials')
           );

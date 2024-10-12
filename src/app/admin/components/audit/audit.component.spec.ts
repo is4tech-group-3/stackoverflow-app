@@ -1,15 +1,12 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AuditComponent } from './audit.component';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSelectModule } from '@angular/material/select';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatTableModule } from '@angular/material/table';
-
-
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { ModalService } from 'src/app/shared/components/modal/service/modal.service';
+import { AuditService } from '../../service/audit/audit.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 describe('AuditComponent', () => {
   let component: AuditComponent;
   let fixture: ComponentFixture<AuditComponent>;
@@ -17,16 +14,8 @@ describe('AuditComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [AuditComponent],
-      imports: [
-        MatFormFieldModule,
-        MatInputModule,
-        MatDatepickerModule,
-        MatNativeDateModule, 
-        NoopAnimationsModule,
-        MatSelectModule,
-        MatPaginatorModule,
-        MatTableModule
-      ]
+      imports: [SharedModule, HttpClientModule, TranslateModule.forRoot(), BrowserAnimationsModule],
+      providers: [TranslateService, ModalService, AuditService]
     });
     fixture = TestBed.createComponent(AuditComponent);
     component = fixture.componentInstance;

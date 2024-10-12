@@ -1,6 +1,7 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { ModalComponent } from './components/modal/modal.component';
 import { RouterLink, RouterLinkActive, RouterModule } from '@angular/router';
 import { LottieModule } from 'ngx-lottie';
 
@@ -23,6 +24,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 // Translation Module
 import { TranslateModule } from '@ngx-translate/core';
+import { BlockUIModule } from 'ng-block-ui';
 
 // HTTP Module
 import { HttpClientModule } from '@angular/common/http';
@@ -30,11 +32,19 @@ import { HttpClientModule } from '@angular/common/http';
 // Reactive Forms Module
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastComponent } from './components/toast/toast.component';
+import { DateFormatPipe } from './pipe/dateForma/date-format.pipe';
+import { DropdownComponent } from './components/dropdown/dropdown/dropdown.component';
 
 // service
 
 @NgModule({
-  declarations: [NavbarComponent, ToastComponent],
+  declarations: [
+    NavbarComponent,
+    ToastComponent,
+    DateFormatPipe,
+    ModalComponent,
+    DropdownComponent
+  ],
   imports: [
     CommonModule,
     HttpClientModule,
@@ -78,6 +88,10 @@ import { ToastComponent } from './components/toast/toast.component';
     RouterModule,
     LottieModule,
     RouterLinkActive,
+    DateFormatPipe,
+    ModalComponent,
+    BlockUIModule,
+    DropdownComponent,
     // Angular Material Modules
     MatMenuModule,
     MatButtonModule,
@@ -95,6 +109,7 @@ import { ToastComponent } from './components/toast/toast.component';
     MatSelectModule,
     MatOptionModule,
     MatStepperModule
-  ]
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SharedModule {}

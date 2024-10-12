@@ -39,6 +39,22 @@
     "haveAccount": "¿No tienes cuenta todavía?",
     "link": "Registrarse aquí"
   },
+  "audit": {
+    "title": "Auditoría",
+    "description": "Ver todos los registros de auditoría para su cuenta.",
+    "search": "Buscar...",
+    "data": {
+      "id": "ID",
+      "email": "Email del usuario",
+      "date": "Fecha de operación",
+      "entity": "Entidad",
+      "http_method": "Método HTTP",
+      "details": "Detalles de Auditoria",
+      "seeMore": "Ver más",
+      "status": "Estado de la operación",
+      "noData": "No hay registros de auditoría disponibles."
+    }
+  },
   "errors": {
     "required": "Este campo es obligatorio.",
     "invalidEmail": "Por favor ingresa un correo válido.",
@@ -72,6 +88,10 @@
     "descriptionConfirm": "Se ha cambiado la contraseña. Ahora puede iniciar sesión con su nueva contraseña."
   },
   "input": {
+    "dropdown": {
+      "label": "Seleccione una opción",
+      "placeholder": "Seleccione una opción"
+    },
     "name": {
       "label": "Nombre",
       "placeholder": "Ingrese su nombre"
@@ -107,6 +127,7 @@
   },
   "button": {
     "continue": "Continuar",
+    "search": "Buscar",
     "back": "Atrás",
     "change": "Cambiar",
     "send": "Enviar",

@@ -1,4 +1,4 @@
-<mat-sidenav-container class=" h-full-screen ">
+<mat-sidenav-container class="h-full-screen">
   <mat-sidenav
     mode="side"
     opened
@@ -25,10 +25,7 @@
       </a>
     </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content
-    class="p-6 bg-light-gray"
-    [style.margin-left]="sidenavWidth()"
-  >
+  <mat-sidenav-content class="p-6" [style.margin-left]="sidenavWidth()">
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

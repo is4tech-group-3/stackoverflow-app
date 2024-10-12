@@ -1,9 +1,10 @@
 <header
   [ngClass]="{
     'fixed w-full bg-transparent': isFixed,
-    'sticky bg-dark-gunmetal ': !isFixed
+    'sticky top-0 bg-dark-gunmetal ': !isFixed,
+    ' backdrop-blur-lg': isMobileMenuOpen
   }"
-  class="top-0 z-50 transition-colors duration-300 ease-in-out"
+  class=" z-50 transition-colors duration-300 ease-in-out"
 >
   <nav
     class="mx-auto flex container gap-8 px-6 transition-all duration-200 ease-in-out lg:px-12 py-2 items-center"
@@ -185,7 +186,7 @@
   <!-- Mobile Menu -->
   <div
     *ngIf="isMobileMenuOpen"
-    class="lg:hidden bg-dark-gunmetal bg-opacity-25 backdrop-blur-lg px-6 py-2"
+    class="lg:hidden backdrop-blur-lg px-6 py-2"
   >
     <ul class="flex flex-col gap-2">
       <li>

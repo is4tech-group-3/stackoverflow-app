@@ -38,6 +38,21 @@
     "haveAccount": "Don't have an account yet?",
     "link": "Sign up here"
   },
+  "audit": {
+    "title": "Audit",
+    "description": "View all the audit logs for your account.",
+    "search": "Search...",
+    "data": {
+      "id": "ID",
+      "email": "User email",
+      "date": "Date of operation",
+      "entity": "Entity",
+      "http_method": "HTTP method",
+      "details": "Audit Details",
+      "seeMore": "See more",
+      "noData": "No audit logs available."
+    }
+  },
   "errors": {
     "required": "This field is required.",
     "invalidEmail": "Please enter a valid email address.",
@@ -71,6 +86,10 @@
     "descriptionConfirm": "Your password has been changed. You can now log in with your new password."
   },
   "input": {
+    "dropdown": {
+      "label": "Select an option",
+      "placeholder": "Select an option"
+    },
     "name": {
       "label": "Name",
       "placeholder": "Enter name"
@@ -106,6 +125,7 @@
   },
   "button": {
     "continue": "Continue",
+    "search": "Search",
     "back": "Back",
     "change": "Change",
     "send": "Send",
