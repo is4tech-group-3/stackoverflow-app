@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { QuestionModalComponent } from './question-modal/question-modal.component';
 import { QuestionService } from '../../service/question.service';
-
+import { TagService } from '../../service/tag.service';
 @Component({
   selector: 'app-questions',
   templateUrl: './questions.component.html',
@@ -10,14 +10,22 @@ import { QuestionService } from '../../service/question.service';
 })
 export class QuestionsComponent implements OnInit {
   questions: any[] = [];
+  relatedTags: any[] = []; // Etiquetas paginadas
+  totalPages: number = 0; // Total de páginas que devuelve el backend
+  currentPage: number = 0; // Página actual
+  numberOfElements: number = 0; // Número de elementos en la página actual
+  isLastPage: boolean = false; // Si estamos en la última página
+  isFirstPage: boolean = false; // Si estamos en la primera página
 
   constructor(
     private questionService: QuestionService,
+    private tagService: TagService,
     public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.getQuestionsList();
+    this.getRelatedTags(this.currentPage);
   }
 
   getQuestionsList(): void {
@@ -30,22 +38,28 @@ export class QuestionsComponent implements OnInit {
       }
     );
   }
-
-  openDialog(): void {
-    const dialogRef = this.dialog.open(QuestionModalComponent, {
-      width: '300px',
-      data: { title: '', description: '' }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        console.log('Nuevo comentario:', result);
-        this.questions.push({
-          title: result.title,
-          description: result.description
-        });
+  getRelatedTags(page: number): void {
+    this.tagService.getAllTags(page).subscribe(
+      data => {
+        this.relatedTags = data.content; // Etiquetas de la página actual
+        this.totalPages = data.totalPages; // Total de páginas
+        this.numberOfElements = data.numberOfElements; // Número de elementos en esta página
+        this.isLastPage = data.last; // Si es la última página
+        this.isFirstPage = data.first; // Si es la primera página
+      },
+      error => {
+        console.error('Error fetching tags', error);
       }
-    });
+    );
+  }
+
+  // Método para cambiar de página
+  changePage(increment: number): void {
+    const newPage = this.currentPage + increment;
+    if (newPage >= 0 && newPage < this.totalPages) {
+      this.currentPage = newPage;
+      this.getRelatedTags(this.currentPage); // Actualiza la lista de etiquetas según la nueva página
+    }
   }
 
   getTagClass(tag: string): { class: string; iconUrl: string } {
@@ -100,12 +114,12 @@ export class QuestionsComponent implements OnInit {
           class: 'tag-default',
           iconUrl: 'https://icongr.am/devicon/php-original.svg'
         };
-      case 'cplusplus':
+      case 'c++':
         return {
           class: 'tag-default',
           iconUrl: 'https://icongr.am/devicon/cplusplus-original.svg'
         };
-      case 'csharp':
+      case 'c#':
         return {
           class: 'tag-default',
           iconUrl: 'https://icongr.am/devicon/csharp-original.svg'
