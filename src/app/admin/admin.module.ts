@@ -9,7 +9,8 @@ import { QuestionsComponent } from './components/questions/questions.component';
 import { UserModalComponent } from './components/users/user-modal/user-modal.component'; */
 import { UsersComponent } from './components/users/users.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { RolesComponent } from './components/roles/roles.component';
+import { QuestionModalComponent } from './components/questions/question-modal/question-modal.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -21,9 +22,9 @@ import { RolesComponent } from './components/roles/roles.component';
     AuditComponent,
     DashboardComponent,
     QuestionsComponent,
-    RolesComponent
+    QuestionModalComponent
   ],
-  imports: [SharedModule, AdminRoutingModule],
+  imports: [SharedModule, AdminRoutingModule, MatDialogModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AdminModule {}
