@@ -15,6 +15,8 @@ export class UsersComponent implements AfterViewInit {
   selectedUser: User | null = null;
   users: User[] = [];
   allUsers: User[] = [];
+  paginatedUsers: User[] = []; 
+  filteredUsers: User[] = [];
   dataSource = new MatTableDataSource<User>([]);
 
   pageSize = 8;
@@ -55,6 +57,8 @@ export class UsersComponent implements AfterViewInit {
         this.paginator.length = response.totalElements;
         this.paginator.pageIndex = response.number;
         this.paginator.pageSize = response.size;
+
+        this.updatePaginatedUsers(); // Actualiza paginatedUsers al obtener usuarios
       },
       error => {
         console.error('Error al obtener los usuarios', error);
@@ -67,28 +71,42 @@ export class UsersComponent implements AfterViewInit {
     );
   }
 
+  updatePaginatedUsers(): void {
+    const start = this.currentPage * this.pageSize;
+    const end = start + this.pageSize;
+    this.paginatedUsers = this.allUsers.slice(start, end); // Actualiza paginatedUsers
+  }
+
   onPageChange(event: PageEvent): void {
     this.currentPage = event.pageIndex;
     this.pageSize = event.pageSize;
-    this.getUsers(this.currentPage, this.pageSize);
+    this.updatePaginatedUsers(); // Actualiza la paginación
+    this.getUsers(this.currentPage, this.pageSize); // Llama a getUsers si es necesario
   }
 
   filterUsers(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-  
+    
     const filteredUsers = this.allUsers.filter(user => {
       const nameMatch = `${user.name} ${user.surname}`.toLowerCase().includes(filterValue);
       const emailMatch = user.email.toLowerCase().includes(filterValue);
       return nameMatch || emailMatch;
     });
-  
-    this.dataSource.data = filteredUsers; 
-  
+    
+    this.dataSource.data = filteredUsers;
+    this.filteredUsers = filteredUsers; // Actualiza filteredUsers
+
+    // Actualizar la longitud del paginator
+    this.paginator.length = filteredUsers.length; 
+
     if (!filterValue) {
       this.dataSource.data = this.allUsers;
+      this.filteredUsers = this.allUsers; // Si no hay filtro, restaurar a todos los usuarios
+      this.paginator.length = this.allUsers.length; 
     }
+
+    this.updatePaginatedUsers(); // Actualiza paginatedUsers al filtrar
   }
-  
 
   editUser(user: User): void {
     user.isEditing = true;
@@ -144,7 +162,7 @@ export class UsersComponent implements AfterViewInit {
       this.userService.toggleUserStatus(user.id, false).subscribe(
         () => {
           console.log('Usuario deshabilitado');
-          this.getUsers(this.currentPage, this.pageSize); // Refresh the users after disabling
+          this.getUsers(this.currentPage, this.pageSize); // Refresca la lista de usuarios después de deshabilitar
           this.snackBar.open('Usuario deshabilitado exitosamente', 'Cerrar', {
             duration: 3000,
             horizontalPosition: 'center',
@@ -169,7 +187,7 @@ export class UsersComponent implements AfterViewInit {
     this.userService.createUser(userToCreate).subscribe(
       (createdUser: User) => {
         console.log('Usuario creado:', createdUser);
-        this.getUsers(); // Refresh the users list
+        this.getUsers(); // Refresca la lista de usuarios
         this.newUser = { id: 0, name: '', surname: '', email: '', username: '', status: '', isExpanded: false };
 
         this.snackBar.open('Usuario creado exitosamente', 'Cerrar', {

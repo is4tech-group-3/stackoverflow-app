@@ -20,7 +20,7 @@
       </div>
 
       <!-- Tarjetas de usuario -->
-      <div *ngFor="let user of dataSource.filteredData" class="bg-white border-b border-gray-300 rounded-lg shadow-sm cursor-pointer p-2">
+      <div *ngFor="let user of paginatedUsers" class="bg-white border-b border-gray-300 rounded-lg shadow-sm cursor-pointer p-2">
         <div (click)="user.isExpanded = !user.isExpanded" class="flex justify-between items-center">
           <div>
             <h2 class="text-sm font-bold">{{ user.name }} {{ user.surname }}</h2>
@@ -65,18 +65,18 @@
 
       <div class="mt-2">
         <mat-paginator
-          [length]="dataSource.filteredData.length"
-          [pageSizeOptions]="[5, 10, 25]"
-          [pageSize]="pageSize"
-          [pageIndex]="currentPage"
-          showFirstLastButtons
-          (page)="onPageChange($event)">
-        </mat-paginator>
+        [length]="filteredUsers.length"
+        [pageSizeOptions]="[5, 10, 25]"
+        [pageSize]="pageSize"
+        [pageIndex]="currentPage"
+        showFirstLastButtons
+        (page)="onPageChange($event)">
+      </mat-paginator>
       </div>
     </div>
 
     <!-- Contenedor de agregar usuario (derecha) -->
-    <div class="bg-white p-6 border-b-2 border-gray-300 rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.1)] w-1/2">
+    <div class="bg-white p-6 border-b-2 border-gray-300 rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.1)] w-2/3">
       <h2 class="text-lg font-bold mb-4">Agregar Usuario</h2>
       <form (ngSubmit)="addUser()">
         <div class="flex space-x-4">
