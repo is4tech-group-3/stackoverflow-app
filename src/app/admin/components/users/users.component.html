@@ -1,7 +1,6 @@
-<div class="bg-light-gray min-h-full-screen p-4 flex flex-col space-y-4">
+<div class="min-h-full-screen p-4 flex flex-col space-y-4">
   <div class="flex w-full space-x-4">
-    <!-- Contenedor de la lista de usuarios (izquierda) -->
-    <div class="bg-white user-list-container p-4 rounded-lg shadow-lg space-y-2">
+    <div class="bg-white user-list-container p-4 rounded-lg shadow-lg space-y-2 w-1/3">
       <h1 class="text-xl font-bold mb-4 w-full">Usuarios</h1>
 
       <!-- Barra de búsqueda -->
@@ -14,7 +13,6 @@
         <input
           type="text"
           placeholder="Buscar usuario"
-          (input)="filterUsers($event)"
           class="block w-full p-2 ps-10 text-sm text-gray-700 border-b-2 border-gray-500 bg-white focus:bg-gray-100 focus:border-gray-700 focus:ring-0 focus:outline-none placeholder-gray-400"
         />
       </div>
@@ -63,52 +61,94 @@
         </div>
       </div>
 
+      <!-- Paginador -->
       <div class="mt-2">
         <mat-paginator
-        [length]="filteredUsers.length"
-        [pageSizeOptions]="[5, 10, 25]"
-        [pageSize]="pageSize"
-        [pageIndex]="currentPage"
-        showFirstLastButtons
-        (page)="onPageChange($event)">
-      </mat-paginator>
+          [length]="users.length"
+          [pageSizeOptions]="[5, 10, 25]"
+          [pageSize]="pageSize"
+          (page)="onPageChange($event)"
+          showFirstLastButtons>
+        </mat-paginator>
       </div>
     </div>
 
-    <!-- Contenedor de agregar usuario (derecha) -->
-    <div class="bg-white p-6 border-b-2 border-gray-300 rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.1)] w-2/3">
-      <h2 class="text-lg font-bold mb-4">Agregar Usuario</h2>
-      <form (ngSubmit)="addUser()">
-        <div class="flex space-x-4">
-          <div class="w-1/2">
-            <label class="block text-sm font-medium">Nombre</label>
-            <input [(ngModel)]="newUser.name" name="name" class="block w-full p-4 text-sm text-gray-700 border-b-2 border-gray-500 bg-white focus:bg-gray-100 focus:border-gray-700 focus:ring-0 focus:outline-none placeholder-gray-400 mb-4" required />
+    <!-- Contenedor derecho que incluye "Agregar Usuario" y "Administración General" -->
+    <div class="flex flex-col space-y-4 w-2/3">
+      <!-- Contenedor de agregar usuario -->
+      <div class="bg-white p-6 border-b-2 border-gray-300 rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.1)]">
+        <h2 class="text-lg font-bold mb-4">Agregar Usuario</h2>
+        <form>
+          <div class="flex space-x-4">
+            <div class="w-1/2">
+              <label class="block text-sm font-medium">Nombre</label>
+              <input class="block w-full p-4 text-sm text-gray-700 border-b-2 border-gray-500 bg-white focus:bg-gray-100 focus:border-gray-700 focus:ring-0 focus:outline-none placeholder-gray-400 mb-4" required />
+            </div>
+            <div class="w-1/2">
+              <label class="block text-sm font-medium">Apellido</label>
+              <input class="block w-full p-4 text-sm text-gray-700 border-b-2 border-gray-500 bg-white focus:bg-gray-100 focus:border-gray-700 focus:ring-0 focus:outline-none placeholder-gray-400 mb-4" required />
+            </div>
           </div>
-          <div class="w-1/2">
-            <label class="block text-sm font-medium">Apellido</label>
-            <input [(ngModel)]="newUser.surname" name="surname" class="block w-full p-4 text-sm text-gray-700 border-b-2 border-gray-500 bg-white focus:bg-gray-100 focus:border-gray-700 focus:ring-0 focus:outline-none placeholder-gray-400 mb-4" required />
-          </div>
-        </div>
 
-        <div class="flex space-x-4">
-          <div class="w-1/2">
-            <label class="block text-sm font-medium">Username</label>
-            <input [(ngModel)]="newUser.username" name="username" class="block w-full p-4 text-sm text-gray-700 border-b-2 border-gray-500 bg-white focus:bg-gray-100 focus:border-gray-700 focus:ring-0 focus:outline-none placeholder-gray-400 mb-4" required />
+          <div class="flex space-x-4">
+            <div class="w-1/2">
+              <label class="block text-sm font-medium">Username</label>
+              <input class="block w-full p-4 text-sm text-gray-700 border-b-2 border-gray-500 bg-white focus:bg-gray-100 focus:border-gray-700 focus:ring-0 focus:outline-none placeholder-gray-400 mb-4" required />
+            </div>
+            <div class="w-1/2">
+              <label class="block text-sm font-medium">Email</label>
+              <input class="block w-full p-4 text-sm text-gray-700 border-b-2 border-gray-500 bg-white focus:bg-gray-100 focus:border-gray-700 focus:ring-0 focus:outline-none placeholder-gray-400 mb-4" required />
+            </div>
           </div>
-          <div class="w-1/2">
-            <label class="block text-sm font-medium">Email</label>
-            <input [(ngModel)]="newUser.email" name="email" class="block w-full p-4 text-sm text-gray-700 border-b-2 border-gray-500 bg-white focus:bg-gray-100 focus:border-gray-700 focus:ring-0 focus:outline-none placeholder-gray-400 mb-4" required />
-          </div>
-        </div>
 
-        <!-- Botón Agregar Usuario -->
-        <div class="flex justify-end">
-          <button type="submit"
-                  class="bg-[#F05454] text-white px-4 py-2 text-xs rounded hover:bg-red-600"> <!-- Sunset Orange y tamaño reducido -->
-            Agregar Usuario
-          </button>
+          <!-- Botón Agregar Usuario -->
+          <div class="flex justify-end">
+            <button type="submit" class="bg-[#F05454] text-white px-4 py-2 text-xs rounded hover:bg-red-600">
+              Agregar Usuario
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Contenedor de "Administración General" alineado con la lista -->
+      <div class="bg-white p-6 rounded-lg shadow-lg" style="min-height: 420px;">
+        <h2 class="text-lg font-semibold">Administración General</h2>
+        <hr class="border-t border-gray-300 my-2">
+      
+        <div class="flex flex-col lg:flex-row w-full space-y-5 lg:space-x-5 lg:space-y-0">
+          <!-- Perfiles Disponibles -->
+          <div class="w-full lg:w-1/2 p-4 rounded-lg shadow">
+            <h3 class="font-semibold">Perfiles Disponibles</h3>
+            <input type="search" placeholder="Buscar perfil" class="block w-full p-2 mt-2 text-sm text-gray-700 border-b-2 border-gray-500 bg-white focus:bg-gray-100 focus:border-gray-700 focus:ring-0 focus:outline-none">
+            <div class="roles-container mt-4 space-y-2 max-h-64 overflow-y-auto">
+              <div class="flex justify-between items-center">
+                <span>Administrador</span>
+                <button class="text-blue-500">Asignar</button>
+              </div>
+              <div class="flex justify-between items-center">
+                <span>Editor</span>
+                <button class="text-blue-500">Asignar</button>
+              </div>
+            </div>
+          </div>
+      
+          <!-- Permisos Disponibles -->
+          <div class="w-full lg:w-1/2 p-4 rounded-lg shadow">
+            <h3 class="font-semibold">Permisos Disponibles</h3>
+            <input type="search" placeholder="Buscar permisos" class="block w-full p-2 mt-2 text-sm text-gray-700 border-b-2 border-gray-500 bg-white focus:bg-gray-100 focus:border-gray-700 focus:ring-0 focus:outline-none">
+            <div class="roles-container mt-4 space-y-2 max-h-64 overflow-y-auto">
+              <div class="flex justify-between items-center">
+                <span>Editar Contenido</span>
+                <button class="text-blue-500">Asignar</button>
+              </div>
+              <div class="flex justify-between items-center">
+                <span>Eliminar Contenido</span>
+                <button class="text-blue-500">Asignar</button>
+              </div>
+            </div>
+          </div>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>

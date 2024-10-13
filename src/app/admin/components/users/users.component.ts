@@ -34,6 +34,8 @@ export class UsersComponent implements AfterViewInit {
     isExpanded: false 
   };
 
+  private userBackup: User | null = null;
+
   constructor(
     private breakpointObserver: BreakpointObserver,
     private userService: UserService,
@@ -109,7 +111,19 @@ export class UsersComponent implements AfterViewInit {
   }
 
   editUser(user: User): void {
+    this.userBackup = { ...user }; // Guarda una copia del usuario actual
     user.isEditing = true;
+  }
+
+  cancelEdit(user: User): void {
+    if (this.userBackup) {
+      // Restaura los valores del usuario a los de la copia
+      user.name = this.userBackup.name;
+      user.surname = this.userBackup.surname;
+      user.username = this.userBackup.username;
+    }
+    user.isEditing = false; // Salir del modo de edición
+    this.userBackup = null; 
   }
 
   saveUser(user: User): void {
