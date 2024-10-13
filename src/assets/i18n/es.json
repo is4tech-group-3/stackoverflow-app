@@ -2,7 +2,7 @@
   "NamePage": "BugStack",
   "Home": "Inicio",
   "About": "Acerca de",
-  "Blogs": "Blogs",
+  "News": "Noticias",
   "Search": "Buscar...",
   "SignIn": "Iniciar sesión",
   "Profiles": "Perfiles",
@@ -53,6 +53,17 @@
       "seeMore": "Ver más",
       "status": "Estado de la operación",
       "noData": "No hay registros de auditoría disponibles."
+    }
+  },
+  "news": {
+    "title": "Últimas noticias",
+    "description": "  Manténgase al día con las últimas insights, consejos y tendencias en nuestra colección de artículos curados. Nuestros expertos comparten conocimiento valioso para ayudarte a navegar por varios temas, inspirando creatividad y innovación a lo largo del camino.",
+    "search": "Buscar...",
+    "data": {
+      "title": "Título",
+      "description": "Descripción",
+      "tags": "Etiquetas",
+      "noData": "No hay noticias disponibles."
     }
   },
   "errors": {

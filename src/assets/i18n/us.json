@@ -2,7 +2,7 @@
   "NamePage": "BugStack",
   "Home": "Home",
   "About": "About",
-  "Blogs": "Blogs",
+  "News": "News",
   "Search": "Search...",
   "Profiles": "Profiles",
   "Users": "Users",
@@ -51,6 +51,17 @@
       "details": "Audit Details",
       "seeMore": "See more",
       "noData": "No audit logs available."
+    }
+  },
+  "news": {
+    "title": "Latest news",
+    "description": "  Stay updated with the latest insights, tips, and trends in our curated collection of articles. Our experts share valuable knowledge to help you navigate through various topics, inspiring creativity and innovation along the way.",
+    "search": "Search...",
+    "data": {
+      "title": "Title",
+      "description": "Description",
+      "tags": "Tags",
+      "noData": "No news available."
     }
   },
   "errors": {

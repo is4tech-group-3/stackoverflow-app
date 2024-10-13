@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const fullScreenHeight = 'calc(100vh - 56px)';
 module.exports = {
   important: true,
   content: ['./src/**/*.{html,ts}'],
@@ -6,9 +7,17 @@ module.exports = {
     extend: {
       spacing: {
         128: '32rem',
+        108: '28rem',
+        98: '26rem',
       },
       height: {
-        'full-screen': 'calc(100vh - 56px)',
+        'full-screen': fullScreenHeight,
+      },
+      minHeight: {
+        'full-screen': fullScreenHeight,
+      },
+      maxHeight: {
+        'full-screen': fullScreenHeight, 
       },
       backgroundImage: {
         galaxy: 'url(assets/img/home.jpg)',
