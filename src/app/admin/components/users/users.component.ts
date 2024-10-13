@@ -3,7 +3,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { UserService } from '../../service/user.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ToastService } from '../../../shared/services/toast/toast.service';
 
 @Component({
   selector: 'app-users',
@@ -39,7 +39,7 @@ export class UsersComponent implements AfterViewInit {
   constructor(
     private breakpointObserver: BreakpointObserver,
     private userService: UserService,
-    private snackBar: MatSnackBar
+    private toastService: ToastService
   ) {
     this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
       .subscribe(result => {
@@ -64,11 +64,7 @@ export class UsersComponent implements AfterViewInit {
       },
       error => {
         console.error('Error al obtener los usuarios', error);
-        this.snackBar.open('Error al obtener los usuarios', 'Cerrar', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top'
-        });
+        this.toastService.showErrorToast('Error al obtener los usuarios');
       }
     );
   }
@@ -76,7 +72,9 @@ export class UsersComponent implements AfterViewInit {
   updatePaginatedUsers(): void {
     const start = this.currentPage * this.pageSize;
     const end = start + this.pageSize;
-    this.paginatedUsers = this.allUsers.slice(start, end); // Actualiza paginatedUsers
+    this.paginatedUsers = this.filteredUsers.length
+      ? this.filteredUsers.slice(start, end)  // Si hay filtrado, usa los usuarios filtrados
+      : this.allUsers.slice(start, end); // Si no hay filtro, usa todos los usuarios
   }
 
   onPageChange(event: PageEvent): void {
@@ -89,23 +87,15 @@ export class UsersComponent implements AfterViewInit {
   filterUsers(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     
-    const filteredUsers = this.allUsers.filter(user => {
+    this.filteredUsers = this.allUsers.filter(user => {
       const nameMatch = `${user.name} ${user.surname}`.toLowerCase().includes(filterValue);
       const emailMatch = user.email.toLowerCase().includes(filterValue);
       return nameMatch || emailMatch;
     });
-    
-    this.dataSource.data = filteredUsers;
-    this.filteredUsers = filteredUsers; // Actualiza filteredUsers
 
-    // Actualizar la longitud del paginator
-    this.paginator.length = filteredUsers.length; 
-
-    if (!filterValue) {
-      this.dataSource.data = this.allUsers;
-      this.filteredUsers = this.allUsers; // Si no hay filtro, restaurar a todos los usuarios
-      this.paginator.length = this.allUsers.length; 
-    }
+    this.currentPage = 0;  // Reiniciar la página actual al filtrar
+    this.paginator.firstPage(); // Llevar el paginador a la primera página
+    this.paginator.length = this.filteredUsers.length; // Actualizar el total del paginador
 
     this.updatePaginatedUsers(); // Actualiza paginatedUsers al filtrar
   }
@@ -128,11 +118,7 @@ export class UsersComponent implements AfterViewInit {
 
   saveUser(user: User): void {
     if (!user.name || !user.surname || !user.username) {
-      this.snackBar.open('Todos los campos son obligatorios', 'Cerrar', {
-        duration: 3000,
-        horizontalPosition: 'center',
-        verticalPosition: 'top'
-      });
+      this.toastService.showErrorToast('Todos los campos son obligatorios');
       return;
     }
 
@@ -146,19 +132,11 @@ export class UsersComponent implements AfterViewInit {
       (updatedUser: User) => {
         console.log('Usuario actualizado:', updatedUser);
         user.isEditing = false;
-        this.snackBar.open('Usuario actualizado exitosamente', 'Cerrar', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top'
-        });
+        this.toastService.showSuccessToast('Usuario actualizado exitosamente');
       },
       error => {
         console.error('Error al actualizar el usuario:', error);
-        this.snackBar.open('Error al actualizar el usuario', 'Cerrar', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top'
-        });
+        this.toastService.showErrorToast('Error al actualizar el usuario');
       }
     );
   }
@@ -177,19 +155,11 @@ export class UsersComponent implements AfterViewInit {
         () => {
           console.log('Usuario deshabilitado');
           this.getUsers(this.currentPage, this.pageSize); // Refresca la lista de usuarios después de deshabilitar
-          this.snackBar.open('Usuario deshabilitado exitosamente', 'Cerrar', {
-            duration: 3000,
-            horizontalPosition: 'center',
-            verticalPosition: 'top'
-          });
+          this.toastService.showSuccessToast('Usuario deshabilitado exitosamente');
         },
         error => {
           console.error('Error al deshabilitar el usuario:', error);
-          this.snackBar.open('Error al deshabilitar el usuario', 'Cerrar', {
-            duration: 3000,
-            horizontalPosition: 'center',
-            verticalPosition: 'top'
-          });
+          this.toastService.showErrorToast('Error al deshabilitar el usuario');
         }
       );
     }
@@ -204,19 +174,11 @@ export class UsersComponent implements AfterViewInit {
         this.getUsers(); // Refresca la lista de usuarios
         this.newUser = { id: 0, name: '', surname: '', email: '', username: '', status: '', isExpanded: false };
 
-        this.snackBar.open('Usuario creado exitosamente', 'Cerrar', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top'
-        });
+        this.toastService.showSuccessToast('Usuario creado exitosamente');
       },
       error => {
         console.error('Error al crear el usuario:', error);
-        this.snackBar.open('Error al crear el usuario', 'Cerrar', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top'
-        });
+        this.toastService.showErrorToast('Error al crear el usuario');
       }
     );
   }
