@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { API_URL } from 'src/app/shared/utils/constants.utility';
+import { DATA_URL } from 'src/app/shared/utils/constants.utility';
 import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -8,8 +8,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class PublicationService {
-  private baseUrl: string = API_URL;
-
+  private baseUrl: string = DATA_URL;
   constructor(private http: HttpClient) {}
 
   create(data: any): Observable<any> {

@@ -24,10 +24,18 @@
         class="mt-8 flex justify-center flex-wrap gap-4 text-center lg:justify-start"
       >
         <a
+          *ngIf="!isLoggedIn"
           [routerLink]="['/auth/register']"
           class="block w-full rounded bg-sunset-orange-500 px-12 py-3 text-sm font-medium text-white shadow hover:brightness-90 active:scale-90 sm:w-auto"
         >
-          {{ 'home.join' | translate }}
+          {{ 'button.join' | translate }}
+        </a>
+        <a
+          *ngIf="isLoggedIn"
+          [routerLink]="['/news']"
+          class="block w-full rounded bg-sunset-orange-500 px-12 py-3 text-sm font-medium text-white shadow hover:brightness-90 active:scale-90 sm:w-auto"
+        >
+          {{ 'button.createPost' | translate }}
         </a>
       </div>
     </div>
@@ -50,37 +58,36 @@
   />
 </section>
 
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-<h1 class="text-9xl"> hola mundo</h1>
-
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>
+<h1 class="text-9xl">hola mundo</h1>

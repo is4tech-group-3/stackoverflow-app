@@ -28,6 +28,7 @@ import { BlockUIModule } from 'ng-block-ui';
 
 // HTTP Module
 import { HttpClientModule } from '@angular/common/http';
+import { AvatarModule } from 'ngx-avatars';
 
 // Reactive Forms Module
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -56,6 +57,7 @@ import { DropdownComponent } from './components/dropdown/dropdown/dropdown.compo
     RouterLink,
     RouterLinkActive,
     LottieModule,
+    AvatarModule,
     // Angular Material Modules
     MatMenuModule,
     MatButtonModule,
@@ -92,6 +94,7 @@ import { DropdownComponent } from './components/dropdown/dropdown/dropdown.compo
     ModalComponent,
     BlockUIModule,
     DropdownComponent,
+    AvatarModule,
     // Angular Material Modules
     MatMenuModule,
     MatButtonModule,

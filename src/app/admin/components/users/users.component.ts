@@ -4,6 +4,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { UserService } from '../../service/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ToastService } from 'src/app/shared/services/toast/toast.service';
 
 @Component({
   selector: 'app-users',
@@ -29,15 +30,17 @@ export class UsersComponent implements AfterViewInit {
     username: '',
     email: '',
     status: '',
-    isExpanded: false 
+    isExpanded: false
   };
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private userService: UserService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private toastService: ToastService
   ) {
-    this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
+    this.breakpointObserver
+      .observe([Breakpoints.XSmall, Breakpoints.Small])
       .subscribe(result => {
         this.isSmallScreen = result.matches;
       });
@@ -45,24 +48,33 @@ export class UsersComponent implements AfterViewInit {
     this.getUsers();
   }
 
-  getUsers(page: number = this.currentPage, size: number = this.pageSize): void {
+  getUsers(
+    page: number = this.currentPage,
+    size: number = this.pageSize
+  ): void {
     this.userService.getUsersPaginated(page, size).subscribe(
       response => {
         console.log('Usuarios recibidos:', response);
-        this.users = response.content.map((user: User) => ({ ...user, isExpanded: false }));
+        this.users = response.content.map((user: User) => ({
+          ...user,
+          isExpanded: false
+        }));
         this.dataSource.data = this.users;
-        this.allUsers = response.content; 
+        this.allUsers = response.content;
         this.paginator.length = response.totalElements;
         this.paginator.pageIndex = response.number;
         this.paginator.pageSize = response.size;
+        this.toastService.showSuccessToast('Usuarios obtenidos exitosamente');
       },
       error => {
+        this.toastService.showErrorToast('Error al obtener los usuarios');
+
         console.error('Error al obtener los usuarios', error);
-        this.snackBar.open('Error al obtener los usuarios', 'Cerrar', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top'
-        });
+        // this.snackBar.open('Error al obtener los usuarios', 'Cerrar', {
+        //   duration: 3000,
+        //   horizontalPosition: 'center',
+        //   verticalPosition: 'top'
+        // });
       }
     );
   }
@@ -74,21 +86,24 @@ export class UsersComponent implements AfterViewInit {
   }
 
   filterUsers(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-  
+    const filterValue = (event.target as HTMLInputElement).value
+      .trim()
+      .toLowerCase();
+
     const filteredUsers = this.allUsers.filter(user => {
-      const nameMatch = `${user.name} ${user.surname}`.toLowerCase().includes(filterValue);
+      const nameMatch = `${user.name} ${user.surname}`
+        .toLowerCase()
+        .includes(filterValue);
       const emailMatch = user.email.toLowerCase().includes(filterValue);
       return nameMatch || emailMatch;
     });
-  
-    this.dataSource.data = filteredUsers; 
-  
+
+    this.dataSource.data = filteredUsers;
+
     if (!filterValue) {
       this.dataSource.data = this.allUsers;
     }
   }
-  
 
   editUser(user: User): void {
     user.isEditing = true;
@@ -136,7 +151,7 @@ export class UsersComponent implements AfterViewInit {
       console.error('El usuario no tiene un ID válido:', user);
       return;
     }
-  
+
     const confirmation = confirm(`¿Estás seguro de que deseas deshabilitar al usuario ${user.name} ${user.surname}?`);
   
     if (confirmation) {
@@ -170,7 +185,15 @@ export class UsersComponent implements AfterViewInit {
       (createdUser: User) => {
         console.log('Usuario creado:', createdUser);
         this.getUsers(); // Refresh the users list
-        this.newUser = { id: 0, name: '', surname: '', email: '', username: '', status: '', isExpanded: false };
+        this.newUser = {
+          id: 0,
+          name: '',
+          surname: '',
+          email: '',
+          username: '',
+          status: '',
+          isExpanded: false
+        };
 
         this.snackBar.open('Usuario creado exitosamente', 'Cerrar', {
           duration: 3000,
@@ -179,12 +202,13 @@ export class UsersComponent implements AfterViewInit {
         });
       },
       error => {
+        this.toastService.showErrorToast('Error al crear el usuario');
         console.error('Error al crear el usuario:', error);
-        this.snackBar.open('Error al crear el usuario', 'Cerrar', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top'
-        });
+        // this.snackBar.open('Error al crear el usuario', 'Cerrar', {
+        //   duration: 3000,
+        //   horizontalPosition: 'center',
+        //   verticalPosition: 'top'
+        // });
       }
     );
   }

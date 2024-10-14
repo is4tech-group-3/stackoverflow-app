@@ -50,6 +50,7 @@
       "http_method": "HTTP method",
       "details": "Audit Details",
       "seeMore": "See more",
+      "status": "Status",
       "noData": "No audit logs available."
     }
   },
@@ -81,10 +82,13 @@
     "PasswordRecovery": "An email with the password recovery code has been sent. Please check your email and follow the instructions to reset your password.",
     "PasswordReset": "Password reset successful. Please log in to continue."
   },
+  "warning": {
+    "notLoggedIn": "You must be logged in to access this page.",
+    "alreadyLoggedIn": "You are already logged in."
+  },
   "home": {
     "title": "Welcome to",
-    "description": "Find solutions, share knowledge, and connect with experts in debugging!",
-    "join": "Join our Community"
+    "description": "Find solutions, share knowledge, and connect with experts in debugging!"
   },
   "forgotPassword": {
     "title": "Forgot password",
@@ -151,6 +155,11 @@
     "register": "Register",
     "login": "Login",
     "logout": "Logout",
-    "forgotPassword": "Forgot password"
+    "forgotPassword": "Forgot password",
+    "join": "Join our Community",
+    "createPost": "Create a post"
+  },
+  "utils": {
+    "loading": "Loading..."
   }
 }

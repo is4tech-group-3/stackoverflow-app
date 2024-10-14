@@ -12,9 +12,7 @@ import { FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./audit.component.scss'],
 })
 export class AuditComponent implements OnInit {
-  verFecha($event: any) {
-    throw new Error('Method not implemented.');
-  }
+
   @ViewChild('modalContent') modalContent!: TemplateRef<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 

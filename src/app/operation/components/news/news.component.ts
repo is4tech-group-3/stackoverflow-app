@@ -8,6 +8,8 @@ import { FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./news.component.scss']
 })
 export class NewsComponent implements OnInit {
+  publications: any[] = [];
+
   constructor(
     private publicationService: PublicationService,
     private fb: FormBuilder,
@@ -18,6 +20,8 @@ export class NewsComponent implements OnInit {
     this.publicationService.getAll().subscribe({
       next: data => {
         console.log(data);
+        this.publications = data.content;
+        console.table(this.publications);
       },
       error: error => {
         console.log(error);

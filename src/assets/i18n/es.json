@@ -4,7 +4,6 @@
   "About": "Acerca de",
   "News": "Noticias",
   "Search": "Buscar...",
-  "SignIn": "Iniciar sesión",
   "Profiles": "Perfiles",
   "Users": "Usuarios",
   "Audit": "Auditoría",
@@ -83,10 +82,13 @@
     "PasswordRecovery": "Se ha enviado un correo electrónico con el código de recuperación de la contraseña. Por favor, revise su correo electrónico y siga las instrucciones para restablecer su contraseña.",
     "PasswordReset": "Se ha restablecido la contraseña. Por favor, inicie sesión para continuar."
   },
+  "warning": {
+    "notLoggedIn": "Debe estar conectado para acceder a esta página.",
+    "alreadyLoggedIn": "Ya has iniciado sesión."
+  },
   "home": {
     "title": "Bienvenido a",
-    "description": "Encuentre soluciones, comparta conocimiento y conecte con expertos en el depurador!",
-    "join": "Únete a nuestra Comunidad"
+    "description": "Encuentre soluciones, comparta conocimiento y conecte con expertos en el depurador!"
   },
   "forgotPassword": {
     "title": "Olvidé mi contraseña",
@@ -153,6 +155,11 @@
     "register": "Registrarse",
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión",
-    "forgotPassword": "Olvidé mi contraseña"
+    "forgotPassword": "Olvidé mi contraseña",
+    "join": "Únete a nuestra Comunidad",
+    "createPost": "Crear un post"
+  },
+  "utils": {
+    "loading": "Cargando..."
   }
 }

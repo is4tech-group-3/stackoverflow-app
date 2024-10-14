@@ -4,21 +4,20 @@ import { AuthService } from '../../service/auth/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/shared/services/toast/toast.service';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
-
+import { BlockUIService } from 'src/app/shared/services/blockUI/block-ui.service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
-  @BlockUI() blockUI!: NgBlockUI;
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private translate: TranslateService,
     private router: Router,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private blockUIService: BlockUIService
   ) {}
 
   registerForm = this.formBuilder.group({
@@ -30,25 +29,22 @@ export class RegisterComponent {
 
   onSubmit() {
     if (this.registerForm.valid) {
-      this.blockUI.start('Loading...');
+      this.blockUIService.start();
       this.authService.signup(this.registerForm.value).subscribe({
         next: (response: any) => {
+          this.registerForm.reset();          
+          this.blockUIService.stop();
           this.toastService.showSuccessToast(
-            this.translate.instant('success.Registered'),
+            this.translate.instant('success.Registered')
           );
-          this.blockUI.stop(); 
-          this.registerForm.reset();
-          setTimeout(() => {
-            this.router.navigate(['/auth/login']);
-          }, 500);
+          this.router.navigate(['/auth/login']);
         },
         error: error => {
           const errorMessage = this.getBackendErrorMessage(error.error);
           this.toastService.showErrorToast(errorMessage);
+          this.blockUIService.stop();
         }
       });
-    } else {
-      // this.toastService.showToast(this.translate.instant('errors.required'), 'error');
     }
   }
 

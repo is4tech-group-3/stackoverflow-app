@@ -31,7 +31,6 @@ export class NavbarComponent implements OnInit {
 
     this.isLoggedIn = this.sessionService.isLoggedIn();
 
-    // Establecer el estado del navbar sticky según la ruta actual
     this.router.events.subscribe(() => {
       this.checkStickyNavbar();
     });

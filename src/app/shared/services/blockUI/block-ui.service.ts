@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -7,11 +8,12 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 export class BlockUIService {
   @BlockUI() blockUI!: NgBlockUI;
 
-  constructor() {}
+  constructor(private translate: TranslateService) {}
 
-  start(message: string = 'Please wait...'): void {
-    console.log("🚀 ~ BlockUIService ~ start ~ message:", message)
-    this.blockUI.start(message);
+  start(): void {
+    this.translate.get('utils.loading').subscribe((message: string) => {
+      this.blockUI.start(message);
+    });
   }
 
   stop(): void {

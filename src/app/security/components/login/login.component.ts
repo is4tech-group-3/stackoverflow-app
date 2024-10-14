@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from '../../service/auth/auth.service'; // Importa el servicio de autenticación
 import { TranslateService } from '@ngx-translate/core';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { BlockUIService } from 'src/app/shared/services/blockUI/block-ui.service';
+import { FormErrorService } from 'src/app/shared/services/formError/form-error.service';
 import { ToastService } from 'src/app/shared/services/toast/toast.service';
 import { DecodeTokenService } from 'src/app/shared/services/token/decode-token.service';
 import { CookieUtil } from 'src/app/shared/utils/CookieUtil';
-import { FormErrorService } from 'src/app/shared/services/formError/form-error.service';
+import { AuthService } from '../../service/auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -20,10 +21,11 @@ export class LoginComponent {
     private translate: TranslateService,
     private toastService: ToastService,
     private decodeTokenService: DecodeTokenService,
-    private formErrorService: FormErrorService
+    private formErrorService: FormErrorService,
+    private blockUIService: BlockUIService,
+    private router: Router
   ) {}
 
-  @BlockUI() blockUI!: NgBlockUI;
   hide = true;
   toastMessage: string = '';
   toastType: 'success' | 'error' | 'warning' | 'info' = 'info';
@@ -35,7 +37,7 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      this.blockUI.start('Cargando...');
+      this.blockUIService.start();
       this.authService.login(this.loginForm.value).subscribe({
         next: (response: any) => {
           const decodedToken = this.decodeTokenService.DecodeToken(
@@ -46,22 +48,21 @@ export class LoginComponent {
           CookieUtil.setValue('iat', decodedToken?.iat);
           CookieUtil.setValue('sub', decodedToken?.sub);
           CookieUtil.setValue('roles', decodedToken?.roles);
-
+          this.loginForm.reset();
+          this.blockUIService.stop();
           this.toastService.showSuccessToast(
             this.translate.instant('success.Login')
           );
-          this.blockUI.stop();
+          this.router.navigate(['/home']);
         },
         error: () => {
-          this.blockUI.stop();
+          this.blockUIService.stop();
 
           this.toastService.showErrorToast(
             this.translate.instant('errors.badCredentials')
           );
         }
       });
-    } else {
-      console.log('Formulario no válido');
     }
   }
 
