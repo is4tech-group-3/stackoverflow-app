@@ -3,7 +3,8 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { UserService } from '../../service/user.service';
-import { ToastService } from '../../../shared/services/toast/toast.service';
+import { ToastService } from 'src/app/shared/services/toast/toast.service';
+import { TranslateService } from '@ngx-translate/core'; // Importar TranslateService
 
 @Component({
   selector: 'app-users',
@@ -39,7 +40,8 @@ export class UsersComponent implements AfterViewInit {
   constructor(
     private breakpointObserver: BreakpointObserver,
     private userService: UserService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private translate: TranslateService // Agregar TranslateService al constructor
   ) {
     this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
       .subscribe(result => {
@@ -50,8 +52,8 @@ export class UsersComponent implements AfterViewInit {
   }
 
   getUsers(page: number = this.currentPage, size: number = this.pageSize): void {
-    this.userService.getUsersPaginated(page, size).subscribe(
-      response => {
+    this.userService.getUsersPaginated(page, size).subscribe({
+      next: (response) => {
         console.log('Usuarios recibidos:', response);
         this.users = response.content.map((user: User) => ({ ...user, isExpanded: false }));
         this.dataSource.data = this.users;
@@ -59,29 +61,29 @@ export class UsersComponent implements AfterViewInit {
         this.paginator.length = response.totalElements;
         this.paginator.pageIndex = response.number;
         this.paginator.pageSize = response.size;
-
-        this.updatePaginatedUsers(); // Actualiza paginatedUsers al obtener usuarios
+  
+        this.updatePaginatedUsers(); 
       },
-      error => {
+      error: (error) => {
         console.error('Error al obtener los usuarios', error);
-        this.toastService.showErrorToast('Error al obtener los usuarios');
+        this.toastService.showErrorToast(this.translate.instant('errors.fetchUsers')); // Utiliza traducción
       }
-    );
+    });
   }
 
   updatePaginatedUsers(): void {
     const start = this.currentPage * this.pageSize;
     const end = start + this.pageSize;
     this.paginatedUsers = this.filteredUsers.length
-      ? this.filteredUsers.slice(start, end)  // Si hay filtrado, usa los usuarios filtrados
-      : this.allUsers.slice(start, end); // Si no hay filtro, usa todos los usuarios
+      ? this.filteredUsers.slice(start, end) 
+      : this.allUsers.slice(start, end); 
   }
 
   onPageChange(event: PageEvent): void {
     this.currentPage = event.pageIndex;
     this.pageSize = event.pageSize;
-    this.updatePaginatedUsers(); // Actualiza la paginación
-    this.getUsers(this.currentPage, this.pageSize); // Llama a getUsers si es necesario
+    this.updatePaginatedUsers(); 
+    this.getUsers(this.currentPage, this.pageSize); 
   }
 
   filterUsers(event: Event): void {
@@ -93,52 +95,51 @@ export class UsersComponent implements AfterViewInit {
       return nameMatch || emailMatch;
     });
 
-    this.currentPage = 0;  // Reiniciar la página actual al filtrar
-    this.paginator.firstPage(); // Llevar el paginador a la primera página
-    this.paginator.length = this.filteredUsers.length; // Actualizar el total del paginador
+    this.currentPage = 0;  
+    this.paginator.firstPage();
+    this.paginator.length = this.filteredUsers.length; 
 
-    this.updatePaginatedUsers(); // Actualiza paginatedUsers al filtrar
+    this.updatePaginatedUsers(); 
   }
 
   editUser(user: User): void {
-    this.userBackup = { ...user }; // Guarda una copia del usuario actual
+    this.userBackup = { ...user }; 
     user.isEditing = true;
   }
 
   cancelEdit(user: User): void {
     if (this.userBackup) {
-      // Restaura los valores del usuario a los de la copia
       user.name = this.userBackup.name;
       user.surname = this.userBackup.surname;
       user.username = this.userBackup.username;
     }
-    user.isEditing = false; // Salir del modo de edición
+    user.isEditing = false; 
     this.userBackup = null; 
   }
 
   saveUser(user: User): void {
     if (!user.name || !user.surname || !user.username) {
-      this.toastService.showErrorToast('Todos los campos son obligatorios');
+      this.toastService.showErrorToast(this.translate.instant('errors.requiredFields')); // Utiliza traducción
       return;
     }
-
+  
     const userUpdatePayload = {
       name: user.name,
       surname: user.surname,
       username: user.username
     };
-
-    this.userService.updateUser(user.id, userUpdatePayload).subscribe(
-      (updatedUser: User) => {
+  
+    this.userService.updateUser(user.id, userUpdatePayload).subscribe({
+      next: (updatedUser: User) => {
         console.log('Usuario actualizado:', updatedUser);
         user.isEditing = false;
-        this.toastService.showSuccessToast('Usuario actualizado exitosamente');
+        this.toastService.showSuccessToast(this.translate.instant('success.userUpdated')); // Utiliza traducción
       },
-      error => {
+      error: (error) => {
         console.error('Error al actualizar el usuario:', error);
-        this.toastService.showErrorToast('Error al actualizar el usuario');
+        this.toastService.showErrorToast(this.translate.instant('errors.updateUser')); // Utiliza traducción
       }
-    );
+    });
   }
 
   disableUser(user: User): void {
@@ -147,40 +148,38 @@ export class UsersComponent implements AfterViewInit {
       return;
     }
   
-    const confirmation = confirm(`¿Estás seguro de que deseas deshabilitar al usuario ${user.name} ${user.surname}?`);
+    const confirmation = confirm(this.translate.instant('confirm.disableUser', { name: user.name, surname: user.surname })); // Utiliza traducción
   
     if (confirmation) {
-      // Cambiar el estado del usuario a "false"
-      this.userService.toggleUserStatus(user.id, false).subscribe(
-        () => {
+      this.userService.toggleUserStatus(user.id, false).subscribe({
+        next: () => {
           console.log('Usuario deshabilitado');
-          this.getUsers(this.currentPage, this.pageSize); // Refresca la lista de usuarios después de deshabilitar
-          this.toastService.showSuccessToast('Usuario deshabilitado exitosamente');
+          this.getUsers(this.currentPage, this.pageSize);
+          this.toastService.showSuccessToast(this.translate.instant('success.userDisabled')); // Utiliza traducción
         },
-        error => {
+        error: (error) => {
           console.error('Error al deshabilitar el usuario:', error);
-          this.toastService.showErrorToast('Error al deshabilitar el usuario');
+          this.toastService.showErrorToast(this.translate.instant('errors.disableUser')); // Utiliza traducción
         }
-      );
+      });
     }
   }
 
   addUser(): void {
     const userToCreate = { ...this.newUser, status: 'true' };
-
-    this.userService.createUser(userToCreate).subscribe(
-      (createdUser: User) => {
+  
+    this.userService.createUser(userToCreate).subscribe({
+      next: (createdUser: User) => {
         console.log('Usuario creado:', createdUser);
-        this.getUsers(); // Refresca la lista de usuarios
+        this.getUsers();
         this.newUser = { id: 0, name: '', surname: '', email: '', username: '', status: '', isExpanded: false };
-
-        this.toastService.showSuccessToast('Usuario creado exitosamente');
+        this.toastService.showSuccessToast(this.translate.instant('success.userCreated')); // Utiliza traducción
       },
-      error => {
+      error: (error) => {
         console.error('Error al crear el usuario:', error);
-        this.toastService.showErrorToast('Error al crear el usuario');
+        this.toastService.showErrorToast(this.translate.instant('errors.createUser')); // Utiliza traducción
       }
-    );
+    });
   }
 
   ngAfterViewInit() {

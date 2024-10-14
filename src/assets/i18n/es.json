@@ -55,6 +55,19 @@
       "noData": "No hay registros de auditoría disponibles."
     }
   },
+  "users":{
+    "title": "Usuarios",
+    "addTitle": "Agregar Usuario",
+    "AdministrationTitle": "Administracion General",
+    "searchUser": "Buscar usuario",
+    "activeProfiles": "Perfiles Disponibles",
+    "data": {
+      "name": "Nombre",
+      "surname": "Apellido",
+      "username": "Username",
+      "email": "Email"
+    }
+  },
   "news": {
     "title": "Últimas noticias",
     "description": "  Manténgase al día con las últimas insights, consejos y tendencias en nuestra colección de artículos curados. Nuestros expertos comparten conocimiento valioso para ayudarte a navegar por varios temas, inspirando creatividad y innovación a lo largo del camino.",
@@ -150,6 +163,7 @@
     "cancel": "Cancelar",
     "close": "Cerrar",
     "save": "Guardar",
+    "disable": "deshabilitar",
     "register": "Registrarse",
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión",
