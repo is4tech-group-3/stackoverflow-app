@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { QuestionModalComponent } from './question-modal/question-modal.component';
 import { QuestionService } from '../../service/question.service';
-import { TagService } from '../../service/tag.service';
 @Component({
   selector: 'app-questions',
   templateUrl: './questions.component.html',
@@ -10,22 +9,18 @@ import { TagService } from '../../service/tag.service';
 })
 export class QuestionsComponent implements OnInit {
   questions: any[] = [];
-  relatedTags: any[] = []; // Etiquetas paginadas
-  totalPages: number = 0; // Total de páginas que devuelve el backend
-  currentPage: number = 0; // Página actual
-  numberOfElements: number = 0; // Número de elementos en la página actual
-  isLastPage: boolean = false; // Si estamos en la última página
-  isFirstPage: boolean = false; // Si estamos en la primera página
+  relatedTags: any[] = [];
+  visibleTags: any[] = [];
+  showAllTags: boolean = false;
+  maxVisibleTags: number = 5;
 
   constructor(
     private questionService: QuestionService,
-    private tagService: TagService,
     public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.getQuestionsList();
-    this.getRelatedTags(this.currentPage);
   }
 
   getQuestionsList(): void {
@@ -38,28 +33,41 @@ export class QuestionsComponent implements OnInit {
       }
     );
   }
-  getRelatedTags(page: number): void {
-    this.tagService.getAllTags(page).subscribe(
-      data => {
-        this.relatedTags = data.content; // Etiquetas de la página actual
-        this.totalPages = data.totalPages; // Total de páginas
-        this.numberOfElements = data.numberOfElements; // Número de elementos en esta página
-        this.isLastPage = data.last; // Si es la última página
-        this.isFirstPage = data.first; // Si es la primera página
-      },
-      error => {
-        console.error('Error fetching tags', error);
-      }
-    );
+
+  updateVisibleTags(): void {
+    this.questions.forEach(question => {
+      question.visibleTags = question.tags.slice(0, this.maxVisibleTags);
+    });
   }
 
-  // Método para cambiar de página
-  changePage(increment: number): void {
-    const newPage = this.currentPage + increment;
-    if (newPage >= 0 && newPage < this.totalPages) {
-      this.currentPage = newPage;
-      this.getRelatedTags(this.currentPage); // Actualiza la lista de etiquetas según la nueva página
-    }
+  showMoreTags(): void {
+    this.showAllTags = true;
+  }
+
+  openQuestionModal(): void {
+    const dialogRef = this.dialog.open(QuestionModalComponent, {
+      width: '600px',
+      data: { page: 0 }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const newQuestion = {
+          title: result.title,
+          description: result.description,
+          tags: result.selectedTags
+        };
+
+        this.questionService.createQuestion(newQuestion).subscribe(
+          response => {
+            this.questions.push(response);
+          },
+          error => {
+            console.error('Error al crear la pregunta', error);
+          }
+        );
+      }
+    });
   }
 
   getTagClass(tag: string): { class: string; iconUrl: string } {
@@ -69,15 +77,15 @@ export class QuestionsComponent implements OnInit {
           class: 'tag-default',
           iconUrl: 'https://icongr.am/devicon/javascript-original.svg'
         };
-      case 'react':
+      case 'reactjs':
         return {
           class: 'tag-default',
           iconUrl: 'https://icongr.am/devicon/react-original.svg'
         };
-      case 'node':
+      case 'nodejs':
         return {
           class: 'tag-default',
-          iconUrl: 'https://icongr.am/devicon/nodejs-original-wordmark.svg'
+          iconUrl: 'https://icongr.am/devicon/nodejs-original.svg'
         };
       case 'mongodb':
         return {
@@ -159,20 +167,100 @@ export class QuestionsComponent implements OnInit {
           class: 'tag-default',
           iconUrl: 'https://icongr.am/devicon/mysql-original.svg'
         };
-      case 'python':
+      case 'vuejs':
         return {
           class: 'tag-default',
-          iconUrl: 'https://icongr.am/devicon/python-original.svg'
+          iconUrl: 'https://icongr.am/devicon/vuejs-original.svg'
         };
-      case 'python':
+      case 'postgresql':
         return {
           class: 'tag-default',
-          iconUrl: 'https://icongr.am/devicon/python-original.svg'
+          iconUrl: 'https://icongr.am/devicon/postgresql-original.svg'
         };
-      case 'python':
+      case 'npm':
         return {
           class: 'tag-default',
-          iconUrl: 'https://icongr.am/devicon/python-original.svg'
+          iconUrl: 'https://icongr.am/devicon/npm-original-wordmark.svg'
+        };
+      case 'github':
+        return {
+          class: 'tag-default',
+          iconUrl: 'https://icongr.am/devicon/github-original.svg'
+        };
+      case 'git':
+        return {
+          class: 'tag-default',
+          iconUrl: 'https://icongr.am/devicon/git-original.svg'
+        };
+      case 'expressjs':
+        return {
+          class: 'tag-default',
+          iconUrl: 'https://icongr.am/devicon/express-original.svg'
+        };
+      case 'docker':
+        return {
+          class: 'tag-default',
+          iconUrl: 'https://icongr.am/devicon/docker-original.svg'
+        };
+      case 'django':
+        return {
+          class: 'tag-default',
+          iconUrl: 'https://icongr.am/devicon/django-original.svg'
+        };
+      case 'bitbucket':
+        return {
+          class: 'tag-default',
+          iconUrl: 'https://icongr.am/devicon/bitbucket-original.svg'
+        };
+      case 'jenkins':
+        return {
+          class: 'tag-default',
+          iconUrl: 'https://icongr.am/simple/jenkins.svg?&colored=true'
+        };
+      case 'terraform':
+        return {
+          class: 'tag-default',
+          iconUrl: 'https://icongr.am/simple/terraform.svg?&colored=true'
+        };
+      case 'rust':
+        return {
+          class: 'tag-default',
+          iconUrl: 'https://icongr.am/simple/rust.svg?&colored=true'
+        };
+      case 'kotlin':
+        return {
+          class: 'tag-default',
+          iconUrl: 'https://icongr.am/simple/kotlin.svg?&colored=true'
+        };
+      case 'kubernetes':
+        return {
+          class: 'tag-default',
+          iconUrl: 'https://icongr.am/simple/kubernetes.svg?&colored=true'
+        };
+      case 'svelte':
+        return {
+          class: 'tag-default',
+          iconUrl: 'https://icongr.am/simple/svelte.svg?&colored=true'
+        };
+      case 'flask':
+        return {
+          class: 'tag-default',
+          iconUrl: 'https://icongr.am/simple/flask.svg?&colored=true'
+        };
+      case 'ansible':
+        return {
+          class: 'tag-default',
+          iconUrl: 'https://icongr.am/simple/ansible.svg'
+        };
+      case 'jwt':
+        return {
+          class: 'tag-default',
+          iconUrl: 'https://icongr.am/simple/jsonwebtokens.svg?&colored=true'
+        };
+      case 'springboot':
+        return {
+          class: 'tag-default',
+          iconUrl: 'https://icongr.am/simple/spring.svg?&colored=true'
         };
       default:
         return { class: 'tag-default', iconUrl: '' };

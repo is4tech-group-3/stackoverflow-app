@@ -19,15 +19,14 @@
             </form>
         </div>
 
-        <div class="flex flex-col mt-4">
+        <div class="flex flex-col mt-4 overflow-auto">
             <div class="flex flex-wrap items-center mb-4 cursor-pointer hover:bg-gray-100"
-                *ngFor="let profile of pagedProfiles" (click)="selectProfile(profile)">
+                *ngFor="let profile of filteredProfiles" (click)="selectProfile(profile)">
                 <div class="h-2.5 w-2.5 rounded-full me-2" [ngClass]="{
-                 'bg-green-500': profile.status, 
-                 'bg-red-500': !profile.status
-             }">
+         'bg-green-500': profile.status, 
+         'bg-red-500': !profile.status
+     }">
                 </div>
-
                 <div class="flex-1 flex items-center text-gray-900 whitespace-normal dark:text-black">
                     <div class="ps-3 text-left w-full">
                         <div class="text-base font-semibold">{{ profile.name }}</div>
@@ -36,11 +35,9 @@
                 </div>
             </div>
         </div>
-
-
         <div class="mt-auto">
-            <mat-paginator [length]="filteredProfiles.length" [pageSize]="pageSize" [pageIndex]="currentPage"
-                [hidePageSize]="true" (page)="handlePageEvent($event)">
+            <mat-paginator [length]="totalItems" [pageIndex]="currentPage" [hidePageSize]="true" [pageSize]="8"
+                (page)="handlePageEvent($event)">
             </mat-paginator>
         </div>
     </div>
@@ -49,30 +46,20 @@
         <div class="bg-white w-full min-h-60 lg:min-h-40 rounded-[5px] p-6 shadow-[0_2px_10px_rgba(0,0,0,0.1)] mb-5">
             <div class="flex justify-between items-center">
                 <h1 class="text-left text-xl font-bold">{{ "Save" | translate }}</h1>
-
                 <div class="flex space-x-1 items-center">
-                    <button
-                        class="text-white bg-red-600 font-medium rounded-lg text-sm px-6 py-2 dark:bg-red-600 dark:hover:bg-red-600"
-                        (click)="saveProfile()">
+                    <button *ngIf="selectedProfile?.idProfile"
+                        class="text-sm font-bold px-3 mr-2 py-2 rounded-lg border-2 cursor-pointer"
+                        [ngClass]="{'border-green-500 text-green-500': selectedProfile?.status,'border-red-500 text-red-500': !selectedProfile?.status}"
+                        (click)="toggleStatus()">
+                        {{ selectedProfile?.status ? 'Habilitado' : 'Desactivado' }}
+                    </button>
+                    <button class="text-white font-medium rounded-lg text-sm px-6 py-2" [ngClass]="{
+    'bg-red-600': checkIfCanSave(),
+    'bg-gray-400 cursor-not-allowed': !checkIfCanSave()
+  }" [disabled]="!checkIfCanSave()" (click)="saveProfile()">
                         {{ "Save" | translate }}
                     </button>
-
-                    <button *ngIf="selectedProfile?.idProfile" mat-icon-button [matMenuTriggerFor]="menu"
-                        aria-label="More options">
-                        <mat-icon>more_vert</mat-icon>
-                    </button>
                 </div>
-
-                <mat-menu #menu="matMenu">
-                    <button mat-menu-item>
-                        <mat-icon>edit</mat-icon>
-                        <span>{{ "Edit" | translate }}</span>
-                    </button>
-                    <button mat-menu-item (click)="disableProfile()">
-                        <mat-icon>block</mat-icon>
-                        <span>{{ "Disable" | translate }}</span>
-                    </button>
-                </mat-menu>
             </div>
 
             <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-32 mt-4">
@@ -100,7 +87,8 @@
             <div class="flex flex-col lg:flex-row space-y-5 lg:space-x-5 lg:space-y-0 w-full h-[915px] lg:h-full">
 
                 <!-- Administration container-->
-                <div class="bg-white w-full rounded-[5px] p-6 h-[915px] lg:h-auto mb-5 lg:mb-0">
+                <div
+                    class="bg-white w-full rounded-[5px] p-6 h-[915px] lg:h-auto mb-5 lg:mb-0 shadow-[0_2px_10px_rgba(0,0,0,0.1)] ">
                     <h2 class="text-lg font-semibold">{{ 'Administration' | translate }}</h2>
                     <hr class="border-t border-gray-300 my-2">
 

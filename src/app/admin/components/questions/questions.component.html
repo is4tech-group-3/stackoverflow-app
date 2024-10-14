@@ -12,8 +12,7 @@
                 </div>
             </div>
             <hr class="border-t border-gray-300 my-2">
-            <div class="flex items-center text-sm font-medium space-x-2 lowercase">
-                <!-- Diseño de los tags de las preguntas -->
+            <div class="flex items-center text-sm font-medium flex-wrap gap-2 lowercase">
                 <span class="flex items-center" *ngFor="let tag of question.tags"
                     [ngClass]="getTagClass(tag.name).class">
                     <img *ngIf="getTagClass(tag.name).iconUrl" [src]="getTagClass(tag.name).iconUrl" alt="{{tag.name}}"
@@ -21,38 +20,23 @@
                     <span class="first-letter:uppercase">{{ tag.name }}</span>
                 </span>
             </div>
+
         </div>
     </div>
 
     <div class="lg:w-1/4">
         <div class="bg-white shadow rounded-lg mb-6 p-6">
             <h3 class="text-xl font-semibold mb-4">Etiquetas relacionadas</h3>
-            <div *ngIf="relatedTags.length > 0">
+            <div>
                 <div class="flex flex-wrap gap-2 text-sm font-medium lowercase">
-                    <span class="flex items-center" *ngFor="let tag of relatedTags"
-                        [ngClass]="getTagClass(tag.name).class">
-                        <img *ngIf="getTagClass(tag.name).iconUrl" [src]="getTagClass(tag.name).iconUrl"
-                            alt="{{tag.name}}" class="w-4 h-4 tag-icon">
-                        <span class="first-letter:uppercase">{{ tag.name }}</span>
-                    </span>
                 </div>
-            </div>
-            <div class="mt-4">
-                <button (click)="changePage(-1)" [disabled]="isFirstPage"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-1">
-                    Anterior
-                </button>
-                <button (click)="changePage(1)" [disabled]="isLastPage"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-1">
-                    Siguiente
-                </button>
             </div>
         </div>
     </div>
 </div>
 
 <div class="fixed bottom-4 right-4">
-    <button mat-fab class="bg-sunset-orange-500">
+    <button mat-fab class="bg-sunset-orange-500" (click)="openQuestionModal()">
         <mat-icon>add</mat-icon>
     </button>
 </div>

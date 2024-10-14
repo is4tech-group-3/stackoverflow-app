@@ -11,14 +11,14 @@ import { PageEvent } from '@angular/material/paginator';
 export class ProfilesComponent implements OnInit {
   profiles: any[] = [];
   filteredProfiles: any[] = [];
-  pagedProfiles: any[] = [];
   rolesAvailable: any[] = [];
   filteredRolesAvailable: any[] = [];
   assignedRoles: any[] = [];
   filteredRolesAssigned: any[] = [];
-  pageSize = 7;
   currentPage = 0;
+  totalItems = 0;
   selectedProfile: any = { id: null, name: '', description: '', roles: [] };
+  hasChanges: boolean = false;
 
   constructor(
     private profileService: ProfileService,
@@ -26,16 +26,16 @@ export class ProfilesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getProfiles();
+    this.getProfiles(this.currentPage);
     this.getRoles();
   }
 
-  getProfiles(): void {
-    this.profileService.getProfiles().subscribe(
+  getProfiles(page: number): void {
+    this.profileService.getProfiles(page).subscribe(
       data => {
         this.profiles = data.content;
         this.filteredProfiles = this.profiles;
-        this.updatePagedProfiles();
+        this.totalItems = data.totalElements;
       },
       error => {
         console.error('Error al obtener perfiles', error);
@@ -55,18 +55,39 @@ export class ProfilesComponent implements OnInit {
     );
   }
 
+  onFieldChange() {
+    this.hasChanges = true;
+  }
+
   asignarRol(role: any): void {
     this.assignedRoles.push(role);
     this.filteredRolesAssigned = this.assignedRoles;
-    this.rolesAvailable = this.rolesAvailable.filter(r => r !== role);
-    this.filteredRolesAvailable = this.rolesAvailable;
+    this.rolesAvailable = this.rolesAvailable.filter(
+      r => r.idRole !== role.idRole
+    );
+    this.filteredRolesAvailable = this.rolesAvailable.filter(
+      role =>
+        !this.assignedRoles.some(assigned => assigned.idRole === role.idRole)
+    );
+
+    this.hasChanges = true;
   }
 
   quitarRol(role: any): void {
-    this.rolesAvailable.push(role);
-    this.filteredRolesAvailable = this.rolesAvailable;
-    this.assignedRoles = this.assignedRoles.filter(r => r !== role);
+    this.assignedRoles = this.assignedRoles.filter(
+      r => r.idRole !== role.idRole
+    );
     this.filteredRolesAssigned = this.assignedRoles;
+
+    if (!this.rolesAvailable.some(r => r.idRole === role.idRole)) {
+      this.rolesAvailable.push(role);
+    }
+    this.filteredRolesAvailable = this.rolesAvailable.filter(
+      role =>
+        !this.assignedRoles.some(assigned => assigned.idRole === role.idRole)
+    );
+
+    this.hasChanges = true;
   }
 
   filterRolesDisponibles(event: Event): void {
@@ -75,6 +96,33 @@ export class ProfilesComponent implements OnInit {
     this.filteredRolesAvailable = this.rolesAvailable.filter(role =>
       role.name.toLowerCase().includes(filterValue)
     );
+  }
+
+  toggleStatus(): void {
+    if (!this.selectedProfile) return;
+    const newStatus = !this.selectedProfile.status;
+    const partialProfile = {
+      status: newStatus
+    };
+    this.profileService
+      .patchProfile(this.selectedProfile.idProfile, partialProfile)
+      .subscribe({
+        next: response => {
+          this.selectedProfile.status = newStatus;
+          this.getProfiles(this.currentPage);
+          console.log(
+            `Perfil ${newStatus ? 'habilitado' : 'deshabilitado'} con éxito`,
+            response
+          );
+        },
+        error: error => {
+          console.error(
+            'Error al actualizar el estado del perfil:',
+            error.error.detail,
+            error.error.instance
+          );
+        }
+      });
   }
 
   filterRolesAsignados(event: Event): void {
@@ -99,16 +147,9 @@ export class ProfilesComponent implements OnInit {
     this.filteredRolesAssigned = [];
   }
 
-  updatePagedProfiles(): void {
-    const startIndex = this.currentPage * this.pageSize;
-    const endIndex = startIndex + this.pageSize;
-    this.pagedProfiles = this.filteredProfiles.slice(startIndex, endIndex);
-  }
-
   handlePageEvent(event: PageEvent): void {
     this.currentPage = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.updatePagedProfiles();
+    this.getProfiles(this.currentPage);
   }
 
   filterProfiles(event: Event): void {
@@ -116,72 +157,87 @@ export class ProfilesComponent implements OnInit {
     const filterValue = inputElement.value
       ? inputElement.value.trim().toLowerCase()
       : '';
-
     this.filteredProfiles = this.profiles.filter(
       profile =>
         profile.name.toLowerCase().includes(filterValue) ||
         profile.description.toLowerCase().includes(filterValue)
     );
-    this.updatePagedProfiles();
   }
 
   selectProfile(profile: any): void {
     this.selectedProfile = { ...profile, roles: [...(profile.roles || [])] };
     this.assignedRoles = this.selectedProfile.roles || [];
     this.filteredRolesAssigned = this.assignedRoles;
-    this.rolesAvailable = this.rolesAvailable.filter(
-      role => !this.assignedRoles.some(assigned => assigned.id === role.id)
+    this.hasChanges = false;
+    this.filteredRolesAvailable = this.rolesAvailable.filter(
+      role =>
+        !this.assignedRoles.some(assigned => assigned.idRole === role.idRole)
     );
-    this.filteredRolesAvailable = this.rolesAvailable;
   }
 
-  saveProfile(): void {
-    if (this.selectedProfile.id) {
+  saveProfile() {
+    const profileData = {
+      name: this.selectedProfile.name,
+      description: this.selectedProfile.description,
+      idRoles: this.assignedRoles.map((r: any) => r.idRole)
+    };
+
+    if (!profileData.idRoles || profileData.idRoles.length === 0) {
+      console.error('No IDs assigned to the roles.');
+      return;
+    }
+
+    if (this.selectedProfile.idProfile) {
       this.profileService
-        .updateProfile(this.selectedProfile.id, this.selectedProfile)
-        .subscribe(
-          response => {
-            console.log('Perfil actualizado', response);
-            this.getProfiles();
+        .updateProfile(this.selectedProfile.idProfile, profileData)
+        .subscribe({
+          next: response => {
+            console.log('Perfil actualizado con éxito', response);
+            this.getProfiles(this.currentPage);
           },
-          error => {
-            console.error('Error al actualizar el perfil', error);
+          error: error => {
+            console.error('Error al actualizar el perfil:', error);
           }
-        );
+        });
     } else {
-      this.profileService.createProfile(this.selectedProfile).subscribe(
-        response => {
-          console.log('Perfil creado', response);
-          this.getProfiles();
+      this.profileService.createProfile(profileData).subscribe({
+        next: response => {
+          console.log('Perfil creado con éxito', response);
+          this.getProfiles(this.currentPage);
         },
-        error => {
-          console.error('Error al crear el perfil', error);
+        error: error => {
+          console.error('Error al crear el perfil:', error);
         }
-      );
+      });
     }
-
-    this.selectedProfile = { id: null, name: '', description: '' };
   }
 
-  disableProfile(): void {
-    if (this.selectedProfile?.idProfile) {
-      const newStatus = !this.selectedProfile.status;
-      console.log(
-        `Actualizando perfil con ID: ${this.selectedProfile.idProfile}, nuevo estado: ${newStatus}`
+  checkIfCanSave(): boolean {
+    const { name, description, roles } = this.selectedProfile;
+    if (!this.selectedProfile.idProfile) {
+      return (
+        !!name?.trim() && !!description?.trim() && this.assignedRoles.length > 0
       );
-
-      this.profileService
-        .toggleProfileStatus(this.selectedProfile.idProfile, newStatus)
-        .subscribe(
-          response => {
-            console.log('Estado del perfil actualizado', response);
-            this.selectedProfile.status = newStatus;
-            this.getProfiles();
-          },
-          error => {
-            console.error('Error al actualizar el estado del perfil', error);
-          }
-        );
     }
+
+    const originalProfile = this.profiles.find(
+      p => p.idProfile === this.selectedProfile.idProfile
+    );
+
+    if (!originalProfile) return false;
+    const nameChanged = originalProfile.name !== this.selectedProfile.name;
+    const descriptionChanged =
+      originalProfile.description !== this.selectedProfile.description;
+    const rolesChanged =
+      originalProfile.roles
+        ?.map((r: any) => r.idRole)
+        .sort()
+        .join(',') !==
+      this.assignedRoles
+        .map((r: any) => r.idRole)
+        .sort()
+        .join(',');
+    this.hasChanges = nameChanged || descriptionChanged || rolesChanged;
+    return this.hasChanges;
   }
 }
