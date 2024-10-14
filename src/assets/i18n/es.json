@@ -164,6 +164,7 @@
     "close": "Cerrar",
     "save": "Guardar",
     "disable": "deshabilitar",
+    "enable": "habilitar",
     "register": "Registrarse",
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión",

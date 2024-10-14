@@ -18,7 +18,7 @@ export class UserService {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
-    return this.http.get(`${this.userApiUrl}`, { params }); // Cambiar baseUrl a userApiUrl
+    return this.http.get(`${this.userApiUrl}`, { params });
   }
   
   findUserByEmail(email: string): Observable<User> {
@@ -41,16 +41,14 @@ export class UserService {
   }
   
 
-
   // DELETE
   deleteUser(id: number): Observable<void> {
     console.log(`Eliminando usuario con ID: ${id}`);
     return this.http.delete<void>(`${this.userApiUrl}/${id}`);
   }
   
-
-  // PUT: Habilitar/Deshabilitar user
-  toggleUserStatus(id: number, status: boolean): Observable<any> {
-    return this.http.put(`${this.userApiUrl}/${id}/status`, { status });
-  }
+  // PUT: Habilitar/Deshabilitar usuario
+  toggleUserStatus(userId: number, status: boolean): Observable<any> {
+    return this.http.patch(`${this.userApiUrl}/changeStatus/${userId}`, { status });
+}
 }

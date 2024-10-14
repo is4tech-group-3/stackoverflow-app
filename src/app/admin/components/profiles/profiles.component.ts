@@ -58,7 +58,9 @@ export class ProfilesComponent implements OnInit {
   asignarRol(role: any): void {
     this.assignedRoles.push(role);
     this.filteredRolesAssigned = this.assignedRoles;
-    this.rolesAvailable = this.rolesAvailable.filter(r => r !== role);
+    this.rolesAvailable = this.rolesAvailable.filter(
+      r => r.idRole !== role.idRole
+    ); // Filtrar por idRole
     this.filteredRolesAvailable = this.rolesAvailable;
   }
 
@@ -75,6 +77,33 @@ export class ProfilesComponent implements OnInit {
     this.filteredRolesAvailable = this.rolesAvailable.filter(role =>
       role.name.toLowerCase().includes(filterValue)
     );
+  }
+
+  toggleStatus(): void {
+    if (!this.selectedProfile) return;
+    const newStatus = !this.selectedProfile.status;
+    const partialProfile = {
+      status: newStatus
+    };
+    this.profileService
+      .patchProfile(this.selectedProfile.idProfile, partialProfile)
+      .subscribe({
+        next: response => {
+          this.selectedProfile.status = newStatus;
+          this.getProfiles();
+          console.log(
+            `Perfil ${newStatus ? 'habilitado' : 'deshabilitado'} con éxito`,
+            response
+          );
+        },
+        error: error => {
+          console.error(
+            'Error al actualizar el estado del perfil:',
+            error.error.detail,
+            error.error.instance
+          );
+        }
+      });
   }
 
   filterRolesAsignados(event: Event): void {
@@ -116,7 +145,6 @@ export class ProfilesComponent implements OnInit {
     const filterValue = inputElement.value
       ? inputElement.value.trim().toLowerCase()
       : '';
-
     this.filteredProfiles = this.profiles.filter(
       profile =>
         profile.name.toLowerCase().includes(filterValue) ||
@@ -129,59 +157,48 @@ export class ProfilesComponent implements OnInit {
     this.selectedProfile = { ...profile, roles: [...(profile.roles || [])] };
     this.assignedRoles = this.selectedProfile.roles || [];
     this.filteredRolesAssigned = this.assignedRoles;
-    this.rolesAvailable = this.rolesAvailable.filter(
-      role => !this.assignedRoles.some(assigned => assigned.id === role.id)
+
+    // Asegurarse de filtrar correctamente los roles disponibles
+    this.filteredRolesAvailable = this.rolesAvailable.filter(
+      role =>
+        !this.assignedRoles.some(assigned => assigned.idRole === role.idRole)
     );
-    this.filteredRolesAvailable = this.rolesAvailable;
   }
 
-  saveProfile(): void {
-    if (this.selectedProfile.id) {
-      this.profileService
-        .updateProfile(this.selectedProfile.id, this.selectedProfile)
-        .subscribe(
-          response => {
-            console.log('Perfil actualizado', response);
-            this.getProfiles();
-          },
-          error => {
-            console.error('Error al actualizar el perfil', error);
-          }
-        );
-    } else {
-      this.profileService.createProfile(this.selectedProfile).subscribe(
-        response => {
-          console.log('Perfil creado', response);
-          this.getProfiles();
-        },
-        error => {
-          console.error('Error al crear el perfil', error);
-        }
-      );
+  saveProfile() {
+    const profileData = {
+      name: this.selectedProfile.name,
+      description: this.selectedProfile.description,
+      idRoles: this.assignedRoles.map(role => role.idRole)
+    };
+
+    if (!profileData.idRoles || profileData.idRoles.length === 0) {
+      console.error('No IDs assigned to the roles.');
+      return;
     }
 
-    this.selectedProfile = { id: null, name: '', description: '' };
-  }
-
-  disableProfile(): void {
-    if (this.selectedProfile?.idProfile) {
-      const newStatus = !this.selectedProfile.status;
-      console.log(
-        `Actualizando perfil con ID: ${this.selectedProfile.idProfile}, nuevo estado: ${newStatus}`
-      );
-
+    if (this.selectedProfile.idProfile) {
       this.profileService
-        .toggleProfileStatus(this.selectedProfile.idProfile, newStatus)
-        .subscribe(
-          response => {
-            console.log('Estado del perfil actualizado', response);
-            this.selectedProfile.status = newStatus;
+        .updateProfile(this.selectedProfile.idProfile, profileData)
+        .subscribe({
+          next: response => {
+            console.log('Perfil actualizado con éxito', response);
             this.getProfiles();
           },
-          error => {
-            console.error('Error al actualizar el estado del perfil', error);
+          error: error => {
+            console.error('Error al actualizar el perfil:', error);
           }
-        );
+        });
+    } else {
+      this.profileService.createProfile(profileData).subscribe({
+        next: response => {
+          console.log('Perfil creado con éxito', response);
+          this.getProfiles();
+        },
+        error: error => {
+          console.error('Error al crear el perfil:', error);
+        }
+      });
     }
   }
 }

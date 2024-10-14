@@ -36,8 +36,8 @@ export class ProfileService {
     return this.http.delete(`${this.baseUrl}/${id}`);
   }
 
-  // PUT: Deshabilitar o habilitar un perfil
-  toggleProfileStatus(id: number, status: boolean): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${id}/status`, { status });
+  // PATCH: Actualizar estado de un perfil
+  patchProfile(id: number, profile: any): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/${id}`, profile);
   }
 }

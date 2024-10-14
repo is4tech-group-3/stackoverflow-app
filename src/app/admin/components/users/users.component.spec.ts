@@ -11,6 +11,7 @@ import { UserService } from '../../service/user.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 describe('UsersComponent', () => {
   let component: UsersComponent;
@@ -26,7 +27,8 @@ describe('UsersComponent', () => {
         HttpClientModule,
         BrowserAnimationsModule,
         FormsModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        TranslateModule.forRoot() 
       ],
       declarations: [UsersComponent],
       providers: [
@@ -50,6 +52,6 @@ describe('UsersComponent', () => {
   });
 
   it('should open the dialog', () => {
-
+    
   });
 });
