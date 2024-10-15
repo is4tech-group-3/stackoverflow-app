@@ -1,8 +1,11 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { SessionService } from 'src/app/shared/services/sesion/session.service';
+import { SessionService } from '../../services/sesion/session.service';
 import { Router } from '@angular/router';
-
+import { CookieUtil } from '../../utils/CookieUtil';
+import { COOKIE_KEYS } from '../../utils/constants.utility';
+import { LocalStorageUtility } from '../../utils/LocalStorageUtility';
+import { LOCAL_STORAGE_KEYS } from '../../utils/constants.utility';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -10,6 +13,7 @@ import { Router } from '@angular/router';
 })
 export class NavbarComponent implements OnInit {
   isLanguageDropdownOpen = false;
+  username: string = ' ';
   isMobileMenuOpen = false;
   isLoggedIn = false;
   activeLanguage = 'us';
@@ -23,6 +27,7 @@ export class NavbarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.username = CookieUtil.getValue(COOKIE_KEYS.SUB) || '';
     this.activeLanguage =
       this.translate.currentLang || this.translate.getDefaultLang();
     this.translate.onLangChange.subscribe(event => {
@@ -43,7 +48,7 @@ export class NavbarComponent implements OnInit {
       document.documentElement.scrollTop ||
       document.body.scrollTop ||
       0;
-    this.hasScrolled = scrollPosition > 0; 
+    this.hasScrolled = scrollPosition > 0;
   }
 
   checkStickyNavbar() {
@@ -58,6 +63,7 @@ export class NavbarComponent implements OnInit {
 
   switchLanguage(language: string) {
     this.translate.use(language);
+    LocalStorageUtility.setValue(LOCAL_STORAGE_KEYS.LANGUAGE  , language);
   }
 
   toggleMobileMenu() {

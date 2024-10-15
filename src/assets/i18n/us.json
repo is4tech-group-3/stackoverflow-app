@@ -3,27 +3,9 @@
   "Home": "Home",
   "About": "About",
   "News": "News",
-  "Search": "Search...",
-  "Profiles": "Profiles",
-  "Users": "Users",
-  "Audit": "Audit",
-  "Save": "Save",
-  "Name": "Name*",
-  "Access": "Access",
-  "Administration": "General Administration",
-  "UserManagement": "User Management",
-  "ReviewandControl": "Review and Control",
-  "Administrator": "Administrator",
-  "Moderator": "Moderator",
-  "RegisteredUser": "Registered User",
-  "AnonymousUser": "Anonymous User",
-  "Reviser": "Reviser",
   "Settings": "Settings",
-  "SignOut": "Sign out",
-  "Dashboard": "Dashboard",
   "English": "English",
   "Spanish": "Spanish",
-  "Description": "Description",
   "register": {
     "SignUp": "Sign up",
     "description": "Welcome! Let's get you started by creating an account.",
@@ -54,6 +36,13 @@
       "noData": "No audit logs available."
     }
   },
+  "profiles": {
+    "title": "Profiles",
+    "available": "Available profiles",
+    "assigned": "Assigned profiles",
+    "administration": "General Administration",
+    "profileManagement": "Profile Management"
+  },
   "news": {
     "title": "Latest news",
     "description": "  Stay updated with the latest insights, tips, and trends in our curated collection of articles. Our experts share valuable knowledge to help you navigate through various topics, inspiring creativity and innovation along the way.",
@@ -64,6 +53,44 @@
       "tags": "Tags",
       "noData": "No news available."
     }
+  },
+  "home": {
+    "title": "Welcome to",
+    "description": "Find solutions, share knowledge, and connect with experts in debugging!"
+  },
+  "aboutUs": {
+    "title": "Building Stronger Communities through Collaboration and Empowerment",
+    "description": "We are a team of developers passionate about technology and innovation. Our goal is to provide a platform where developers can find solutions, share knowledge, and connect with experts in the field. Join our community and be part of the BugStack family!",
+    "mission": {
+      "title": "Our Mission",
+      "description": "Our mission is to empower developers by providing a platform where they can find solutions, share knowledge, and connect with experts in the field. We believe that collaboration and knowledge sharing are essential for growth and innovation."
+    },
+    "vision": {
+      "title": "Our Vision",
+      "description": "Our vision is to build a strong community of developers who are passionate about technology and innovation. We aim to create a platform where developers can learn, grow, and connect with like-minded individuals to create a better future."
+    }
+  },
+  "forgotPassword": {
+    "title": "Forgot password",
+    "success": "Password Changed Successfully!",
+    "label-1": "recovery",
+    "label-2": "Password",
+    "label-3": "Confirmation",
+    "descriptionEmail": "Enter your email address to receive a verification link to reset your password.",
+    "descriptionCode": "Enter the verification code sent to your email and set a new password.",
+    "descriptionConfirm": "Your password has been changed. You can now log in with your new password."
+  },
+  "sidebar": {
+    "profiles": "Profile",
+    "audit": "Audit",
+    "users": "Users"
+  },
+  "navbar": {
+    "home": "Home",
+    "aboutUs": "About Us",
+    "news": "News",
+    "settings": "Settings",
+    "logout": "Logout"
   },
   "errors": {
     "required": "This field is required.",
@@ -86,24 +113,22 @@
     "notLoggedIn": "You must be logged in to access this page.",
     "alreadyLoggedIn": "You are already logged in."
   },
-  "home": {
-    "title": "Welcome to",
-    "description": "Find solutions, share knowledge, and connect with experts in debugging!"
-  },
-  "forgotPassword": {
-    "title": "Forgot password",
-    "success": "Password Changed Successfully!",
-    "label-1": "recovery",
-    "label-2": "Password",
-    "label-3": "Confirmation",
-    "descriptionEmail": "Enter your email address to receive a verification link to reset your password.",
-    "descriptionCode": "Enter the verification code sent to your email and set a new password.",
-    "descriptionConfirm": "Your password has been changed. You can now log in with your new password."
-  },
   "input": {
+    "search": {
+      "label": "Search",
+      "placeholder": "Search..."
+    },
+    "description": {
+      "label": "Description",
+      "placeholder": "Enter description"
+    },
     "dropdown": {
       "label": "Select an option",
       "placeholder": "Select an option"
+    },
+    "nameProfile": {
+      "label": "Profile Name",
+      "placeholder": "Enter profile name"
     },
     "name": {
       "label": "Name",
@@ -139,6 +164,8 @@
     }
   },
   "button": {
+    "singUp": "Sign Up",
+    "signIn": "Sign In",
     "continue": "Continue",
     "search": "Search",
     "back": "Back",
@@ -157,7 +184,8 @@
     "logout": "Logout",
     "forgotPassword": "Forgot password",
     "join": "Join our Community",
-    "createPost": "Create a post"
+    "createPost": "Create a post",
+    "changePassword": "Change password"
   },
   "utils": {
     "loading": "Loading..."

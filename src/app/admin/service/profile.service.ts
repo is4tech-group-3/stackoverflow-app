@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_URL } from 'src/app/shared/utils/constants.utility';
@@ -12,8 +12,9 @@ export class ProfileService {
   constructor(private http: HttpClient) {}
 
   // GET: Obtener todos los perfiles
-  getProfiles(): Observable<any> {
-    return this.http.get(`${this.baseUrl}`);
+  getProfiles(page: number): Observable<any> {
+    let params = new HttpParams().set('page', page.toString());
+    return this.http.get(`${this.baseUrl}`, { params });
   }
 
   // GET: Obtener perfil por ID
@@ -36,8 +37,8 @@ export class ProfileService {
     return this.http.delete(`${this.baseUrl}/${id}`);
   }
 
-  // PUT: Deshabilitar o habilitar un perfil
-  toggleProfileStatus(id: number, status: boolean): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${id}/status`, { status });
+  // PATCH: Actualizar estado de un perfil
+  patchProfile(id: number, profile: any): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/${id}`, profile);
   }
 }

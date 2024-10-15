@@ -4,7 +4,6 @@ import { UsersComponent } from './components/users/users.component';
 import { AuditComponent } from './components/audit/audit.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProfilesComponent } from './components/profiles/profiles.component';
-import { QuestionsComponent } from './components/questions/questions.component';
 import { NoAuthGuard } from '../shared/guards/noAuth/no-auth.guard';
 
 const routes: Routes = [
@@ -18,7 +17,6 @@ const routes: Routes = [
       { path: 'users', component: UsersComponent },
       { path: 'profiles', component: ProfilesComponent },
       { path: 'audit', component: AuditComponent },
-      { path: 'questions', component: QuestionsComponent }
     ],
     data: { showNavbar: true }
   }

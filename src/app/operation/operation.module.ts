@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { NewsComponent } from './components/news/news.component';
 import { SharedModule } from '../shared/shared.module';
+import { NewsComponent } from './components/news/news.component';
 import { OperationRoutingModule } from './operation-routing.module';
-
+import { QuestionsComponent } from './components/questions/questions.component';
+import { QuestionModalComponent } from './components/questions/question-modal/question-modal.component';
 @NgModule({
-  declarations: [NewsComponent],
+  declarations: [NewsComponent, QuestionsComponent, QuestionModalComponent],
   imports: [SharedModule, OperationRoutingModule]
 })
 export class OperationModule {}

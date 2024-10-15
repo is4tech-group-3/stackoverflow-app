@@ -9,7 +9,7 @@
       </p>
     </div>
     <div
-      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-16 max-md:max-w-lg mx-auto"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-16 max-lg:max-w-lg mx-auto"
     >
       <a
         *ngFor="let publication of publications"
@@ -21,7 +21,7 @@
             {{ publication.dateCreation | dateFormat: 'FORMAT-1' }}</span
           >
           <h3
-            class="text-xl font-bold text-gray-800 group-hover:text-sunset-orange-500 transition-all  normal-case "
+            class="text-xl font-bold text-gray-800 group-hover:text-sunset-orange-500 transition-all normal-case"
           >
             {{ publication.title }}
           </h3>
@@ -37,7 +37,6 @@
             name="{{ publication.author.name }} "
             size="32"
             [textSizeRatio]="2"
-            bgColor="#f05454"
           ></ngx-avatars>
           <p class="text-xs text-gray-400 font-semibold uppercase">
             {{ publication.author.name }} {{ publication.author.surname }}
@@ -47,4 +46,5 @@
     </div>
   </div>
 </div>
-'
+
+<app-footer></app-footer>

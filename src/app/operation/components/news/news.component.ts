@@ -18,10 +18,9 @@ export class NewsComponent implements OnInit {
 
   ngOnInit(): void {
     this.publicationService.getAll().subscribe({
-      next: data => {
-        console.log(data);
-        this.publications = data.content;
-        console.table(this.publications);
+      next: (response: any) => {
+        console.table(response);
+        this.publications = response.content;
       },
       error: error => {
         console.log(error);

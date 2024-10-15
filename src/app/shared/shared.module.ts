@@ -35,6 +35,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastComponent } from './components/toast/toast.component';
 import { DateFormatPipe } from './pipe/dateForma/date-format.pipe';
 import { DropdownComponent } from './components/dropdown/dropdown/dropdown.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 // service
 
@@ -44,7 +45,8 @@ import { DropdownComponent } from './components/dropdown/dropdown/dropdown.compo
     ToastComponent,
     DateFormatPipe,
     ModalComponent,
-    DropdownComponent
+    DropdownComponent,
+    FooterComponent
   ],
   imports: [
     CommonModule,
@@ -55,7 +57,6 @@ import { DropdownComponent } from './components/dropdown/dropdown/dropdown.compo
     AsyncPipe,
     RouterModule,
     RouterLink,
-    RouterLinkActive,
     LottieModule,
     AvatarModule,
     // Angular Material Modules
@@ -89,12 +90,12 @@ import { DropdownComponent } from './components/dropdown/dropdown/dropdown.compo
     RouterLink,
     RouterModule,
     LottieModule,
-    RouterLinkActive,
     DateFormatPipe,
     ModalComponent,
     BlockUIModule,
     DropdownComponent,
     AvatarModule,
+    FooterComponent,
     // Angular Material Modules
     MatMenuModule,
     MatButtonModule,

@@ -1,53 +1,50 @@
 <section
   class="relative bg-fixed bg-galaxy bg-cover bg-center bg-no-repeat overflow-hidden"
 >
-  <div
-    class="absolute inset-0 bg-gradient-to-r from-black/95 to-gray-900/25"
-  ></div>
+  <!-- Overlay -->
+  <div class="absolute inset-0 bg-gradient-to-r from-black/95 to-gray-900/40"></div>
 
   <div
     class="relative mx-auto max-w-screen-2xl px-4 py-32 sm:px-6 lg:flex lg:h-screen lg:items-center lg:px-8"
   >
+    <!-- Texto principal -->
     <div class="max-w-full text-center lg:text-left lg:w-1/2">
-      <h1 class="text-3xl font-extrabold text-white sm:text-5xl">
+      <h1 class="text-4xl font-extrabold text-white sm:text-6xl">
         {{ 'home.title' | translate }}
-        <strong class="block font-extrabold text-sunset-orange-500">
-          {{ 'NamePage' | translate }}.
-        </strong>
+        <strong
+        class="block font-extrabold text-sunset-orange-500 animate-pulse"
+      >
+        {{ 'NamePage' | translate }}.
+      </strong>
+
+
       </h1>
 
-      <p class="mt-4 max-w-full lg:max-w-lg text-white sm:text-xl/relaxed">
+      <p class="mt-6 max-w-full lg:max-w-lg text-white sm:text-xl/relaxed leading-relaxed">
         {{ 'home.description' | translate }}
       </p>
 
+      <!-- Botón de llamada a la acción -->
       <div
-        class="mt-8 flex justify-center flex-wrap gap-4 text-center lg:justify-start"
+        class="mt-10 flex justify-center flex-wrap gap-4 text-center lg:justify-start"
       >
         <a
-          *ngIf="!isLoggedIn"
           [routerLink]="['/auth/register']"
-          class="block w-full rounded bg-sunset-orange-500 px-12 py-3 text-sm font-medium text-white shadow hover:brightness-90 active:scale-90 sm:w-auto"
+          class="block w-full rounded-lg bg-sunset-orange-500 px-12 py-3 text-sm font-semibold text-white shadow-lg hover:brightness-90 hover:scale-105 transition-transform duration-200 ease-in-out active:scale-95 sm:w-auto"
         >
           {{ 'button.join' | translate }}
-        </a>
-        <a
-          *ngIf="isLoggedIn"
-          [routerLink]="['/news']"
-          class="block w-full rounded bg-sunset-orange-500 px-12 py-3 text-sm font-medium text-white shadow hover:brightness-90 active:scale-90 sm:w-auto"
-        >
-          {{ 'button.createPost' | translate }}
         </a>
       </div>
     </div>
 
     <div
-      class="mt-8 lg:ml-8 lg:w-1/2 hidden lg:flex items-center justify-center"
+      class="mt-12 lg:ml-10 lg:w-1/2 hidden lg:flex items-center justify-center"
     >
       <ng-lottie
         [options]="{ path: planetAnimationPath }"
-        width="500px"
-        height="500px"
-        class="flex-shrink-0"
+        width="520px"
+        height="520px"
+        class="flex-shrink-0 shadow-lg rounded-lg overflow-hidden"
       ></ng-lottie>
     </div>
   </div>
@@ -57,37 +54,3 @@
     class="hidden lg:block absolute -bottom-16 left-0 w-full"
   />
 </section>
-
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>
-<h1 class="text-9xl">hola mundo</h1>

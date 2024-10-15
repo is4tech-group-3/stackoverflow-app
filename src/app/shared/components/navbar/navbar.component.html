@@ -4,10 +4,10 @@
     'sticky top-0 bg-dark-gunmetal ': !isFixed,
     ' backdrop-blur-lg': isMobileMenuOpen
   }"
-  class=" z-50 transition-colors duration-300 ease-in-out"
+  class="z-50 transition-colors duration-300 ease-in-out"
 >
   <nav
-    class="mx-auto flex container gap-8 px-6 transition-all duration-200 ease-in-out lg:px-12 py-2 items-center"
+    class="mx-auto flex container gap-8 px-6 transition-all duration-200 ease-in-out lg:px-12 py-2 items-center lg:h-auto h-14" 
   >
     <div class="relative flex items-center">
       <a href="/">
@@ -23,29 +23,32 @@
     <ul class="hidden items-center justify-center gap-6 lg:flex">
       <li>
         <a
+          routerLinkActive="active-link"
           routerLinkActive="text-sunset-orange-500"
           [routerLink]="['/home']"
           class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-300"
         >
-          {{ 'Home' | translate }}
+          {{ 'navbar.home' | translate }}
         </a>
       </li>
       <li>
         <a
+          routerLinkActive="active-link"
           routerLinkActive="!text-sunset-orange-500"
           [routerLink]="['/about']"
           class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-300"
         >
-          {{ 'About' | translate }}
+          {{ 'navbar.aboutUs' | translate }}
         </a>
       </li>
       <li>
         <a
+          routerLinkActive="active-link"
           routerLinkActive="!text-sunset-orange-500"
           [routerLink]="['/news']"
           class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-300"
         >
-          {{ 'News' | translate }}
+          {{ 'navbar.news' | translate }}
         </a>
       </li>
     </ul>
@@ -106,7 +109,7 @@
         <input
           type="text"
           class="block w-full pl-10 pr-3 py-1.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sunset-orange-500 focus:border-transparent"
-          placeholder="{{ 'Search' | translate }}"
+          placeholder="{{ 'input.search.placeholder' | translate }}"
         />
         <div
           class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
@@ -134,7 +137,7 @@
           [routerLink]="['/auth/login']"
           class="group active:scale-105 relative inline-flex py-2 items-center justify-center overflow-hidden rounded bg-sunset-orange-500 px-3 font-medium text-white"
         >
-          {{ 'login.SignIn' | translate }}
+          {{ 'button.signIn' | translate }}
           <div
             class="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-100%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(100%)]"
           >
@@ -147,7 +150,7 @@
           [routerLink]="['/auth/register']"
           class="group active:scale-105 relative inline-flex py-2 items-center justify-center overflow-hidden rounded bg-white px-3 font-normal"
         >
-          {{ 'register.SignUp' | translate }}
+          {{ 'button.singUp' | translate }}
           <div
             class="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-100%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(100%)]"
           >
@@ -159,23 +162,30 @@
       <!-- User Profile Menu -->
       <div *ngIf="isLoggedIn" class="flex items-center justify-center">
         <button class="focus:outline-none" [matMenuTriggerFor]="menu">
-          <img
+          <ngx-avatars
+            name="{{ username }} "
+            size="40"
+            [textSizeRatio]="2"
+          ></ngx-avatars>
+          <!-- <img
             src="https://randomuser.me/api/portraits/women/50.jpg"
             class="object-cover w-8 h-8 bg-cover rounded-full transition transform hover:scale-105 active:scale-95"
-          />
+          /> -->
         </button>
-        <mat-menu #menu="matMenu">
+        <mat-menu #menu="matMenu" xPosition="before">
           <button mat-menu-item [routerLink]="['/auth/reset-password']">
-            Cambiar Contraseña
+            {{ 'button.changePassword' | translate }}
           </button>
-          <button mat-menu-item (click)="logout()">Salir</button>
+          <button mat-menu-item (click)="logout()">
+            {{ 'navbar.logout' | translate }}
+          </button>
         </mat-menu>
       </div>
     </div>
 
     <!-- Mobile Hamburger Menu -->
     <div class="relative flex items-center justify-center lg:hidden">
-      <button type="button" (click)="toggleMobileMenu()">
+      <button type="button" class="py-1" (click)="toggleMobileMenu()">
         <mat-icon class="text-white">{{
           isMobileMenuOpen ? 'close' : 'menu'
         }}</mat-icon>
@@ -184,10 +194,7 @@
   </nav>
 
   <!-- Mobile Menu -->
-  <div
-    *ngIf="isMobileMenuOpen"
-    class="lg:hidden backdrop-blur-lg px-6 py-2"
-  >
+  <div *ngIf="isMobileMenuOpen" class="lg:hidden backdrop-blur-lg px-6 py-2">
     <ul class="flex flex-col gap-2">
       <li>
         <a

@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-const fullScreenHeight = 'calc(100vh - 56px)';
+const fullScreenHeight = 'calc(100vh - 56px)'
 module.exports = {
   important: true,
   content: ['./src/**/*.{html,ts}'],
@@ -17,7 +17,7 @@ module.exports = {
         'full-screen': fullScreenHeight,
       },
       maxHeight: {
-        'full-screen': fullScreenHeight, 
+        'full-screen': fullScreenHeight,
       },
       backgroundImage: {
         galaxy: 'url(assets/img/home.jpg)',
@@ -27,6 +27,17 @@ module.exports = {
         'dark-gunmetal': '#222831',
         'metallic-blue': '#30475E',
         'light-gray': '#DDDDDD',
+        'deep-aqua': {
+          100: '#cfeae7',
+          200: '#9ed4cf',
+          300: '#6ebfb8',
+          400: '#3da9a0',
+          500: '#0d9488',
+          600: '#0a766d',
+          700: '#085952',
+          800: '#053b36',
+          900: '#031e1b',
+        },
         'sunset-orange': {
           100: '#fcdddd',
           200: '#f9bbbb',

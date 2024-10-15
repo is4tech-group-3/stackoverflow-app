@@ -13,7 +13,6 @@ export type MenuItem = {
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
-
   menuItems = signal<MenuItem[]>([]);
 
   constructor(private translate: TranslateService) {
@@ -28,17 +27,17 @@ export class DashboardComponent {
     this.menuItems.set([
       {
         icon: 'admin_panel_settings',
-        label: this.translate.instant('Profiles'),
+        label: this.translate.instant('sidebar.profiles'),
         route: 'profiles'
       },
       {
         icon: 'group',
-        label: this.translate.instant('Users'),
+        label: this.translate.instant('sidebar.users'),
         route: 'users'
       },
       {
         icon: 'content_paste',
-        label: this.translate.instant('Audit'),
+        label: this.translate.instant('sidebar.audit'),
         route: 'audit'
       }
     ]);

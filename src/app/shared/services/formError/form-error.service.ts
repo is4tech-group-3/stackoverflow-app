@@ -17,11 +17,6 @@ export class FormErrorService {
       pattern: this.translate.instant('errors.pattern'),
       mismatch: this.translate.instant('errors.mismatch')
     };
-    console.log(
-      '🚀 ~ FormErrorService ~ getErrorMessage ~ control.errors:',
-      control?.errors,
-      controlName
-    );
     if (control && control.errors) {
       const errorKey = Object.keys(control.errors).find(
         key => control.errors![key]

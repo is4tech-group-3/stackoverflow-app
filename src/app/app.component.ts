@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-
+import { LocalStorageUtility } from './shared/utils/LocalStorageUtility';
+import { LOCAL_STORAGE_KEYS } from './shared/utils/constants.utility';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -15,7 +16,9 @@ export class AppComponent {
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService
   ) {
-    this.translate.setDefaultLang('es');
+    const savedLang =
+      LocalStorageUtility.getValue(LOCAL_STORAGE_KEYS.LANGUAGE) || 'es';
+    this.translate.setDefaultLang(savedLang);
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.updateNavbarVisibility();

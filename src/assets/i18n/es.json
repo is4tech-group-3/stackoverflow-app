@@ -3,27 +3,9 @@
   "Home": "Inicio",
   "About": "Acerca de",
   "News": "Noticias",
-  "Search": "Buscar...",
-  "Profiles": "Perfiles",
-  "Users": "Usuarios",
-  "Audit": "Auditoría",
-  "Save": "Guardar",
-  "Name": "Nombre*",
-  "Access": "Acceso",
-  "Administration": "Administración General",
-  "UserManagement": "Gestión de Usuarios",
-  "ReviewandControl": "Revisión y Control",
-  "Administrator": "Administrador",
-  "Moderator": "Moderador",
-  "RegisteredUser": "Usuario Registrado",
-  "AnonymousUser": "Usuario Anónimo",
-  "Reviser": "Revisor",
   "Settings": "Configuraciones",
-  "SignOut": "Cerrar sesión",
-  "Dashboard": "Panel de Control",
   "English": "Inglés",
   "Spanish": "Español",
-  "Description": "Descripción",
   "register": {
     "SignUp": "Crear cuenta",
     "description": "¡Bienvenido! Comencemos creando tu cuenta.",
@@ -54,6 +36,13 @@
       "noData": "No hay registros de auditoría disponibles."
     }
   },
+  "profiles": {
+    "title": "Perfiles",
+    "available": "Perfiles disponibles",
+    "assigned": "Perfiles asignados",
+    "administration": "General Administration",
+    "profileManagement": "Gestión de perfil"
+  },
   "news": {
     "title": "Últimas noticias",
     "description": "  Manténgase al día con las últimas insights, consejos y tendencias en nuestra colección de artículos curados. Nuestros expertos comparten conocimiento valioso para ayudarte a navegar por varios temas, inspirando creatividad y innovación a lo largo del camino.",
@@ -64,6 +53,44 @@
       "tags": "Etiquetas",
       "noData": "No hay noticias disponibles."
     }
+  },
+  "home": {
+    "title": "Bienvenido a",
+    "description": "Encuentre soluciones, comparta conocimiento y conecte con expertos en el depurador!"
+  },
+  "aboutUs": {
+    "title": "Fortaleciendo Comunidades a Través de la Colaboración y el Empoderamiento",
+    "description": "Somos una comunidad de desarrolladores que se dedica a ayudar a otros desarrolladores a encontrar soluciones a sus problemas de programación. Nuestro objetivo es crear un espacio donde los desarrolladores puedan compartir conocimientos, colaborar y aprender unos de otros. ¡Únete a nuestra comunidad hoy!",
+    "mission": {
+      "title": "Nuestra Misión",
+      "description": "Nuestra misión es empoderar a los desarrolladores de todo el mundo para que puedan crear soluciones innovadoras y de alta calidad. Creemos que al compartir conocimientos y colaborar, podemos lograr grandes cosas juntos."
+    },
+    "vision": {
+      "title": "Nuestra Visión",
+      "description": "Nuestra visión es crear una comunidad global de desarrolladores que se apoyen mutuamente y compartan conocimientos para el beneficio de todos. Creemos que al trabajar juntos, podemos lograr un impacto positivo en el mundo."
+    }
+  },
+  "forgotPassword": {
+    "title": "Olvidé mi contraseña",
+    "success": "¡Contraseña cambiada con éxito!",
+    "label-1": "Recuperar",
+    "label-2": "Contraseña",
+    "label-3": "Confirmacion",
+    "descriptionEmail": "Ingrese su correo electrónico para recibir un enlace de verificación para restablecer su contraseña.",
+    "descriptionCode": "Ingrese el código de verificación enviado a su correo electrónico y establezca una nueva contraseña.",
+    "descriptionConfirm": "Se ha cambiado la contraseña. Ahora puede iniciar sesión con su nueva contraseña."
+  },
+  "sidebar": {
+    "profiles": "Perfils",
+    "audit": "Auditoría",
+    "users": "Usuarios"
+  },
+  "navbar": {
+    "home": "Inicio",
+    "aboutUs": "Sobre nosotros",
+    "news": "Noticias",
+    "settings": "Configuraciones",
+    "logout": "Cerrar sesión"
   },
   "errors": {
     "required": "Este campo es obligatorio.",
@@ -86,24 +113,22 @@
     "notLoggedIn": "Debe estar conectado para acceder a esta página.",
     "alreadyLoggedIn": "Ya has iniciado sesión."
   },
-  "home": {
-    "title": "Bienvenido a",
-    "description": "Encuentre soluciones, comparta conocimiento y conecte con expertos en el depurador!"
-  },
-  "forgotPassword": {
-    "title": "Olvidé mi contraseña",
-    "success": "¡Contraseña cambiada con éxito!",
-    "label-1": "Recuperar",
-    "label-2": "Contraseña",
-    "label-3": "Confirmacion",
-    "descriptionEmail": "Ingrese su correo electrónico para recibir un enlace de verificación para restablecer su contraseña.",
-    "descriptionCode": "Ingrese el código de verificación enviado a su correo electrónico y establezca una nueva contraseña.",
-    "descriptionConfirm": "Se ha cambiado la contraseña. Ahora puede iniciar sesión con su nueva contraseña."
-  },
   "input": {
+    "search": {
+      "label": "Buscar",
+      "placeholder": "Buscar..."
+    },
+    "description": {
+      "label": "Descripción",
+      "placeholder": "Ingrese una descripción"
+    },
     "dropdown": {
       "label": "Seleccione una opción",
       "placeholder": "Seleccione una opción"
+    },
+    "nameProfile": {
+      "label": "Nombre del perfil",
+      "placeholder": "Ingrese el nombre del perfil"
     },
     "name": {
       "label": "Nombre",
@@ -139,6 +164,8 @@
     }
   },
   "button": {
+    "singUp": "Registrarse",
+    "signIn": "Iniciar sesión",
     "continue": "Continuar",
     "search": "Buscar",
     "back": "Atrás",
@@ -157,7 +184,8 @@
     "logout": "Cerrar sesión",
     "forgotPassword": "Olvidé mi contraseña",
     "join": "Únete a nuestra Comunidad",
-    "createPost": "Crear un post"
+    "createPost": "Crear un post",
+    "changePassword": "Cambiar contraseña"
   },
   "utils": {
     "loading": "Cargando..."
