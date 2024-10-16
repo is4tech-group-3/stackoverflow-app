@@ -43,6 +43,19 @@
     "administration": "General Administration",
     "profileManagement": "Profile Management"
   },
+  "users": {
+    "title": "Users",
+    "addTitle": "Add Users",
+    "AdministrationTitle": "General Administration",
+    "searchUser": "Search user",
+    "activeProfiles": "Active profiles",
+    "data": {
+      "name": "Name",
+      "surname": "Second Name",
+      "username": "Username",
+      "email": "Email"
+    }
+  },
   "news": {
     "title": "Latest news",
     "description": "  Stay updated with the latest insights, tips, and trends in our curated collection of articles. Our experts share valuable knowledge to help you navigate through various topics, inspiring creativity and innovation along the way.",
@@ -73,7 +86,7 @@
   "forgotPassword": {
     "title": "Forgot password",
     "success": "Password Changed Successfully!",
-    "label-1": "recovery",
+    "label-1": "Recovery",
     "label-2": "Password",
     "label-3": "Confirmation",
     "descriptionEmail": "Enter your email address to receive a verification link to reset your password.",
@@ -89,6 +102,8 @@
     "home": "Home",
     "aboutUs": "About Us",
     "news": "News",
+    "dashboard": "Dashboard",
+    "questions": "Questions",
     "settings": "Settings",
     "logout": "Logout"
   },
@@ -101,6 +116,8 @@
     "badCredentials": "Incorrect email or password.",
     "emailInUse": "Email is already in use.",
     "internalServerError": "Internal server error.",
+    "sendEmailError": "Error sending email.",
+    "errorChangePassword": "Error changing password.",
     "unknownError": "An unknown error occurred. Please try again later."
   },
   "success": {
@@ -178,10 +195,13 @@
     "delete": "Delete",
     "cancel": "Cancel",
     "close": "Close",
+    "disable": "disable",
+    "enable": "enable",
     "save": "Save",
     "register": "Register",
     "login": "Login",
     "logout": "Logout",
+    "dashboard": "Dashboard",
     "forgotPassword": "Forgot password",
     "join": "Join our Community",
     "createPost": "Create a post",

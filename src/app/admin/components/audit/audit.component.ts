@@ -9,10 +9,9 @@ import { FormBuilder, Validators } from '@angular/forms';
 @Component({
   selector: 'app-audit',
   templateUrl: './audit.component.html',
-  styleUrls: ['./audit.component.scss'],
+  styleUrls: ['./audit.component.scss']
 })
 export class AuditComponent implements OnInit {
-
   @ViewChild('modalContent') modalContent!: TemplateRef<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -44,9 +43,16 @@ export class AuditComponent implements OnInit {
   handlePageEvent(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex + 1;
+
+    // Enviar los filtros junto con la paginación
     this.handlerGetAudits({
       limit: this.pageSize.toString(),
-      page: this.currentPage.toString()
+      page: this.currentPage.toString(),
+      email: this.searchForm.value.email,
+      startDate: this.searchForm.value.startDate,
+      endDate: this.searchForm.value.endDate,
+      httpMethod: this.searchForm.value.httpMethod,
+      entity: this.searchForm.value.entity
     });
   }
 
@@ -118,6 +124,7 @@ export class AuditComponent implements OnInit {
       return 'text-gray-500';
     }
   }
+
   ngOnInit(): void {
     const params = {
       limit: '12',

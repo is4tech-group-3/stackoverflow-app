@@ -43,6 +43,19 @@
     "administration": "General Administration",
     "profileManagement": "Gestión de perfil"
   },
+  "users": {
+    "title": "Usuarios",
+    "addTitle": "Agregar Usuario",
+    "AdministrationTitle": "Administracion General",
+    "searchUser": "Buscar usuario",
+    "activeProfiles": "Perfiles Disponibles",
+    "data": {
+      "name": "Nombre",
+      "surname": "Apellido",
+      "username": "Username",
+      "email": "Email"
+    }
+  },
   "news": {
     "title": "Últimas noticias",
     "description": "  Manténgase al día con las últimas insights, consejos y tendencias en nuestra colección de artículos curados. Nuestros expertos comparten conocimiento valioso para ayudarte a navegar por varios temas, inspirando creatividad y innovación a lo largo del camino.",
@@ -81,7 +94,7 @@
     "descriptionConfirm": "Se ha cambiado la contraseña. Ahora puede iniciar sesión con su nueva contraseña."
   },
   "sidebar": {
-    "profiles": "Perfils",
+    "profiles": "Perfiles",
     "audit": "Auditoría",
     "users": "Usuarios"
   },
@@ -89,6 +102,8 @@
     "home": "Inicio",
     "aboutUs": "Sobre nosotros",
     "news": "Noticias",
+    "dashboard": "Tablero",
+    "questions": "Preguntas",
     "settings": "Configuraciones",
     "logout": "Cerrar sesión"
   },
@@ -101,6 +116,8 @@
     "badCredentials": "Correo o contraseña incorrectos.",
     "emailInUse": "El correo electrónico ya está en uso.",
     "internalServerError": "Error interno del servidor.",
+    "sendEmailError": "Error al enviar el correo electrónico.",
+    "errorChangePassword": "Error al cambiar la contraseña.",
     "unknownError": "Ocurrió un error desconocido. Por favor intenta nuevamente más tarde."
   },
   "success": {
@@ -179,9 +196,12 @@
     "cancel": "Cancelar",
     "close": "Cerrar",
     "save": "Guardar",
+    "disable": "deshabilitar",
+    "enable": "habilitar",
     "register": "Registrarse",
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión",
+    "dashboard": "Tablero",
     "forgotPassword": "Olvidé mi contraseña",
     "join": "Únete a nuestra Comunidad",
     "createPost": "Crear un post",

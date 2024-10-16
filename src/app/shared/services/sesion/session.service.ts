@@ -11,9 +11,7 @@ export class SessionService {
   }
 
   logout(): void {
+    CookieUtil.clear();
     window.location.reload();
-    setTimeout(() => {
-      CookieUtil.clear();
-    }, 1000);
   }
 }

@@ -9,6 +9,8 @@ import { map } from 'rxjs/operators';
 import { ToastService } from 'src/app/shared/services/toast/toast.service';
 import { AuthService } from '../../service/auth/auth.service';
 import { FormErrorService } from 'src/app/shared/services/formError/form-error.service';
+import { BlockUIService } from 'src/app/shared/services/blockUI/block-ui.service';
+
 @Component({
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.component.html',
@@ -22,6 +24,7 @@ export class ForgotPasswordComponent {
     private translate: TranslateService,
     private toastService: ToastService,
     private formErrorService: FormErrorService,
+    private blockUIService: BlockUIService,
     breakpointObserver: BreakpointObserver
   ) {
     this.stepperOrientation = breakpointObserver
@@ -61,6 +64,7 @@ export class ForgotPasswordComponent {
 
   onSubmit() {
     if (this.emailForm.valid) {
+      this.blockUIService.start();
       this.authService.recoveryPassword(this.emailForm.value).subscribe({
         next: (response: any) => {
           this.toastService.showSuccessToast(
@@ -68,11 +72,14 @@ export class ForgotPasswordComponent {
           );
           const email = this.emailForm.get('email')?.value;
           this.passwordChangeForm.patchValue({ email: email });
+          this.blockUIService.stop();
           this.nextStep();
         },
         error: error => {
-          console.error('Error al enviar el email:', error);
-          this.toastService.showErrorToast('Eror al enviar el email');
+          this.blockUIService.stop();
+          this.toastService.showErrorToast(
+            this.translate.instant('errors.sendEmailError')
+          );
         }
       });
     }
@@ -80,19 +87,21 @@ export class ForgotPasswordComponent {
 
   resetPasswordOnSubmit() {
     if (this.passwordChangeForm.valid) {
+      this.blockUIService.start();
       const formValue = { ...this.passwordChangeForm.getRawValue() };
-
       this.authService.resetPassword(formValue).subscribe({
         next: (response: any) => {
           this.toastService.showSuccessToast(
             this.translate.instant('success.PasswordReset')
           );
+          this.blockUIService.stop();
           this.nextStep();
         },
         error: error => {
-          this.nextStep();
-          console.error('Error al enviar el email:', error);
-          this.toastService.showErrorToast('Eror al enviar el email');
+          this.blockUIService.stop();
+          this.toastService.showErrorToast(
+            this.translate.instant('errors.errorChangePassword')
+          );
         }
       });
     }

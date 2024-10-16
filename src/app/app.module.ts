@@ -8,7 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { JwtInterceptorInterceptor } from './interceptors/jwt-interceptor.interceptor';
+import { JwtInterceptorInterceptor } from './shared/interceptors/jwt-interceptor.interceptor';
 import { BlockUIModule } from 'ng-block-ui';
 import { LottieModule } from 'ngx-lottie';
 import player from 'lottie-web';

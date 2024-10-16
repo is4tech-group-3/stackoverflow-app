@@ -6,7 +6,7 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CookieUtil } from '../shared/utils/CookieUtil';
+import { CookieUtil } from '../utils/CookieUtil';
 
 @Injectable()
 export class JwtInterceptorInterceptor implements HttpInterceptor {
