@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../service/auth/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/shared/services/toast/toast.service';
 import { BlockUIService } from 'src/app/shared/services/blockUI/block-ui.service';
+import { convertFormGroupToFormData } from 'src/app/shared/utils/form-data.util';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -12,27 +13,53 @@ import { BlockUIService } from 'src/app/shared/services/blockUI/block-ui.service
 })
 export class RegisterComponent {
   constructor(
-    private formBuilder: FormBuilder,
-    private authService: AuthService,
-    private translate: TranslateService,
-    private router: Router,
-    private toastService: ToastService,
-    private blockUIService: BlockUIService
+    private readonly formBuilder: FormBuilder,
+    private readonly authService: AuthService,
+    private readonly translate: TranslateService,
+    private readonly router: Router,
+    private readonly toastService: ToastService,
+    private readonly blockUIService: BlockUIService,
+    private readonly cd: ChangeDetectorRef
   ) {}
 
   registerForm = this.formBuilder.group({
     name: ['', [Validators.required]],
     surname: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
-    username: ['', [Validators.required]]
+    username: ['', [Validators.required]],
+    image: [null, [Validators.required]]
   });
+
+  fileName = '';
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+
+    if (file) {
+      this.fileName = file.name;
+
+      const formData = new FormData();
+      formData.append('thumbnail', file);
+      console.log(
+        '🚀 ~ RegisterComponent ~ onFileSelected ~ formData:',
+        formData
+      );
+    }
+  }
+
+  handleFileChange(event: any) {
+    this.registerForm.patchValue({
+      image: event.target.files[0]
+    });
+  }
 
   onSubmit() {
     if (this.registerForm.valid) {
       this.blockUIService.start();
-      this.authService.signup(this.registerForm.value).subscribe({
+      console.log(this.registerForm.value);
+      const formData = convertFormGroupToFormData(this.registerForm);
+      this.authService.signup(formData).subscribe({
         next: (response: any) => {
-          this.registerForm.reset();          
+          this.registerForm.reset();
           this.blockUIService.stop();
           this.toastService.showSuccessToast(
             this.translate.instant('success.Registered')

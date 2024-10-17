@@ -1,263 +1,171 @@
 <header
   [ngClass]="{
     'fixed w-full bg-transparent': isFixed,
-    'sticky top-0 bg-dark-gunmetal ': !isFixed,
-    ' backdrop-blur-lg': isMobileMenuOpen
+    'sticky top-0 bg-dark-gunmetal ': !isFixed
   }"
-  class="z-50 transition-colors duration-300 ease-in-out"
+  class="sticky top-0 z-50 transition-colors duration-300 ease-in-out"
 >
-  <nav
-    class="mx-auto flex container gap-8 px-6 transition-all duration-200 ease-in-out lg:px-12 py-2 items-center lg:h-auto h-14"
+  <div
+    class="mx-auto flex h-16 max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8"
   >
-    <div class="relative flex items-center">
-      <a href="/">
-        <img
-          src="../../../assets/img/Logo.svg"
-          loading="lazy"
-          width="32"
-          height="32"
-        />
-      </a>
-    </div>
+    <a class="block text-teal-600" [routerLink]="['/home']">
+      <img src="assets/img/Logo.svg" loading="lazy" class="h-8" alt="icon" />
+    </a>
 
-    <ul class="hidden items-center justify-center gap-6 lg:flex">
-      <li>
-        <a
-          routerLinkActive="active-link"
-          routerLinkActive="text-sunset-orange-500"
-          [routerLink]="['/home']"
-          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-300"
-        >
-          {{ 'navbar.home' | translate }}
-        </a>
-      </li>
-      <li>
-        <a
-          routerLinkActive="active-link"
-          routerLinkActive="!text-sunset-orange-500"
-          [routerLink]="['/about']"
-          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-300"
-        >
-          {{ 'navbar.aboutUs' | translate }}
-        </a>
-      </li>
-      <li>
-        <a
-          *ngIf="isLoggedIn"
-          routerLinkActive="active-link"
-          routerLinkActive="!text-sunset-orange-500"
-          [routerLink]="['/news']"
-          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-300"
-        >
-          {{ 'navbar.news' | translate }}
-        </a>
-      </li>
-      <li>
-        <a
-          *ngIf="isLoggedIn"
-          routerLinkActive="active-link"
-          routerLinkActive="!text-sunset-orange-500"
-          [routerLink]="['/questions']"
-          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-300"
-        >
-          {{ 'navbar.questions' | translate }}
-        </a>
-      </li>
-    </ul>
+    <div class="flex flex-1 items-center justify-end md:justify-between">
+      <nav aria-label="Global" class="hidden md:block">
+        <ul class="flex items-center gap-6 text-sm">
+          <li *ngFor="let item of menuItems">
+            <a
+              class="text-gray-300 transition hover:text-gray-300/75"
+              routerLinkActive="text-sunset-orange-500"
+              [routerLink]="item.link"
+            >
+              {{ item.label | translate }}
+            </a>
+          </li>
 
-    <div class="flex-grow"></div>
+          <li class="relative">
+            <button
+              class="flex items-center text-sm font-medium text-white rounded-full cursor-pointer"
+              (click)="toggleLanguageDropdown()"
+            >
+              <span class="fi fi-{{ activeLanguage }}"></span>
+              <svg
+                class="w-2.5 h-2.5 ms-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 10 6"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m1 1 4 4 4-4"
+                />
+              </svg>
+            </button>
+            <div
+              *ngIf="isLanguageDropdownOpen"
+              class="absolute left-0 mt-2 w-auto z-10 bg-dark-gunmetal text-white rounded-md shadow-lg"
+            >
+              <li>
+                <button
+                  class="block px-4 py-2 text-sm hover:bg-sunset-orange-600"
+                  (click)="switchLanguage('us'); closeLanguageDropdown()"
+                >
+                  <span class="fi fi-us"></span>
+                </button>
+              </li>
+              <li>
+                <button
+                  class="block px-4 py-2 text-sm hover:bg-sunset-orange-600"
+                  (click)="switchLanguage('es'); closeLanguageDropdown()"
+                >
+                  <span class="fi fi-es"></span>
+                </button>
+              </li>
+            </div>
+          </li>
+        </ul>
+      </nav>
 
-    <div class="hidden items-center justify-center space-x-2 lg:flex">
-      <!-- Language Switcher -->
-      <div class="relative">
+      <div class="flex items-center gap-4">
+        <div class="sm:flex sm:gap-4">
+          <a
+            *ngIf="!isLoggedIn"
+            class="block rounded-md bg-sunset-orange-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-sunset-orange-700"
+            [routerLink]="['/auth/login']"
+          >
+            {{ 'button.signIn' | translate }}
+          </a>
+          <a
+            *ngIf="!isLoggedIn"
+            class="hidden rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-sunset-orange-600 transition hover:bg-white/75 sm:block"
+            [routerLink]="['/auth/register']"
+          >
+            {{ 'button.singUp' | translate }}
+          </a>
+          <div *ngIf="isLoggedIn" class="hidden md:relative md:block">
+            <button
+              type="button"
+              class="overflow-hidden rounded-full shadow-inner profile-button"
+              (click)="toggleProfileMenu()"
+            >
+              <span class="sr-only">Toggle dashboard menu</span>
+
+              <ngx-avatars
+                name="{{ username }}"
+                size="40"
+                [textSizeRatio]="2"
+              ></ngx-avatars>
+            </button>
+
+            <div
+              *ngIf="isProfileMenuOpen"
+              class="absolute end-0 z-10 mt-0.5 w-auto divide-y divide-gray-100 rounded-md border border-gray-100 bg-white shadow-lg profile-menu"
+              role="menu"
+            >
+              <div class="px-2">
+                <p
+                  class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50"
+                >
+                  {{ username }}
+                </p>
+              </div>
+              <div class="p-2">
+                <a
+                  [routerLink]="['/profile']"
+                  (click)="closeProfileMenu()"
+                  class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                  role="menuitem"
+                >
+                  {{ 'button.myProfile' | translate }}
+                </a>
+
+                <a
+                  [routerLink]="['/admin']"
+                  (click)="closeProfileMenu()"
+                  class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                  role="menuitem"
+                >
+                  {{ 'button.dashboard' | translate }}
+                </a>
+                <button
+                  type="submit"
+                  class="flex w-full items-center gap-2 rounded-lg px-4 py-2 text-sm text-red-700 hover:bg-red-50"
+                  role="menuitem"
+                  (click)="logout(); closeProfileMenu()"
+                >
+                  {{ 'button.logout' | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <button
-          (click)="toggleLanguageDropdown()"
-          class="flex items-center text-sm font-medium text-white rounded-full cursor-pointer"
+          class="block rounded bg-gray-100 p-2.5 text-gray-600 transition hover:text-gray-600/75 md:hidden"
         >
-          <span class="fi fi-{{ activeLanguage }}"></span>
+          <span class="sr-only">Toggle menu</span>
           <svg
-            class="w-2.5 h-2.5 ms-3"
-            aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
+            class="size-5"
             fill="none"
-            viewBox="0 0 10 6"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
           >
             <path
-              stroke="currentColor"
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="2"
-              d="m1 1 4 4 4-4"
+              d="M4 6h16M4 12h16M4 18h16"
             />
           </svg>
         </button>
-        <div
-          *ngIf="isLanguageDropdownOpen"
-          class="absolute left-0 mt-2 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
-        >
-          <ul class="py-2 font-medium">
-            <li>
-              <button
-                (click)="switchLanguage('us'); closeLanguageDropdown()"
-                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-              >
-                <span class="fi fi-us"></span>
-              </button>
-            </li>
-            <li>
-              <button
-                (click)="switchLanguage('es'); closeLanguageDropdown()"
-                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-              >
-                <span class="fi fi-es"></span>
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Search Input -->
-      <div class="relative">
-        <input
-          type="text"
-          class="block w-full pl-10 pr-3 py-1.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sunset-orange-500 focus:border-transparent"
-          placeholder="{{ 'input.search.placeholder' | translate }}"
-        />
-        <div
-          class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
-        >
-          <svg
-            class="w-5 h-5 text-gray-500"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M21 21l-4.35-4.35M9.5 17a7.5 7.5 0 1 1 7.5-7.5 7.5 7.5 0 0 1-7.5 7.5z"
-            ></path>
-          </svg>
-        </div>
-      </div>
-
-      <!-- Login/Register Buttons -->
-      <div *ngIf="!isLoggedIn">
-        <a
-          [routerLink]="['/auth/login']"
-          class="group active:scale-105 relative inline-flex py-2 items-center justify-center overflow-hidden rounded bg-sunset-orange-500 px-3 font-medium text-white"
-        >
-          {{ 'button.signIn' | translate }}
-          <div
-            class="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-100%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(100%)]"
-          >
-            <div class="relative h-full w-8 bg-white/20"></div>
-          </div>
-        </a>
-      </div>
-      <div *ngIf="!isLoggedIn">
-        <a
-          [routerLink]="['/auth/register']"
-          class="group active:scale-105 relative inline-flex py-2 items-center justify-center overflow-hidden rounded bg-white px-3 font-normal"
-        >
-          {{ 'button.singUp' | translate }}
-          <div
-            class="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-100%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(100%)]"
-          >
-            <div class="relative h-full w-8 bg-white/20"></div>
-          </div>
-        </a>
-      </div>
-
-      <!-- User Profile Menu -->
-      <div *ngIf="isLoggedIn" class="flex items-center justify-center">
-        <button class="focus:outline-none" [matMenuTriggerFor]="menu">
-          <ngx-avatars
-            name="{{ username }} "
-            size="40"
-            [textSizeRatio]="2"
-          ></ngx-avatars>
-        </button>
-        <mat-menu #menu="matMenu" xPosition="before">
-          <button mat-menu-item [routerLink]="['/admin']">
-            {{ 'button.dashboard' | translate }}
-          </button>
-          <!-- <button mat-menu-item [routerLink]="['/auth/reset-password']">
-            {{ 'button.changePassword' | translate }}
-          </button> -->
-          <button mat-menu-item (click)="logout()">
-            {{ 'navbar.logout' | translate }}
-          </button>
-        </mat-menu>
       </div>
     </div>
-
-    <!-- Mobile Hamburger Menu -->
-    <div class="relative flex items-center justify-center lg:hidden">
-      <button type="button" class="py-1" (click)="toggleMobileMenu()">
-        <mat-icon class="text-white">{{
-          isMobileMenuOpen ? 'close' : 'menu'
-        }}</mat-icon>
-      </button>
-    </div>
-  </nav>
-
-  <!-- Mobile Menu -->
-  <div *ngIf="isMobileMenuOpen" class="lg:hidden backdrop-blur-lg px-6 py-2">
-    <ul class="flex flex-col gap-2">
-      <li>
-        <a
-          routerLinkActive="!text-sunset-orange-500"
-          [routerLink]="['/home']"
-          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-500"
-        >
-          {{ 'Home' | translate }}
-        </a>
-      </li>
-      <li>
-        <a
-          routerLinkActive="!text-sunset-orange-500"
-          [routerLink]="['/about']"
-          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-500"
-        >
-          {{ 'About' | translate }}
-        </a>
-      </li>
-      <li>
-        <a
-          routerLinkActive="!text-sunset-orange-500"
-          [routerLink]="['/blogs']"
-          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-500"
-        >
-          {{ 'Blogs' | translate }}
-        </a>
-      </li>
-      <li *ngIf="!isLoggedIn">
-        <a
-          [routerLink]="['/auth/login']"
-          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-500"
-        >
-          {{ 'login.SignIn' | translate }}
-        </a>
-      </li>
-      <li *ngIf="!isLoggedIn">
-        <a
-          [routerLink]="['/auth/register']"
-          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-500"
-        >
-          {{ 'register.SignUp' | translate }}
-        </a>
-      </li>
-      <li *ngIf="isLoggedIn">
-        <button
-          (click)="logout()"
-          class="text-white transition-colors duration-300 ease-in-out hover:text-sunset-orange-500"
-        >
-          Salir
-        </button>
-      </li>
-    </ul>
   </div>
 </header>

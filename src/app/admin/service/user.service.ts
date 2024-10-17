@@ -1,54 +1,46 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
-import { User } from '../components/users/users.component';
 import { API_URL } from 'src/app/shared/utils/constants.utility';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class UserService {
-  private userApiUrl = `${API_URL}user`;
-  private authApiUrl = `${API_URL}auth/signup`;
+  private readonly baseUrl: string = API_URL;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   // GET
-  getUsersPaginated(page: number, size: number): Observable<any> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', size.toString());
-    return this.http.get(`${this.userApiUrl}`, { params });
-  }
-  
-  findUserByEmail(email: string): Observable<User> {
-    return this.http.get<User>(`${this.userApiUrl}/findByEmail/${email}`);
+  getAllUser(params?: Params): Observable<any> {
+    return this.http.get(`${this.baseUrl}user`, { params });
   }
 
   // GETID
-  getUserById(id: number): Observable<User> {
-    return this.http.get<User>(`${this.userApiUrl}/${id}`);
+  getUserById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}user/${id}`);
   }
 
   // POST
-  createUser(user: User): Observable<User> {
-    return this.http.post<User>(this.authApiUrl, user);
+  createUser(data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}auth/signup`, data);
   }
 
   // PUT
-  updateUser(id: number, user: Partial<User>): Observable<User> {
-    return this.http.put<User>(`${this.userApiUrl}/${id}`, user); 
+  updateUser(data: any): Observable<any> {
+    console.log('🚀 ~ UserService ~ updateUser ~ data:', data);
+    return this.http.put<any>(`${this.baseUrl}user/${data.id}`, data);
   }
-  
 
-  // DELETE
   deleteUser(id: number): Observable<void> {
-    console.log(`Eliminando usuario con ID: ${id}`);
-    return this.http.delete<void>(`${this.userApiUrl}/${id}`);
+    return this.http.patch<any>(`${this.baseUrl}user/changeStatus/${id}`, {});
   }
-  
-  // PUT: Habilitar/Deshabilitar usuario
-  toggleUserStatus(userId: number, status: boolean): Observable<any> {
-    return this.http.patch(`${this.userApiUrl}/changeStatus/${userId}`, { status });
-}
+
+  // PATCH
+  changeProfile(id: number, idProfile: number): Observable<void> {
+    return this.http.patch<any>(`${this.baseUrl}user/updateProfile/${id}`, {
+      profileId: idProfile
+    });
+  }
 }

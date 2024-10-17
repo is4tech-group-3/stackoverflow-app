@@ -124,16 +124,20 @@
     "Registered": "Registration successful. Please check your email for the password to access the platform.",
     "Login": "Login successful",
     "PasswordRecovery": "An email with the password recovery code has been sent. Please check your email and follow the instructions to reset your password.",
-    "PasswordReset": "Password reset successful. Please log in to continue."
+    "PasswordReset": "Password reset successful. Please log in to continue.",
+    "changeProfile": "Profile changed successfully."
   },
   "warning": {
     "notLoggedIn": "You must be logged in to access this page.",
     "alreadyLoggedIn": "You are already logged in."
   },
   "input": {
-    "search": {
-      "label": "Search",
-      "placeholder": "Search..."
+    "profile": {
+      "label": "Profile",
+      "placeholder": "Select a profile"
+    },
+    "photoProfile": {
+      "label": "Profile Picture"
     },
     "description": {
       "label": "Description",
@@ -181,6 +185,7 @@
     }
   },
   "button": {
+    "myProfile": "My Profile",
     "singUp": "Sign Up",
     "signIn": "Sign In",
     "continue": "Continue",

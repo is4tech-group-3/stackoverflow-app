@@ -1,234 +1,190 @@
-import { Component, AfterViewInit, ViewChild } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { UserService } from '../../service/user.service';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { FormErrorService } from 'src/app/shared/services/formError/form-error.service';
 import { ToastService } from 'src/app/shared/services/toast/toast.service';
+import { UserService } from '../../service/user.service';
+import { BlockUIService } from 'src/app/shared/services/blockUI/block-ui.service';
+import { ProfileService } from '../../service/profile.service';
 import { TranslateService } from '@ngx-translate/core';
-
+import { AuditService } from '../../service/audit/audit.service';
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss']
 })
-export class UsersComponent implements AfterViewInit {
-  isSmallScreen: boolean = false;
-  selectedUser: User | null = null;
-  users: User[] = [];
-  allUsers: User[] = [];
-  paginatedUsers: User[] = []; 
-  filteredUsers: User[] = [];
-  dataSource = new MatTableDataSource<User>([]);
+export class UsersComponent implements OnInit {
+  users: any[] = [];
+  profiles: any[] = [];
+  audits: any[] = [];
 
-  pageSize = 8;
-  currentPage = 0;
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-  newUser: User = {
-    id: 0,
-    name: '',
-    surname: '',
-    username: '',
-    email: '',
-    status: true, 
-    isDisabled: false,
-    isExpanded: false 
-  };
-
-  private userBackup: User | null = null;
-
+  isEditable = false;
+  img = '';
   constructor(
-    private breakpointObserver: BreakpointObserver,
-    private userService: UserService,
-    private toastService: ToastService,
-    private translate: TranslateService
-  ) {
-    this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
-      .subscribe(result => {
-        this.isSmallScreen = result.matches;
-      });
+    private readonly formBuilder: FormBuilder,
+    private readonly formErrorService: FormErrorService,
+    private readonly toastService: ToastService,
+    private readonly userService: UserService,
+    private readonly blockUIService: BlockUIService,
+    private readonly profileService: ProfileService,
+    private readonly translate: TranslateService,
+    private readonly auditService: AuditService
+  ) {}
 
-    this.getUsers();
+  ngOnInit(): void {
+    this.handlerGetAllProfile();
+    this.handlerGetAllUser();
+    this.handlerGetAllAudit(0);
   }
 
-  getUsers(page: number = this.currentPage, size: number = this.pageSize): void {
-    this.userService.getUsersPaginated(page, size).subscribe({
-      next: (response) => {
-        console.log('Usuarios recibidos:', response);
-        this.users = response.content.map((user: User) => ({ 
-          ...user, 
-          isExpanded: false,
-          isDisabled: user.status === false 
-        }));
-        this.dataSource.data = this.users;
-        this.allUsers = response.content; 
-        this.paginator.length = response.totalElements;
-        this.paginator.pageIndex = response.number;
-        this.paginator.pageSize = response.size;
+  userForm = this.formBuilder.group({
+    id: [0],
+    name: ['', [Validators.required]],
+    surname: ['', [Validators.required]],
+    email: ['', [Validators.required, Validators.email]],
+    username: ['', [Validators.required]],
+    idProfile: [''],
+    image: [null]
+  });
 
-        this.updatePaginatedUsers(); 
-      },
-      error: (error) => {
-        console.error('Error al obtener los usuarios', error);
-        this.toastService.showErrorToast(this.translate.instant('errors.fetchUsers'));
-      }
-    });
+  getErrorMessage(controlName: string): string {
+    return this.formErrorService.getErrorMessage(this.userForm, controlName);
   }
 
-  updatePaginatedUsers(): void {
-    const start = this.currentPage * this.pageSize;
-    const end = start + this.pageSize;
-    this.paginatedUsers = this.filteredUsers.length
-      ? this.filteredUsers.slice(start, end) 
-      : this.allUsers.slice(start, end); 
+  clearForm() {
+    this.isEditable = false;
+    this.userForm.reset();
+    this.userForm.get('email')?.enable();
+    this.userForm.get('username')?.enable();
   }
 
-  onPageChange(event: PageEvent): void {
-    this.currentPage = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.updatePaginatedUsers(); 
-    this.getUsers(this.currentPage, this.pageSize); 
-  }
-
-  filterUsers(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    
-    this.filteredUsers = this.allUsers.filter(user => {
-      const nameMatch = `${user.name} ${user.surname}`.toLowerCase().includes(filterValue);
-      const emailMatch = user.email.toLowerCase().includes(filterValue);
-      return nameMatch || emailMatch;
-    });
-
-    this.currentPage = 0;  
-    this.paginator.firstPage();
-    this.paginator.length = this.filteredUsers.length; 
-
-    this.updatePaginatedUsers(); 
-  }
-
-  editUser(user: User): void {
-    this.userBackup = { ...user }; 
-    user.isEditing = true;
-  }
-
-  cancelEdit(user: User): void {
-    if (this.userBackup) {
-      user.name = this.userBackup.name;
-      user.surname = this.userBackup.surname;
-      user.username = this.userBackup.username;
-    }
-    user.isEditing = false; 
-    this.userBackup = null; 
-  }
-
-  saveUser(user: User): void {
-    if (!user.name || !user.surname || !user.username) {
-      this.toastService.showErrorToast(this.translate.instant('errors.requiredFields'));
-      return;
-    }
-
-    const userUpdatePayload = {
-      name: user.name,
-      surname: user.surname,
-      username: user.username
-    };
-
-    this.userService.updateUser(user.id, userUpdatePayload).subscribe({
-      next: (updatedUser: User) => {
-        console.log('Usuario actualizado:', updatedUser);
-        user.isEditing = false;
-        this.toastService.showSuccessToast(this.translate.instant('success.userUpdated'));
-      },
-      error: (error) => {
-        console.error('Error al actualizar el usuario:', error);
-        this.toastService.showErrorToast(this.translate.instant('errors.updateUser'));
-      }
-    });
-  }
-
-  enableUser(user: User): void {
-    if (!user.id) {
-        console.error('El usuario no tiene un ID válido:', user);
-        return;
-    }
-  
-    const confirmation = confirm(this.translate.instant('confirm.enableUser', { name: user.name, surname: user.surname }));
-  
-    if (confirmation) {
-        const newStatus = true; 
-  
-        this.userService.toggleUserStatus(user.id, newStatus).subscribe({
-            next: () => {
-                console.log('Usuario habilitado');
-                this.getUsers(this.currentPage, this.pageSize);
-                this.toastService.showSuccessToast(this.translate.instant('success.userEnabled'));
-            },
-            error: (error) => {
-                console.error('Error al habilitar el usuario:', error);
-                this.toastService.showErrorToast(this.translate.instant('errors.enableUser'));
-            }
-        });
-    }
-  }
-
-
-disableUser(user: User): void {
-  if (!user.id) {
-      console.error('El usuario no tiene un ID válido:', user);
-      return;
-  }
-
-  const confirmation = confirm(this.translate.instant('confirm.disableUser', { name: user.name, surname: user.surname }));
-
-  if (confirmation) {
-      const newStatus = false; 
-      this.userService.toggleUserStatus(user.id, newStatus).subscribe({
+  onSubmit() {
+    if (this.userForm.valid) {
+      this.blockUIService.start();
+      console.log(this.userForm.value);
+      this.blockUIService.stop();
+      if (this.userForm.get('id')?.value) {
+        this.userService.updateUser(this.userForm.value).subscribe({
           next: () => {
-              console.log('Usuario deshabilitado');
-              this.getUsers(this.currentPage, this.pageSize);
-              this.toastService.showSuccessToast(this.translate.instant('success.userDisabled'));
+            this.userForm.reset();
+            this.blockUIService.stop();
+            this.toastService.showSuccessToast(
+              'Usuario actualizado correctamente'
+            );
           },
-          error: (error) => {
-              console.error('Error al deshabilitar el usuario:', error);
-              this.toastService.showErrorToast(this.translate.instant('errors.disableUser'));
+          error: () => {
+            this.blockUIService.stop();
+            this.toastService.showErrorToast('Error al actualizar el usuario');
           }
-      });
+        });
+      } else {
+        this.userService.createUser(this.userForm.value).subscribe({
+          next: () => {
+            this.userForm.reset();
+            this.blockUIService.stop();
+            this.toastService.showSuccessToast('Usuario creado correctamente');
+          },
+          error: () => {
+            this.blockUIService.stop();
+            this.toastService.showErrorToast('Error al crear el usuario');
+          }
+        });
+      }
+    }
   }
-}
 
-
-  addUser(): void {
-    const userToCreate = { ...this.newUser, status: true };
-  
-    this.userService.createUser(userToCreate).subscribe({
-      next: (createdUser: User) => {
-        console.log('Usuario creado:', createdUser);
-        this.getUsers();
-        this.newUser = { id: 0, name: '', surname: '', email: '', username: '', status: true, isDisabled: false, isExpanded: false }; // Cambiado de '' a true
-        this.toastService.showSuccessToast(this.translate.instant('success.userCreated'));
+  setUser(id: number) {
+    this.isEditable = true;
+    this.userService.getUserById(id).subscribe({
+      next: (response: any) => {
+        this.userForm.patchValue(response);
+        this.userForm.get('email')?.disable();
       },
-      error: (error) => {
-        console.error('Error al crear el usuario:', error);
-        this.toastService.showErrorToast(this.translate.instant('errors.createUser'));
+      error: () => {
+        this.toastService.showErrorToast('Error al obtener el usuario');
       }
     });
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.getUsers();
+  handlerDeleteUser(id: number) {
+    this.blockUIService.start();
+    this.userService.deleteUser(id).subscribe({
+      next: () => {
+        this.handlerGetAllUser();
+        this.blockUIService.stop();
+        this.toastService.showSuccessToast('Usuario eliminado correctamente');
+      },
+      error: () => {
+        this.blockUIService.stop();
+        this.toastService.showErrorToast('Error al eliminar el usuario');
+      }
+    });
   }
-}
 
-export interface User {
-  id: number;
-  name: string;
-  surname: string;
-  username: string;
-  email: string;
-  status: boolean; 
-  isDisabled: boolean;
-  isEditing?: boolean;
-  isExpanded?: boolean;
+  handlerProfileChange(event: any) {
+    this.blockUIService.start();
+    const idProfile = parseInt(event.target.value);
+    const id = this.userForm.get('id')?.value;
+    if (id !== undefined && id !== null) {
+      this.userService.changeProfile(id, idProfile).subscribe({
+        next: () => {
+          this.handlerGetAllUser();
+          this.blockUIService.stop();
+          this.toastService.showSuccessToast(
+            this.translate.instant('success.changeProfile')
+          );
+        },
+        error: () => {
+          this.blockUIService.stop();
+          this.toastService.showErrorToast('Error al actualizar el perfil');
+        }
+      });
+    }
+  }
+
+  handlerGetAllProfile() {
+    this.blockUIService.start();
+    this.profileService.getProfiles().subscribe({
+      next: (response: any) => {
+        this.profiles = response.content;
+        this.blockUIService.stop();
+      },
+      error: () => {
+        this.blockUIService.stop();
+        this.toastService.showErrorToast('Error al obtener los perfiles');
+      }
+    });
+  }
+
+  handlerGetAllAudit(id: number) {
+    this.blockUIService.start();
+    this.auditService.get().subscribe({
+      next: (response: any) => {
+        console.log(
+          '🚀 ~ UsersComponent ~ this.auditService.getAuditByIdUser ~ response:',
+          response
+        );
+        this.audits = response.audits;
+        this.blockUIService.stop();
+      },
+      error: () => {
+        this.blockUIService.stop();
+        this.toastService.showErrorToast('Error al obtener los perfiles');
+      }
+    });
+  }
+
+  handlerGetAllUser() {
+    this.blockUIService.start();
+    this.userService.getAllUser().subscribe({
+      next: (response: any) => {
+        
+        this.users = response.content;
+        this.blockUIService.stop();
+      },
+      error: () => {
+        this.blockUIService.stop();
+        this.toastService.showErrorToast('Error al obtener los usuarios');
+      }
+    });
+  }
 }

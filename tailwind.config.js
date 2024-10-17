@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-const fullScreenHeight = 'calc(100vh - 56px)'
+const fullScreenHeight = 'calc(100vh - 64px)'
 module.exports = {
   important: true,
   content: ['./src/**/*.{html,ts}'],

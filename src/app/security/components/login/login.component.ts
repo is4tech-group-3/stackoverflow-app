@@ -16,19 +16,17 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   constructor(
-    private validatorForm: FormBuilder,
-    private authService: AuthService,
-    private translate: TranslateService,
-    private toastService: ToastService,
-    private decodeTokenService: DecodeTokenService,
-    private formErrorService: FormErrorService,
-    private blockUIService: BlockUIService,
-    private router: Router
+    private readonly validatorForm: FormBuilder,
+    private readonly authService: AuthService,
+    private readonly translate: TranslateService,
+    private readonly toastService: ToastService,
+    private readonly decodeTokenService: DecodeTokenService,
+    private readonly formErrorService: FormErrorService,
+    private readonly blockUIService: BlockUIService,
+    private readonly router: Router
   ) {}
 
   hide = true;
-  toastMessage: string = '';
-  toastType: 'success' | 'error' | 'warning' | 'info' = 'info';
 
   loginForm = this.validatorForm.group({
     email: ['', [Validators.required, Validators.email]],
@@ -43,6 +41,7 @@ export class LoginComponent {
           const decodedToken = this.decodeTokenService.DecodeToken(
             response?.token
           );
+          CookieUtil.setValue('userId', decodedToken.userId);
           CookieUtil.setValue('token', response?.token);
           CookieUtil.setValue('expiration', decodedToken?.exp);
           CookieUtil.setValue('iat', decodedToken?.iat);

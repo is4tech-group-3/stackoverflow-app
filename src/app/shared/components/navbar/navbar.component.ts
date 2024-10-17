@@ -13,12 +13,18 @@ import { LOCAL_STORAGE_KEYS } from '../../utils/constants.utility';
 })
 export class NavbarComponent implements OnInit {
   isLanguageDropdownOpen = false;
+  isProfileMenuOpen = false;
   username: string = ' ';
-  isMobileMenuOpen = false;
   isLoggedIn = false;
   activeLanguage = 'us';
   hasScrolled = false;
   isFixed: boolean = false;
+  menuItems = [
+    { label: 'navbar.home', link: '/home' },
+    { label: 'navbar.aboutUs', link: '/about' },
+    { label: 'navbar.questions', link: '/questions', requiresLogin: true },
+    { label: 'navbar.news', link: '/news', requiresLogin: true }
+  ];
 
   constructor(
     private translate: TranslateService,
@@ -30,11 +36,16 @@ export class NavbarComponent implements OnInit {
     this.username = CookieUtil.getValue(COOKIE_KEYS.SUB) || '';
     this.activeLanguage =
       this.translate.currentLang || this.translate.getDefaultLang();
+
     this.translate.onLangChange.subscribe(event => {
       this.activeLanguage = event.lang;
     });
 
     this.isLoggedIn = this.sessionService.isLoggedIn();
+
+    this.menuItems = this.isLoggedIn
+      ? this.menuItems
+      : this.menuItems.filter(item => !item.requiresLogin);
 
     this.router.events.subscribe(() => {
       this.checkStickyNavbar();
@@ -52,30 +63,43 @@ export class NavbarComponent implements OnInit {
   }
 
   checkStickyNavbar() {
-    const fixedRoutes = ['/home']; // Añade las rutas que deseas que sean fixed
+    const fixedRoutes = ['/home'];
 
     this.isFixed = fixedRoutes.includes(this.router.url);
+  }
+
+  toggleProfileMenu() {
+    this.isProfileMenuOpen = !this.isProfileMenuOpen;
+  }
+  closeProfileMenu() {
+    this.isProfileMenuOpen = false;
   }
 
   toggleLanguageDropdown() {
     this.isLanguageDropdownOpen = !this.isLanguageDropdownOpen;
   }
 
-  switchLanguage(language: string) {
-    this.translate.use(language);
-    LocalStorageUtility.setValue(LOCAL_STORAGE_KEYS.LANGUAGE  , language);
-  }
-
-  toggleMobileMenu() {
-    this.isMobileMenuOpen = !this.isMobileMenuOpen;
-  }
-
   closeLanguageDropdown() {
     this.isLanguageDropdownOpen = false;
+  }
+  switchLanguage(language: string) {
+    this.translate.use(language);
+    LocalStorageUtility.setValue(LOCAL_STORAGE_KEYS.LANGUAGE, language);
   }
 
   logout() {
     this.isLoggedIn = false;
     this.sessionService.logout();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (
+      !target.closest('.profile-menu') &&
+      !target.closest('.profile-button')
+    ) {
+      this.isProfileMenuOpen = false;
+    }
   }
 }

@@ -1,122 +1,410 @@
-<div class="min-h-full-screen p-4 flex flex-col space-y-4">
-  <div class="flex flex-col lg:flex-row lg:w-full space-x-4">
-    <div class="bg-white user-list-container p-4 rounded-lg space-y-2 lg:w-1/4 w-full">
-      <h1 class="text-xl font-bold mb-4 w-full">{{ 'users.title' | translate }}</h1>
-
-      <!-- Barra de búsqueda -->
-      <div class="relative mb-4">
-        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-          <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-          </svg>
-        </div>
+<div class="flex flex-col gap-6 h-full lg:flex-row">
+  <div
+    class="flex flex-col justify-between bg-white o p-4 w-full lg:w-80 rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.1)]"
+  >
+    <div class="relative">
+      <label class="text-gray-800 font-semibold text-sm block" for="search">
+        Busar
+      </label>
+      <div class="relative flex items-center group">
         <input
+          id="search"
           type="text"
-          placeholder="{{ 'users.searchUser' | translate }}"
-          (input)="filterUsers($event)"
-          class="block w-full p-2 ps-10 text-sm text-gray-700 border-b-2 border-gray-500 bg-white focus:bg-gray-100 focus:border-gray-700 focus:ring-0 focus:outline-none placeholder-gray-400"
+          class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-3 outline-none"
+          placeholder="Buscar usuario"
         />
-      </div>
-
-      <!-- Tarjetas de usuario -->
-      <div *ngFor="let user of paginatedUsers" class="bg-white rounded-lg p-2 cursor-pointer">
-        <div (click)="user.isExpanded = !user.isExpanded" class="flex justify-between items-center">
-          <div class="flex items-center">
-            <div class="h-2.5 w-2.5 rounded-full me-2" [ngClass]="{ 'bg-green-500': user.status, 'bg-red-500': !user.status }"></div>
-            <div>
-              <h2 class="text-sm font-bold">{{ user.name }} {{ user.surname }}</h2>
-              <p class="text-xs text-gray-600">{{ user.username }}</p>
-            </div>
-          </div>
-          <div>
-            <button class="text-blue-500 hover:text-blue-700 ml-2">
-              <svg *ngIf="!user.isExpanded" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-              </svg>
-              <svg *ngIf="user.isExpanded" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-              </svg>
-            </button>
-          </div>
+        <div
+          class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal"
+        >
+          <mat-icon aria-label="search icon">search</mat-icon>
         </div>
-
-        <div *ngIf="user.isExpanded" class="p-2 bg-gray-100 rounded-lg mt-1 space-y-2">
-          <div>
-            <p class="text-xs"><strong>{{ 'users.data.email' | translate }}:</strong> {{ user.email }}</p>
-          </div>
-
-          <!-- Modo edición -->
-          <div *ngIf="user.isEditing" class="space-y-2">
-            <label class="block text-xs font-medium">{{ 'users.data.name' | translate }}</label>
-            <input [(ngModel)]="user.name" class="block w-full p-2 text-xs text-gray-700 border-b border-gray-500 bg-white focus:bg-gray-100 focus:border-gray-700 focus:ring-0 focus:outline-none" />
-
-            <label class="block text-xs font-medium">{{ 'users.data.surname' | translate }}</label>
-            <input [(ngModel)]="user.surname" class="block w-full p-2 text-xs text-gray-700 border-b border-gray-500 bg-white focus:bg-gray-100 focus:border-gray-700 focus:ring-0 focus:outline-none" />
-
-            <label class="block text-xs font-medium">{{ 'users.data.username' | translate }}</label>
-            <input [(ngModel)]="user.username" class="block w-full p-2 text-xs text-gray-700 border-b border-gray-500 bg-white focus:bg-gray-100 focus:border-gray-700 focus:ring-0 focus:outline-none" />
-          </div>
-
-          <div class="flex justify-between mt-2">
-            <button mat-button *ngIf="!user.isEditing" (click)="editUser(user)" class="bg-sunset-orange-600 text-white hover:bg-sunset-orange-500 rounded px-2 py-1 text-sm">{{ 'button.update' | translate }}</button>
-            <button mat-button *ngIf="user.isEditing" (click)="saveUser(user)" class="bg-sunset-orange-400 text-white hover:bg-sunset-orange-300 rounded px-2 py-1 text-sm">{{ 'button.save' | translate }}</button>
-            <button mat-button *ngIf="user.isEditing" (click)="cancelEdit(user)" class="bg-sunset-orange-300 text-white hover:bg-sunset-orange-200 rounded px-2 py-1 text-sm">{{ 'button.cancel' | translate }}</button>
-            <button mat-button *ngIf="!user.isEditing" (click)="user.status ? disableUser(user) : enableUser(user)" [ngClass]="user.status ? 'bg-sunset-orange-700' : 'bg-green-600'" class="text-white hover:bg-sunset-orange-600 rounded px-2 py-1 text-sm"> {{ user.status ? ('button.disable' | translate) : ('button.enable' | translate) }} </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Paginador -->
-      <div class="mt-2">
-        <mat-paginator
-          [length]="filteredUsers.length"
-          [pageSizeOptions]="[5, 10, 25]"
-          [pageSize]="pageSize"
-          (page)="onPageChange($event)"
-          showFirstLastButtons>
-        </mat-paginator>
       </div>
     </div>
 
-    <!-- Contenedor derecho que incluye "Agregar Usuario" y "Administración General" -->
-    <div class="flex flex-col space-y-4 lg:w-3/4 w-full">
-      <!-- Contenedor de agregar usuario -->
-      <div class="bg-white p-6 border-b-2 border-gray-300 rounded-lg w-full">
-        <h2 class="text-lg font-bold mb-4">{{ 'users.addTitle' | translate }}</h2>
-        <form (ngSubmit)="addUser()">
-          <div class="flex flex-col lg:flex-row lg:space-x-4">
-            <div class="w-full lg:w-1/2 mb-4">
-              <label class="block text-sm font-medium">{{ 'input.name.label'  | translate }}</label>
-              <input [(ngModel)]="newUser.name" name="name" class="block w-full p-4 text-sm text-gray-700 border-b-2 border-gray-500 bg-white focus:bg-gray-100 focus:border-gray-700 focus:ring-0 focus:outline-none placeholder-gray-400" required />
-            </div>
-            <div class="w-full lg:w-1/2 mb-4">
-              <label class="block text-sm font-medium">{{ 'input.surname.label' | translate }}</label>
-              <input [(ngModel)]="newUser.surname" name="surname" class="block w-full p-4 text-sm text-gray-700 border-b-2 border-gray-500 bg-white focus:bg-gray-100 focus:border-gray-700 focus:ring-0 focus:outline-none placeholder-gray-400" required />
+    <ul class="space-y-6 w-full mt-8 overflow-auto">
+      <li
+        *ngFor="let user of users"
+        class="w-full p-3 hover:bg-gray-200 rounded-lg transition-all flex justify-between"
+      >
+        <button (click)="setUser(user.id)" class="block">
+          <div class="flex items-center space-x-4">
+            <ng-container *ngIf="user.image; else avatarTemplate">
+              <img
+                [src]="user.image"
+                alt="{{ user.name }} {{ user.surname }}"
+                class="w-10 h-10 rounded-full object-cover"
+              />
+            </ng-container>
+            <ng-template #avatarTemplate>
+              <ngx-avatars
+                name="{{ user.name }} {{ user.surname }}"
+                size="40"
+                [textSizeRatio]="2"
+              ></ngx-avatars>
+            </ng-template>
+
+            <div>
+              <p class="text-sm text-left font-semibold text-gray-900">
+                {{ user.name }} {{ user.surname }}
+              </p>
+              <p class="text-xs text-left text-gray-500">{{ user.email }}</p>
             </div>
           </div>
+        </button>
+        <button
+          (click)="handlerDeleteUser(user.id)"
+          [ngClass]="{
+            'text-emerald-400': user.status,
+            'text-rose-500': !user.status
+          }"
+        >
+          <mat-icon aria-label="delete icon">{{
+            user.status ? 'toggle_on' : 'toggle_off'
+          }}</mat-icon>
+        </button>
+      </li>
+    </ul>
 
-          <div class="flex flex-col lg:flex-row lg:space-x-4">
-            <div class="w-full lg:w-1/2 mb-4">
-              <label class="block text-sm font-medium">{{ 'input.username.label' | translate }}</label>
-              <input [(ngModel)]="newUser.username" name="username" class="block w-full p-4 text-sm text-gray-700 border-b-2 border-gray-500 bg-white focus:bg-gray-100 focus:border-gray-700 focus:ring-0 focus:outline-none placeholder-gray-400" required />
-            </div>
-            <div class="w-full lg:w-1/2 mb-4">
-              <label class="block text-sm font-medium">{{'input.email.label' | translate }}</label>
-              <input [(ngModel)]="newUser.email" name="email" class="block w-full p-4 text-sm text-gray-700 border-b-2 border-gray-500 bg-white focus:bg-gray-100 focus:border-gray-700 focus:ring-0 focus:outline-none placeholder-gray-400" required />
-            </div>
-          </div>
+    <mat-paginator
+      class="w-full mt-auto"
+      [hidePageSize]="true"
+      [length]="100"
+      [pageSize]="10"
+    />
+  </div>
 
-          <!-- Botón Agregar Usuario -->
-          <div class="flex justify-end mt-4">
-            <button type="submit" class="bg-sunset-orange-500 text-white hover:bg-sunset-orange-400 rounded px-4 py-2">{{ 'button.create' | translate }}</button>
+  <div class="w-full flex-1 rounded-lg">
+    <div class="flex flex-col gap-6 h-full">
+      <div
+        class="p-8 rounded-lg grid content-center row-span-1 col-span-2 shadow-[0_2px_10px_rgba(0,0,0,0.1)]"
+      >
+        <form [formGroup]="userForm" (submit)="onSubmit()" class="w-full">
+          <div class="grid lg:grid-cols-3 gap-4">
+            <div class="col-span-1 flex flex-col items-center">
+              <h2 class="text-gray-800 font-semibold text-lg block">
+                {{ 'input.photoProfile.label' | translate }}
+              </h2>
+              <div class="relative w-32 h-32 mx-auto group">
+                <label for="image" class="w-full h-full cursor-pointer">
+                  <img
+                    class="w-full h-full rounded-full border border-collapse border-sunset-orange-500"
+                    [src]="
+                      userForm.get('image')?.value
+                        ? userForm.get('image')?.value
+                        : 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg'
+                    "
+                    alt="profile"
+                  />
+                  <mat-icon
+                    class="absolute top-0 left-0 text-4xl w-full h-full flex justify-center items-center rounded-full cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gray-200 bg-opacity-60"
+                    aria-label="Upload icon"
+                    >upload</mat-icon
+                  >
+                </label>
+                <input
+                  id="image"
+                  type="file"
+                  class="hidden"
+                  multiple="multiple"
+                />
+              </div>
+            </div>
+
+            <div class="lg:col-span-2 grid lg:grid-cols-2 gap-4">
+              <div class="relative">
+                <label
+                  class="text-gray-800 font-semibold text-sm block"
+                  for="name"
+                >
+                  {{ 'input.name.label' | translate }}
+                </label>
+                <div class="relative flex items-center group">
+                  <input
+                    id="name"
+                    formControlName="name"
+                    type="text"
+                    class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-3 outline-none"
+                    placeholder="{{ 'input.name.placeholder' | translate }}"
+                  />
+                  <div
+                    class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal"
+                  >
+                    <mat-icon aria-label="name icon">person_add</mat-icon>
+                  </div>
+                </div>
+                <p
+                  *ngIf="
+                    userForm.get('name')?.errors &&
+                    (userForm.get('name')?.touched ||
+                      userForm.get('name')?.dirty)
+                  "
+                  class="absolute w-full text-red-500 text-xs text-center font-medium mt-1 h-5"
+                >
+                  {{ getErrorMessage('name') }}
+                </p>
+              </div>
+
+              <div class="relative">
+                <label
+                  class="text-gray-800 font-semibold text-sm block"
+                  for="surname"
+                >
+                  {{ 'input.surname.label' | translate }}
+                </label>
+                <div class="relative flex items-center group">
+                  <input
+                    id="surname"
+                    formControlName="surname"
+                    type="text"
+                    class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-3 outline-none"
+                    placeholder="{{ 'input.surname.placeholder' | translate }}"
+                  />
+                  <div
+                    class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal"
+                  >
+                    <mat-icon aria-label="surname icon">person_add</mat-icon>
+                  </div>
+                </div>
+                <p
+                  *ngIf="
+                    userForm.get('surname')?.errors &&
+                    (userForm.get('surname')?.touched ||
+                      userForm.get('surname')?.dirty)
+                  "
+                  class="absolute w-full text-red-500 text-xs text-center font-medium mt-1 h-5"
+                >
+                  {{ getErrorMessage('surname') }}
+                </p>
+              </div>
+
+              <div class="relative">
+                <label
+                  class="text-gray-800 font-semibold text-sm block"
+                  for="email"
+                >
+                  {{ 'input.email.label' | translate }}
+                </label>
+                <div class="relative flex items-center group">
+                  <input
+                    id="email"
+                    formControlName="email"
+                    type="text"
+                    class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-3 outline-none"
+                    placeholder="{{ 'input.email.placeholder' | translate }}"
+                  />
+                  <div
+                    class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal"
+                  >
+                    <mat-icon aria-label="Email icon">email</mat-icon>
+                  </div>
+                </div>
+                <p
+                  *ngIf="
+                    userForm.get('email')?.errors &&
+                    (userForm.get('email')?.touched ||
+                      userForm.get('email')?.dirty)
+                  "
+                  class="absolute w-full text-red-500 text-xs text-center font-medium mt-1 h-5"
+                >
+                  {{ getErrorMessage('email') }}
+                </p>
+              </div>
+
+              <div class="relative">
+                <label
+                  class="text-gray-800 font-semibold text-sm block"
+                  for="username"
+                >
+                  {{ 'input.username.label' | translate }}
+                </label>
+                <div class="relative flex items-center group">
+                  <input
+                    id="username"
+                    formControlName="username"
+                    type="text"
+                    class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-3 outline-none"
+                    placeholder="{{ 'input.username.placeholder' | translate }}"
+                  />
+                  <div
+                    class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal"
+                  >
+                    <mat-icon aria-label="username icon">badge</mat-icon>
+                  </div>
+                </div>
+                <p
+                  *ngIf="
+                    userForm.get('username')?.errors &&
+                    (userForm.get('username')?.touched ||
+                      userForm.get('username')?.dirty)
+                  "
+                  class="absolute w-full text-red-500 text-xs text-center font-medium mt-1 h-5"
+                >
+                  {{ getErrorMessage('username') }}
+                </p>
+              </div>
+              <div *ngIf="isEditable" class="relative">
+                <label
+                  class="text-gray-800 font-semibold text-sm block"
+                  for="idProfile"
+                >
+                  {{ 'input.profile.label' | translate }}
+                </label>
+                <div class="relative flex items-center group">
+                  <select
+                    id="idProfile"
+                    formControlName="idProfile"
+                    (change)="handlerProfileChange($event)"
+                    class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-3 outline-none"
+                  >
+                    <option disabled selected value="">
+                      {{ 'input.profile.placeholder' | translate }}
+                    </option>
+
+                    <option
+                      *ngFor="let profile of profiles"
+                      [value]="profile.idProfile"
+                    >
+                      {{ profile.name }}
+                    </option>
+                  </select>
+                  <div
+                    class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal"
+                  >
+                    <mat-icon aria-label="role icon"
+                      >supervisor_account</mat-icon
+                    >
+                  </div>
+                </div>
+                <p
+                  *ngIf="
+                    userForm.get('profile')?.errors &&
+                    (userForm.get('profile')?.touched ||
+                      userForm.get('profile')?.dirty)
+                  "
+                  class="absolute w-full text-red-500 text-xs text-center font-medium mt-1 h-5"
+                >
+                  {{ getErrorMessage('profile') }}
+                </p>
+              </div>
+              <div
+                [ngClass]="{
+                  'mt-4': !isEditable
+                }"
+                class="content-end flex justify-center items-end gap-4"
+              >
+                <button
+                  (click)="clearForm()"
+                  type="button"
+                  class="p-6 inline-flex justify-center items-center text-sm w-full h-10 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  [disabled]="userForm.invalid"
+                  [ngClass]="{
+                    'opacity-60 cursor-not-allowed': userForm.invalid,
+                    'active:scale-95 hover:bg-sunset-orange-600': userForm.valid
+                  }"
+                  type="submit"
+                  class="p-6 inline-flex justify-center items-center h-10 text-sm w-full bg-sunset-orange-500 rounded-md text-white focus:outline-none transition-colors duration-300 ease-in-out"
+                >
+                  {{
+                    isEditable
+                      ? ('button.update' | translate)
+                      : ('button.create' | translate)
+                  }}
+                </button>
+              </div>
+            </div>
           </div>
         </form>
       </div>
 
-      <!-- Contenedor de Administración General -->
-      <div class="bg-white p-6 border-b-2 border-gray-300 rounded-lg w-full">
-        <h2 class="text-lg font-bold mb-4">{{ 'users.AdministrationTitle' | translate }}</h2>
-        <p class="text-sm">{{ 'users.AdministrationTitle' | translate }}</p>
+      <div
+        class="flex-1 overflow-x-auto rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.1)]"
+      >
+        <div class="min-w-full inline-block align-middle h-full">
+          <div
+            class="overflow-hidden border rounded-lg bg-white border-gray-300 h-full flex flex-col"
+          >
+            <div class="overflow-y-auto flex-1">
+              <table class="min-w-full">
+                <thead class="sticky top-0 bg-dark-gunmetal">
+                  <tr>
+                    <th
+                      class="p-5 text-center text-sm leading-6 font-semibold text-light-gray capitalize"
+                    >
+                      {{ 'audit.data.id' | translate }}
+                    </th>
+                    <th
+                      class="p-5 text-center text-sm leading-6 font-semibold text-light-gray capitalize"
+                    >
+                      {{ 'audit.data.email' | translate }}
+                    </th>
+                    <th
+                      class="p-5 text-center text-sm leading-6 font-semibold text-light-gray capitalize"
+                    >
+                      {{ 'audit.data.date' | translate }}
+                    </th>
+                    <th
+                      class="p-5 text-center text-sm leading-6 font-semibold text-light-gray capitalize"
+                    >
+                      {{ 'audit.data.entity' | translate }}
+                    </th>
+                    <th
+                      class="p-5 text-center text-sm leading-6 font-semibold text-light-gray capitalize"
+                    >
+                      {{ 'audit.data.http_method' | translate }}
+                    </th>
+                    <th
+                      class="p-5 text-center text-sm leading-6 font-semibold text-light-gray capitalize"
+                    >
+                      {{ 'audit.data.details' | translate }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let audit of audits; let i = index"
+                    class="odd:bg-gray-100 even:bg-white"
+                  >
+                    <td
+                      class="p-5 text-center whitespace-nowrap text-sm leading-6 font-medium text-gray-900 border-r border-gray-300"
+                    ></td>
+                    <td
+                      class="p-5 text-center whitespace-nowrap text-sm leading-6 font-medium text-gray-900 border-r border-gray-300"
+                    >
+                      {{ audit.email }}
+                    </td>
+                    <td
+                      class="p-5 text-center whitespace-nowrap text-sm leading-6 font-medium text-gray-900 border-r border-gray-300"
+                    >
+                      {{ audit.date_operation | dateFormat }}
+                    </td>
+                    <td
+                      class="p-5 text-center whitespace-nowrap text-sm leading-6 font-medium text-gray-900 border-r border-gray-300"
+                    >
+                      {{ audit.entity }}
+                    </td>
+                    <td
+                      class="p-5 text-center whitespace-nowrap text-sm leading-6 font-black text-gray-900 border-r border-gray-300"
+                    ></td>
+                    <td
+                      class="p-5 text-center whitespace-nowrap text-sm leading-6 font-medium text-gray-900 border-r border-gray-300"
+                    ></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <mat-paginator
+              class="w-full mt-auto"
+              [hidePageSize]="true"
+              [length]="100"
+              [pageSize]="10"
+            >
+            </mat-paginator>
+          </div>
+        </div>
       </div>
     </div>
   </div>

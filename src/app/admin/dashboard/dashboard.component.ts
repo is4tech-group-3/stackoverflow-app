@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 export type MenuItem = {
@@ -12,7 +12,7 @@ export type MenuItem = {
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   menuItems = signal<MenuItem[]>([]);
 
   constructor(private translate: TranslateService) {
@@ -23,6 +23,9 @@ export class DashboardComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.loadMenuItems();
+  }
   loadMenuItems() {
     this.menuItems.set([
       {

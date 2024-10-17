@@ -2,7 +2,9 @@
   class="relative bg-fixed bg-galaxy bg-cover bg-center bg-no-repeat overflow-hidden"
 >
   <!-- Overlay -->
-  <div class="absolute inset-0 bg-gradient-to-r from-black/95 to-gray-900/40"></div>
+  <div
+    class="absolute inset-0 bg-gradient-to-r from-black/95 to-gray-900/40"
+  ></div>
 
   <div
     class="relative mx-auto max-w-screen-2xl px-4 py-32 sm:px-6 lg:flex lg:h-screen lg:items-center lg:px-8"
@@ -12,15 +14,15 @@
       <h1 class="text-4xl font-extrabold text-white sm:text-6xl">
         {{ 'home.title' | translate }}
         <strong
-        class="block font-extrabold text-sunset-orange-500 animate-pulse"
-      >
-        {{ 'NamePage' | translate }}.
-      </strong>
-
-
+          class="block font-extrabold text-sunset-orange-500 animate-pulse"
+        >
+          {{ 'NamePage' | translate }}.
+        </strong>
       </h1>
 
-      <p class="mt-6 max-w-full lg:max-w-lg text-white sm:text-xl/relaxed leading-relaxed">
+      <p
+        class="mt-6 max-w-full lg:max-w-lg text-white sm:text-xl/relaxed leading-relaxed"
+      >
         {{ 'home.description' | translate }}
       </p>
 
@@ -50,6 +52,7 @@
   </div>
 
   <img
+    alt="wave-decoration"
     src="assets/img/waveHorizontal.png"
     class="hidden lg:block absolute -bottom-16 left-0 w-full"
   />

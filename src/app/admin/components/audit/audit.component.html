@@ -53,7 +53,12 @@
     />
     <button
       submit
-      class="bg-sunset-orange-500 text-white p-2 rounded hover:bg-sunset-orange-600 w-full"
+      [disabled]="searchForm.invalid"
+      [ngClass]="{
+        'opacity-60 cursor-not-allowed': searchForm.invalid,
+        ' active:scale-95  hover:bg-sunset-orange-600': searchForm.valid
+      }"
+      class="bg-sunset-orange-500 text-white p-2 rounded w-full"
     >
       {{ 'button.search' | translate }}
     </button>

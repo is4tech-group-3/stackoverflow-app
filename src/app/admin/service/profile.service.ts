@@ -12,8 +12,11 @@ export class ProfileService {
   constructor(private http: HttpClient) {}
 
   // GET: Obtener todos los perfiles
-  getProfiles(page: number): Observable<any> {
-    let params = new HttpParams().set('page', page.toString());
+  getProfiles(page?: number): Observable<any> {
+    let params = new HttpParams();
+    if (page !== undefined && page !== null) {
+      params = params.set('page', page.toString());
+    }
     return this.http.get(`${this.baseUrl}`, { params });
   }
 
