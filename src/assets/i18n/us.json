@@ -131,7 +131,7 @@
   "warning": {
     "notLoggedIn": "You must be logged in to access this page.",
     "alreadyLoggedIn": "You are already logged in.",
-    "disableUser": "Doing this action will log out your account, and may be no longer active"
+    "disableUser": "Do this action will log out your account, and may be no longer active"
   },
   "input": {
     "profile": {
