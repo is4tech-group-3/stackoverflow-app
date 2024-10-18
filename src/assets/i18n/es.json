@@ -48,6 +48,7 @@
     "addTitle": "Agregar Usuario",
     "AdministrationTitle": "Administracion General",
     "searchUser": "Buscar usuario",
+    "profileInformation": "Informacion del perfil",
     "activeProfiles": "Perfiles Disponibles",
     "data": {
       "name": "Nombre",
@@ -133,7 +134,8 @@
   },
   "warning": {
     "notLoggedIn": "Debe estar conectado para acceder a esta página.",
-    "alreadyLoggedIn": "Ya has iniciado sesión."
+    "alreadyLoggedIn": "Ya has iniciado sesión.",
+    "disableUser": "Realizar esta accion cerrara tu seccion actual, y deshabilitara tu cuenta"
   },
   "input": {
     "profile": {
