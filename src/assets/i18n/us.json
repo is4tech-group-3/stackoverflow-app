@@ -46,6 +46,7 @@
   "users": {
     "title": "Users",
     "addTitle": "Add Users",
+    "profileInformation": "Profile Information",
     "AdministrationTitle": "General Administration",
     "searchUser": "Search user",
     "activeProfiles": "Active profiles",
@@ -129,7 +130,8 @@
   },
   "warning": {
     "notLoggedIn": "You must be logged in to access this page.",
-    "alreadyLoggedIn": "You are already logged in."
+    "alreadyLoggedIn": "You are already logged in.",
+    "disableUser": "Doing this action will log out your account, and may be no longer active"
   },
   "input": {
     "profile": {
