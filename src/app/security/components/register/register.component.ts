@@ -55,7 +55,6 @@ export class RegisterComponent {
   onSubmit() {
     if (this.registerForm.valid) {
       this.blockUIService.start();
-      console.log(this.registerForm.value);
       const formData = convertFormGroupToFormData(this.registerForm);
       this.authService.signup(formData).subscribe({
         next: (response: any) => {

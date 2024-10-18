@@ -7,6 +7,8 @@ import { BlockUIService } from 'src/app/shared/services/blockUI/block-ui.service
 import { ProfileService } from '../../service/profile.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AuditService } from '../../service/audit/audit.service';
+import { convertFormGroupToFormData } from 'src/app/shared/utils/form-data.util';
+import { Params } from '@angular/router';
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
@@ -16,9 +18,11 @@ export class UsersComponent implements OnInit {
   users: any[] = [];
   profiles: any[] = [];
   audits: any[] = [];
-
+  pageSize = 8;
+  totalLength = 0;
+  selectedPhoto = '';
   isEditable = false;
-  img = '';
+
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly formErrorService: FormErrorService,
@@ -33,7 +37,7 @@ export class UsersComponent implements OnInit {
   ngOnInit(): void {
     this.handlerGetAllProfile();
     this.handlerGetAllUser();
-    this.handlerGetAllAudit(0);
+    // this.handlerGetAllAudit();
   }
 
   userForm = this.formBuilder.group({
@@ -51,6 +55,7 @@ export class UsersComponent implements OnInit {
   }
 
   clearForm() {
+    this.selectedPhoto = '';
     this.isEditable = false;
     this.userForm.reset();
     this.userForm.get('email')?.enable();
@@ -60,15 +65,13 @@ export class UsersComponent implements OnInit {
   onSubmit() {
     if (this.userForm.valid) {
       this.blockUIService.start();
-      console.log(this.userForm.value);
-      this.blockUIService.stop();
       if (this.userForm.get('id')?.value) {
         this.userService.updateUser(this.userForm.value).subscribe({
           next: () => {
             this.userForm.reset();
             this.blockUIService.stop();
             this.toastService.showSuccessToast(
-              'Usuario actualizado correctamente'
+              this.translate.instant('success.userUpdated')
             );
           },
           error: () => {
@@ -77,11 +80,15 @@ export class UsersComponent implements OnInit {
           }
         });
       } else {
-        this.userService.createUser(this.userForm.value).subscribe({
+        const formData = convertFormGroupToFormData(this.userForm);
+        this.userService.createUser(formData).subscribe({
           next: () => {
-            this.userForm.reset();
+            this.clearForm();
+            this.handlerGetAllUser();
             this.blockUIService.stop();
-            this.toastService.showSuccessToast('Usuario creado correctamente');
+            this.toastService.showSuccessToast(
+              this.translate.instant('success.userCreated')
+            );
           },
           error: () => {
             this.blockUIService.stop();
@@ -92,11 +99,20 @@ export class UsersComponent implements OnInit {
     }
   }
 
+  changePage(event: any) {
+    this.handlerGetAllUser({
+      size: this.pageSize,
+      page: event.pageIndex
+    });
+  }
+
   setUser(id: number) {
     this.isEditable = true;
     this.userService.getUserById(id).subscribe({
       next: (response: any) => {
-        this.userForm.patchValue(response);
+        const { image, ...rest } = response;
+        this.userForm.patchValue(rest);
+        this.selectedPhoto = image;
         this.userForm.get('email')?.disable();
       },
       error: () => {
@@ -105,13 +121,18 @@ export class UsersComponent implements OnInit {
     });
   }
 
-  handlerDeleteUser(id: number) {
+  handlerChangeStatus(id: number, status: boolean) {
     this.blockUIService.start();
-    this.userService.deleteUser(id).subscribe({
+    const successMessage = status
+      ? 'success.userDisabled'
+      : 'success.userEnabled';
+    this.userService.changeStatus(id).subscribe({
       next: () => {
         this.handlerGetAllUser();
         this.blockUIService.stop();
-        this.toastService.showSuccessToast('Usuario eliminado correctamente');
+        this.toastService.showSuccessToast(
+          this.translate.instant(successMessage)
+        );
       },
       error: () => {
         this.blockUIService.stop();
@@ -141,6 +162,39 @@ export class UsersComponent implements OnInit {
     }
   }
 
+  handlerChangeImage(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const id = this.userForm.get('id')?.value;
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const imageData = reader.result;
+        this.selectedPhoto = imageData as string;
+      };
+
+      reader.readAsDataURL(file);
+
+      if (id !== undefined && id !== null && id !== 0) {
+        this.blockUIService.start();
+        // this.userService.updateUserImage(id, file).subscribe({
+        //   next: () => {
+        //     this.toastService.showSuccessToast('Imagen actualizada correctamente');
+        //     this.blockUIService.stop();
+        //   },
+        //   error: () => {
+        //     this.toastService.showErrorToast('Error al actualizar la imagen');
+        //     this.blockUIService.stop();
+        //   }
+        // });
+      } else {
+        this.userForm.patchValue({
+          image: file
+        });
+      }
+    }
+  }
+
   handlerGetAllProfile() {
     this.blockUIService.start();
     this.profileService.getProfiles().subscribe({
@@ -157,12 +211,8 @@ export class UsersComponent implements OnInit {
 
   handlerGetAllAudit(id: number) {
     this.blockUIService.start();
-    this.auditService.get().subscribe({
+    this.auditService.get({ entity: 'USER' }).subscribe({
       next: (response: any) => {
-        console.log(
-          '🚀 ~ UsersComponent ~ this.auditService.getAuditByIdUser ~ response:',
-          response
-        );
         this.audits = response.audits;
         this.blockUIService.stop();
       },
@@ -173,12 +223,16 @@ export class UsersComponent implements OnInit {
     });
   }
 
-  handlerGetAllUser() {
+  handlerGetAllUser(params?: Params) {
     this.blockUIService.start();
-    this.userService.getAllUser().subscribe({
+    this.userService.getAllUser(params).subscribe({
       next: (response: any) => {
-        
+        console.log(
+          '🚀 ~ UsersComponent ~ this.userService.getAllUser ~ response:',
+          response
+        );
         this.users = response.content;
+        this.totalLength = response.totalElements;
         this.blockUIService.stop();
       },
       error: () => {

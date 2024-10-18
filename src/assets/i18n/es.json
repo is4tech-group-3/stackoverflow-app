@@ -125,7 +125,11 @@
     "Login": "Inicio de sesión exitoso",
     "PasswordRecovery": "Se ha enviado un correo electrónico con el código de recuperación de la contraseña. Por favor, revise su correo electrónico y siga las instrucciones para restablecer su contraseña.",
     "PasswordReset": "Se ha restablecido la contraseña. Por favor, inicie sesión para continuar.",
-    "changeProfile": "Perfil cambiado con éxito."
+    "changeProfile": "Perfil cambiado con éxito.",
+    "userUpdated": "Usuario actualizado con éxito",
+    "userCreated": "Usuario creado con éxito.",
+    "userDisabled": "Usuario deshabilitado con éxito.",
+    "userEnabled": "Usuario habilitado con éxito."
   },
   "warning": {
     "notLoggedIn": "Debe estar conectado para acceder a esta página.",

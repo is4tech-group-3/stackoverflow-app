@@ -52,7 +52,7 @@
           </div>
         </button>
         <button
-          (click)="handlerDeleteUser(user.id)"
+          (click)="handlerChangeStatus(user.id, user.status)"
           [ngClass]="{
             'text-emerald-400': user.status,
             'text-rose-500': !user.status
@@ -68,8 +68,9 @@
     <mat-paginator
       class="w-full mt-auto"
       [hidePageSize]="true"
-      [length]="100"
-      [pageSize]="10"
+      [length]="totalLength"
+      (page)="changePage($event)"
+      [pageSize]="pageSize"
     />
   </div>
 
@@ -87,10 +88,10 @@
               <div class="relative w-32 h-32 mx-auto group">
                 <label for="image" class="w-full h-full cursor-pointer">
                   <img
-                    class="w-full h-full rounded-full border border-collapse border-sunset-orange-500"
+                    class="w-full h-full object-cover rounded-full border border-collapse border-sunset-orange-500"
                     [src]="
-                      userForm.get('image')?.value
-                        ? userForm.get('image')?.value
+                      selectedPhoto
+                        ? selectedPhoto
                         : 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg'
                     "
                     alt="profile"
@@ -102,6 +103,7 @@
                   >
                 </label>
                 <input
+                  (change)="handlerChangeImage($event)"
                   id="image"
                   type="file"
                   class="hidden"

@@ -33,7 +33,7 @@ export class UserService {
     return this.http.put<any>(`${this.baseUrl}user/${data.id}`, data);
   }
 
-  deleteUser(id: number): Observable<void> {
+  changeStatus(id: number): Observable<void> {
     return this.http.patch<any>(`${this.baseUrl}user/changeStatus/${id}`, {});
   }
 

@@ -125,7 +125,11 @@
     "Login": "Login successful",
     "PasswordRecovery": "An email with the password recovery code has been sent. Please check your email and follow the instructions to reset your password.",
     "PasswordReset": "Password reset successful. Please log in to continue.",
-    "changeProfile": "Profile changed successfully."
+    "changeProfile": "Profile changed successfully.",
+    "userUpdated": "User updated successfully",
+    "userCreated": "User created successfully.",
+    "userDisabled": "User disabled successfully.",
+    "userEnabled": "User enabled successfully."
   },
   "warning": {
     "notLoggedIn": "You must be logged in to access this page.",

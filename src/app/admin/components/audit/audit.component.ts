@@ -26,10 +26,10 @@ export class AuditComponent implements OnInit {
   totalLength = 0;
 
   constructor(
-    private auditService: AuditService,
-    private modalService: ModalService,
-    private translate: TranslateService,
-    private validatorForm: FormBuilder
+    private readonly auditService: AuditService,
+    private readonly modalService: ModalService,
+    private readonly translate: TranslateService,
+    private readonly validatorForm: FormBuilder
   ) {}
 
   searchForm = this.validatorForm.group({
@@ -56,20 +56,10 @@ export class AuditComponent implements OnInit {
     });
   }
 
-  updatePaginatedAudits() {
-    const startIndex = this.currentPage * this.pageSize;
-    this.paginatedAudits = this.audits.slice(
-      startIndex,
-      startIndex + this.pageSize
-    );
-  }
+  
 
   onOptionSelected(option: string) {
     this.selectedOption = option;
-    console.log(
-      '🚀 ~ AuditComponent ~ onOptionSelected ~ selectedOption:',
-      this.selectedOption
-    );
   }
 
   openModal(audit: any) {
@@ -139,7 +129,6 @@ export class AuditComponent implements OnInit {
         this.audits = response?.audits || [];
         this.totalLength = response.pagination.totalAudits;
         this.currentPage = response.pagination.currentPage;
-        this.updatePaginatedAudits();
       },
       error: () => {
         console.log('Error al obtener los registros de auditoría');
