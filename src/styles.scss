@@ -15,13 +15,15 @@ $stack-overflow-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 $stack-overflow-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object.
-$stack-overflow-theme: mat.define-light-theme((
-  color: (
-    primary: $stack-overflow-primary,
-    accent: $stack-overflow-accent,
-    warn: $stack-overflow-warn,
+$stack-overflow-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $stack-overflow-primary,
+      accent: $stack-overflow-accent,
+      warn: $stack-overflow-warn
+    )
   )
-));
+);
 
 // Include theme styles for core and each component used in your app.
 @include mat.all-component-themes($stack-overflow-theme);
@@ -31,14 +33,15 @@ $stack-overflow-theme: mat.define-light-theme((
 @tailwind components;
 @tailwind utilities;
 
-@import "/node_modules/flag-icons/css/flag-icons.min.css";
+@import '/node_modules/flag-icons/css/flag-icons.min.css';
+
 // Custom body styling
 body {
- 
   margin: 0;
   height: 100%;
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }

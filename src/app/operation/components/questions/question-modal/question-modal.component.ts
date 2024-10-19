@@ -1,7 +1,15 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  ElementRef,
+  ViewChild
+} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TagService } from 'src/app/admin/service/tag.service';
 import { QuestionService } from 'src/app/operation/service/question/question.service';
+import * as SimpleMDE from 'simplemde';
+import { marked } from 'marked';
 
 @Component({
   selector: 'app-question-modal',
@@ -18,6 +26,10 @@ export class QuestionModalComponent implements OnInit {
   title: string = '';
   description: string = '';
 
+  simpleMDE: SimpleMDE | undefined;
+
+  @ViewChild('mdeEditor', { static: true }) mdeEditor!: ElementRef;
+
   constructor(
     private tagService: TagService,
     private questionService: QuestionService,
@@ -28,6 +40,47 @@ export class QuestionModalComponent implements OnInit {
   ngOnInit(): void {
     this.currentPage = this.data.page || 0;
     this.getTags(this.currentPage);
+    this.initializeEditor();
+  }
+
+  initializeEditor() {
+    this.simpleMDE = new SimpleMDE({
+      element: this.mdeEditor.nativeElement,
+      initialValue: this.description,
+      placeholder: 'Describe tu pregunta...',
+      toolbar: [
+        'bold',
+        'italic',
+        '',
+        'link',
+        'quote',
+        {
+          name: 'code',
+          action: SimpleMDE.toggleCodeBlock,
+          className: 'fa fa-code',
+          title: 'Insertar código'
+        },
+        '',
+        'ordered-list',
+        'unordered-list',
+        'horizontal-rule',
+        '',
+        'undo',
+        'redo',
+        ''
+      ],
+      autosave: {
+        enabled: false,
+        uniqueId: 'questionEditor'
+      },
+      renderingConfig: {
+        codeSyntaxHighlighting: true
+      }
+    });
+
+    this.simpleMDE.codemirror.on('change', () => {
+      this.description = this.simpleMDE?.value() || '';
+    });
   }
 
   getTags(page: number): void {
@@ -65,30 +118,23 @@ export class QuestionModalComponent implements OnInit {
   }
 
   saveQuestion() {
-    const questionPayload = {
+    const question = {
       title: this.title,
-      description: this.description,
+      description: marked(this.description),
       idTags: Array.from(this.selectedTags)
     };
-
-    this.questionService.createQuestion(questionPayload).subscribe({
+    this.questionService.createQuestion(question).subscribe({
       next: response => {
         this.dialogRef.close();
       },
       error: error => {
         console.error('Error creating question:', error);
-        console.error('Full error response:', error.error);
       }
     });
   }
 
   close(): void {
-    this.dialogRef.close({
-      page: this.currentPage,
-      selectedTags: Array.from(this.selectedTags),
-      title: this.title,
-      description: this.description
-    });
+    this.dialogRef.close();
   }
 
   getTagClass(tag: string): { iconUrl: string } {

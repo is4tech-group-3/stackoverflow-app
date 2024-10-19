@@ -5,13 +5,11 @@
             <mat-label>Título</mat-label>
             <input matInput [(ngModel)]="title" name="title">
         </mat-form-field>
-
-        <mat-form-field class="w-full mt-4">
-            <mat-label>Descripción</mat-label>
-            <textarea matInput [(ngModel)]="description" name="description"></textarea>
-        </mat-form-field>
+        <div class="w-full mt-4">
+            <label>Descripción</label>
+            <textarea #mdeEditor></textarea>
+        </div>
     </form>
-
     <div *ngIf="tags.length > 0" class="mt-4">
         <div class="flex flex-wrap gap-2 text-sm font-medium lowercase justify-center">
             <span class="flex items-center cursor-pointer" *ngFor="let tag of tags"
@@ -22,7 +20,6 @@
             </span>
         </div>
     </div>
-
     <div class="mt-4 text-center">
         <button (click)="changePage(-1)" [disabled]="isFirstPage"
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-1">Anterior</button>
@@ -32,5 +29,5 @@
 </div>
 <div mat-dialog-actions>
     <button mat-button (click)="close()">Cerrar</button>
-    <button mat-button color="primary" (click)="saveQuestion()">Guardar</button> <!-- Botón para guardar -->
+    <button mat-button color="primary" (click)="saveQuestion()">Guardar</button>
 </div>
