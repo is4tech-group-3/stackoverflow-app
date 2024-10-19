@@ -10,7 +10,8 @@ export const COOKIE_KEYS = {
   EXPIRATION: 'expiration',
   IAT: 'iat',
   SUB: 'sub',
-  ROLES: 'roles'
+  ROLES: 'roles',
+  IMAGE_URL: 'imageUrl'
 };
 
 export const LOCAL_STORAGE_KEYS = {

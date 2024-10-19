@@ -2,24 +2,9 @@
   <div
     class="flex flex-col justify-between bg-white o p-4 w-full lg:w-80 rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.1)]"
   >
-    <div class="relative">
-      <label class="text-gray-800 font-semibold text-sm block" for="search">
-        Busar
-      </label>
-      <div class="relative flex items-center group">
-        <input
-          id="search"
-          type="text"
-          class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-3 outline-none"
-          placeholder="Buscar usuario"
-        />
-        <div
-          class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal"
-        >
-          <mat-icon aria-label="search icon">search</mat-icon>
-        </div>
-      </div>
-    </div>
+    <h1 class="text-2xl font-semibold text-center text-gray-800">
+      {{ 'users.title' | translate }}
+    </h1>
 
     <ul class="space-y-6 w-full mt-8 overflow-auto">
       <li

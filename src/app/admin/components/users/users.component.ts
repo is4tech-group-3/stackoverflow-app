@@ -172,24 +172,27 @@ export class UsersComponent implements OnInit {
         const imageData = reader.result;
         this.selectedPhoto = imageData as string;
       };
+      this.userForm.patchValue({
+        image: file
+      });
 
       reader.readAsDataURL(file);
-
       if (id !== undefined && id !== null && id !== 0) {
+        console.log('simon  si cambiaste la imagen');
         this.blockUIService.start();
-        // this.userService.updateUserImage(id, file).subscribe({
-        //   next: () => {
-        //     this.toastService.showSuccessToast('Imagen actualizada correctamente');
-        //     this.blockUIService.stop();
-        //   },
-        //   error: () => {
-        //     this.toastService.showErrorToast('Error al actualizar la imagen');
-        //     this.blockUIService.stop();
-        //   }
-        // });
-      } else {
-        this.userForm.patchValue({
-          image: file
+        const formData = convertFormGroupToFormData(this.userForm);
+        this.userService.changePhotoProfile(id, formData).subscribe({
+          next: () => {
+            this.handlerGetAllUser();
+            this.toastService.showSuccessToast(
+              'Imagen actualizada correctamente'
+            );
+            this.blockUIService.stop();
+          },
+          error: () => {
+            this.toastService.showErrorToast('Error al actualizar la imagen');
+            this.blockUIService.stop();
+          }
         });
       }
     }

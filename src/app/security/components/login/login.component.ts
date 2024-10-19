@@ -41,6 +41,9 @@ export class LoginComponent {
           const decodedToken = this.decodeTokenService.DecodeToken(
             response?.token
           );
+          if (decodedToken.imageUrl) {
+            CookieUtil.setValue('imageUrl', decodedToken.imageUrl);
+          }
           CookieUtil.setValue('userId', decodedToken.userId);
           CookieUtil.setValue('token', response?.token);
           CookieUtil.setValue('expiration', decodedToken?.exp);

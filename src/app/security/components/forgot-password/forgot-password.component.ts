@@ -1,6 +1,6 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { MatStepper, StepperOrientation } from '@angular/material/stepper';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -10,6 +10,7 @@ import { ToastService } from 'src/app/shared/services/toast/toast.service';
 import { AuthService } from '../../service/auth/auth.service';
 import { FormErrorService } from 'src/app/shared/services/formError/form-error.service';
 import { BlockUIService } from 'src/app/shared/services/blockUI/block-ui.service';
+import { CustomValidators } from 'src/app/shared/Validators/validators';
 
 @Component({
   selector: 'app-forgot-password',
@@ -18,13 +19,13 @@ import { BlockUIService } from 'src/app/shared/services/blockUI/block-ui.service
 })
 export class ForgotPasswordComponent {
   constructor(
-    private authService: AuthService,
-    private validatorForm: FormBuilder,
-    private router: Router,
-    private translate: TranslateService,
-    private toastService: ToastService,
-    private formErrorService: FormErrorService,
-    private blockUIService: BlockUIService,
+    private readonly authService: AuthService,
+    private readonly validatorForm: FormBuilder,
+    private readonly router: Router,
+    private readonly translate: TranslateService,
+    private readonly toastService: ToastService,
+    private readonly formErrorService: FormErrorService,
+    private readonly blockUIService: BlockUIService,
     breakpointObserver: BreakpointObserver
   ) {
     this.stepperOrientation = breakpointObserver
@@ -50,17 +51,21 @@ export class ForgotPasswordComponent {
         [Validators.required, Validators.email]
       ],
       code: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
-      newPassword: ['', [Validators.required, Validators.minLength(8)]],
+      newPassword: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          CustomValidators.containsUpperCaseValidator(),
+          CustomValidators.containsLowerCaseValidator(),
+          CustomValidators.containsNumberValidator(),
+          CustomValidators.containsSpecialCharacterValidator()
+        ]
+      ],
       confirmPassword: ['', [Validators.required]]
     },
-    { validator: this.passwordMatchValidator }
+    { validators: CustomValidators.passwordMatchValidator() }
   );
-
-  passwordMatchValidator(form: FormGroup) {
-    return form.get('newPassword')?.value === form.get('confirmPassword')?.value
-      ? null
-      : { mismatch: true };
-  }
 
   onSubmit() {
     if (this.emailForm.valid) {

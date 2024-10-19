@@ -9,7 +9,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 })
 export class NewsComponent implements OnInit {
   publications: any[] = [];
-
+  text: string | undefined;
   constructor(
     private publicationService: PublicationService,
     private fb: FormBuilder,

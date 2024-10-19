@@ -96,11 +96,20 @@
             >
               <span class="sr-only">Toggle dashboard menu</span>
 
-              <ngx-avatars
-                name="{{ username }}"
-                size="40"
-                [textSizeRatio]="2"
-              ></ngx-avatars>
+              <ng-container *ngIf="imgUrl; else avatarTemplate">
+                <img
+                  [src]="imgUrl"
+                  alt="{{ username }}"
+                  class="w-11 h-11 rounded-full object-cover"
+                />
+              </ng-container>
+              <ng-template #avatarTemplate>
+                <ngx-avatars
+                  name="{{ username }}"
+                  size="44"
+                  [textSizeRatio]="2"
+                ></ngx-avatars>
+              </ng-template>
             </button>
 
             <div
@@ -124,7 +133,14 @@
                 >
                   {{ 'button.myProfile' | translate }}
                 </a>
-
+                <a
+                  [routerLink]="['/auth/change-password']"
+                  (click)="closeProfileMenu()"
+                  class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                  role="menuitem"
+                >
+                  {{ 'button.changePassword' | translate }}
+                </a>
                 <a
                   [routerLink]="['/admin']"
                   (click)="closeProfileMenu()"

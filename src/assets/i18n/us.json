@@ -58,6 +58,7 @@
     }
   },
   "news": {
+    "by": "By",
     "title": "Latest news",
     "description": "  Stay updated with the latest insights, tips, and trends in our curated collection of articles. Our experts share valuable knowledge to help you navigate through various topics, inspiring creativity and innovation along the way.",
     "search": "Search...",
@@ -109,9 +110,14 @@
     "logout": "Logout"
   },
   "errors": {
+    "noSpecialCharacter": "The password must contain at least one special character.",
+    "noNumber": "The password must contain at least one number.",
+    "noUppercase": "The password must contain at least one uppercase letter.",
+    "noLowercase": "The password must contain at least one lowercase letter.",
     "required": "This field is required.",
     "invalidEmail": "Please enter a valid email address.",
-    "minLength": "The password must be at least 8 characters long.",
+    "minLength": "This field must be at least {{minLength}} characters long.",
+    "maxLength": "This field must be a maximum of {{maxLength}} characters long.",
     "pattern": "Please enter numbers only.",
     "mismatch": "Passwords do not match.",
     "badCredentials": "Incorrect email or password.",
@@ -124,6 +130,7 @@
   "success": {
     "Registered": "Registration successful. Please check your email for the password to access the platform.",
     "Login": "Login successful",
+    "changePassword": "Password changed successfully.",
     "PasswordRecovery": "An email with the password recovery code has been sent. Please check your email and follow the instructions to reset your password.",
     "PasswordReset": "Password reset successful. Please log in to continue.",
     "changeProfile": "Profile changed successfully.",
@@ -138,12 +145,20 @@
     "disableUser": "Do this action will log out your account, and may be no longer active"
   },
   "input": {
+    "oldPassword": {
+      "label": "Old Password",
+      "placeholder": "Enter old password"
+    },
     "profile": {
       "label": "Profile",
       "placeholder": "Select a profile"
     },
     "photoProfile": {
       "label": "Profile Picture"
+    },
+    "search": {
+      "label": "Search",
+      "placeholder": "Search..."
     },
     "description": {
       "label": "Description",
@@ -206,7 +221,7 @@
     "delete": "Delete",
     "cancel": "Cancel",
     "close": "Close",
-    "disable": "disable",
+    "disable": "Disable",
     "enable": "enable",
     "save": "Save",
     "register": "Register",

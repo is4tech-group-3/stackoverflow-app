@@ -58,6 +58,7 @@
     }
   },
   "news": {
+    "by": "Por",
     "title": "Últimas noticias",
     "description": "  Manténgase al día con las últimas insights, consejos y tendencias en nuestra colección de artículos curados. Nuestros expertos comparten conocimiento valioso para ayudarte a navegar por varios temas, inspirando creatividad y innovación a lo largo del camino.",
     "search": "Buscar...",
@@ -109,9 +110,14 @@
     "logout": "Cerrar sesión"
   },
   "errors": {
+    "noSpecialCharacter": "La contraseña debe contener al menos un carácter especial.",
+    "noNumber": "La contraseña debe contener al menos un número.",
+    "noUppercase": "La contraseña debe contener al menos una letra mayúscula.",
+    "noLowercase": "La contraseña debe contener al menos una letra minúscula.",
     "required": "Este campo es obligatorio.",
     "invalidEmail": "Por favor ingresa un correo válido.",
-    "minLength": "La contraseña debe tener al menos 8 caracteres.",
+    "minLength": "Este campo debe tener al menos {{minLength}} caracteres.",
+    "maxLength": "Este campo debe tener un máximo de {{maxLength}} caracteres.",
     "pattern": "Por favor ingresa sólo números.",
     "mismatch": "Las contraseñas no coinciden.",
     "badCredentials": "Correo o contraseña incorrectos.",
@@ -124,6 +130,7 @@
   "success": {
     "Registered": "Registro exitoso. Por favor, revise su correo electrónico, donde encontrará su contraseña para acceder a la plataforma.",
     "Login": "Inicio de sesión exitoso",
+    "changePassword": "Contraseña cambiada con éxito.",
     "PasswordRecovery": "Se ha enviado un correo electrónico con el código de recuperación de la contraseña. Por favor, revise su correo electrónico y siga las instrucciones para restablecer su contraseña.",
     "PasswordReset": "Se ha restablecido la contraseña. Por favor, inicie sesión para continuar.",
     "changeProfile": "Perfil cambiado con éxito.",
@@ -138,6 +145,10 @@
     "disableUser": "Realizar esta accion cerrara tu seccion actual, y deshabilitara tu cuenta"
   },
   "input": {
+    "oldPassword": {
+      "label": "Contraseña anterior",
+      "placeholder": "Ingrese su contraseña anterior"
+    },
     "profile": {
       "label": "Perfil",
       "placeholder": "Seleccione un perfil"
@@ -211,7 +222,7 @@
     "cancel": "Cancelar",
     "close": "Cerrar",
     "save": "Guardar",
-    "disable": "deshabilitar",
+    "disable": "Dpeshabilitar",
     "enable": "habilitar",
     "register": "Registrarse",
     "login": "Iniciar sesión",

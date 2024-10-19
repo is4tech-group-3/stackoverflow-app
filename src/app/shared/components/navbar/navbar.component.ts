@@ -3,9 +3,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { SessionService } from '../../services/sesion/session.service';
 import { Router } from '@angular/router';
 import { CookieUtil } from '../../utils/CookieUtil';
-import { COOKIE_KEYS } from '../../utils/constants.utility';
+import { COOKIE_KEYS, LOCAL_STORAGE_KEYS} from '../../utils/constants.utility';
 import { LocalStorageUtility } from '../../utils/LocalStorageUtility';
-import { LOCAL_STORAGE_KEYS } from '../../utils/constants.utility';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -15,6 +14,7 @@ export class NavbarComponent implements OnInit {
   isLanguageDropdownOpen = false;
   isProfileMenuOpen = false;
   username: string = ' ';
+  imgUrl: string = '';
   isLoggedIn = false;
   activeLanguage = 'us';
   hasScrolled = false;
@@ -22,18 +22,19 @@ export class NavbarComponent implements OnInit {
   menuItems = [
     { label: 'navbar.home', link: '/home' },
     { label: 'navbar.aboutUs', link: '/about' },
-    { label: 'navbar.questions', link: '/questions', requiresLogin: true },
-    { label: 'navbar.news', link: '/news', requiresLogin: true }
+    { label: 'navbar.questions', link: '/questions' },
+    { label: 'navbar.news', link: '/news' }
   ];
 
   constructor(
-    private translate: TranslateService,
-    private sessionService: SessionService,
-    private router: Router
+    private readonly translate: TranslateService,
+    private readonly sessionService: SessionService,
+    private readonly router: Router
   ) {}
 
   ngOnInit() {
-    this.username = CookieUtil.getValue(COOKIE_KEYS.SUB) || '';
+    this.username = CookieUtil.getValue(COOKIE_KEYS.SUB) ?? '';
+    this.imgUrl = CookieUtil.getValue(COOKIE_KEYS.IMAGE_URL) ?? '';
     this.activeLanguage =
       this.translate.currentLang || this.translate.getDefaultLang();
 
@@ -43,9 +44,9 @@ export class NavbarComponent implements OnInit {
 
     this.isLoggedIn = this.sessionService.isLoggedIn();
 
-    this.menuItems = this.isLoggedIn
-      ? this.menuItems
-      : this.menuItems.filter(item => !item.requiresLogin);
+    // this.menuItems = this.isLoggedIn
+    //   ? this.menuItems
+    //   : this.menuItems.filter(item => item.requiresLogin);
 
     this.router.events.subscribe(() => {
       this.checkStickyNavbar();

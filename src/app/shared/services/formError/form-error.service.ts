@@ -6,26 +6,27 @@ import { TranslateService } from '@ngx-translate/core';
   providedIn: 'root'
 })
 export class FormErrorService {
-  constructor(private translate: TranslateService) {}
+  constructor(private readonly translate: TranslateService) {}
 
   getErrorMessage(form: FormGroup, controlName: string): string {
     const control = form.get(controlName);
+    // console.log(controlName, control?.errors)
     const messages: { [key: string]: string } = {
       required: this.translate.instant('errors.required'),
       email: this.translate.instant('errors.invalidEmail'),
-      minlength: this.translate.instant('errors.minLength'),
+      minlength: this.translate.instant('errors.minLength', { minLength: control?.errors?.['minlength']?.requiredLength }),
       pattern: this.translate.instant('errors.pattern'),
-      mismatch: this.translate.instant('errors.mismatch')
+      mismatch: this.translate.instant('errors.mismatch'),
+      noUppercase: this.translate.instant('errors.noUppercase'),
+      noLowercase: this.translate.instant('errors.noLowercase'),
+      noNumber: this.translate.instant('errors.noNumber'),
+      noSpecialCharacter: this.translate.instant('errors.noSpecialCharacter'),
     };
-    if (control && control.errors) {
-      const errorKey = Object.keys(control.errors).find(
-        key => control.errors![key]
-      );
-      if (errorKey) {
-        return messages[errorKey] || '';
-      }
-    }
 
-    return '';
+    const errorKey = Object.keys(control?.errors || {}).find(key => {
+      return control?.errors?.[key];
+    });
+
+    return errorKey ? messages[errorKey] || '' : '';
   }
 }

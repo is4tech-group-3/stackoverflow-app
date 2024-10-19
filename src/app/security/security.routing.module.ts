@@ -23,10 +23,10 @@ const routes: Routes = [
     data: { showNavbar: false }
   },
   {
-    path: 'reset-password',
+    path: 'change-password',
     component: ResetPasswordComponent,
     canActivate: [NoAuthGuard],
-    data: { showNavbar: false }
+    data: { showNavbar: true }
   },
   {
     path: 'register',

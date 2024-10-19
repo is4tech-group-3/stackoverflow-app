@@ -1,51 +1,99 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
-import { ToastService } from 'src/app/shared/services/toast/toast.service';
 import { AuthService } from '../../service/auth/auth.service';
+import { FormErrorService } from 'src/app/shared/services/formError/form-error.service';
+import { ToastService } from 'src/app/shared/services/toast/toast.service';
+import { BlockUIService } from 'src/app/shared/services/blockUI/block-ui.service';
+import { TranslateService } from '@ngx-translate/core';
+import { SessionService } from 'src/app/shared/services/sesion/session.service';
+import { CustomValidators } from 'src/app/shared/Validators/validators';
 @Component({
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.scss']
 })
 export class ResetPasswordComponent {
+  hideConfirm: boolean = true;
+  hideNewPassword: boolean = true;
+  hideOldPassword: boolean = true;
+
   constructor(
-    private validatorForm: FormBuilder,
-    private translate: TranslateService,
-    private toastService: ToastService,
-    private authService: AuthService
+    private readonly formBuilder: FormBuilder,
+    private readonly authService: AuthService,
+    private readonly formErrorService: FormErrorService,
+    private readonly toastService: ToastService,
+    private readonly blockUIService: BlockUIService,
+    private readonly translateService: TranslateService,
+    private readonly sessionService: SessionService
   ) {}
 
-  changePasswordForm = this.validatorForm.group({
-    password: ['', [Validators.required, Validators.minLength(8)]],
-    confirmPassword: ['', [Validators.required]]
-  });
+  passwordChangeForm = this.formBuilder.group(
+    {
+      oldPassword: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          CustomValidators.containsUpperCaseValidator(),
+          CustomValidators.containsLowerCaseValidator(),
+          CustomValidators.containsNumberValidator(),
+          CustomValidators.containsSpecialCharacterValidator()
+        ]
+      ],
+      newPassword: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          CustomValidators.containsUpperCaseValidator(),
+          CustomValidators.containsLowerCaseValidator(),
+          CustomValidators.containsNumberValidator(),
+          CustomValidators.containsSpecialCharacterValidator()
+        ]
+      ],
+      confirmPassword: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          CustomValidators.containsUpperCaseValidator(),
+          CustomValidators.containsLowerCaseValidator(),
+          CustomValidators.containsNumberValidator(),
+          CustomValidators.containsSpecialCharacterValidator()
+        ]
+      ]
+    },
+    { validators: CustomValidators.passwordMatchValidator() }
+  );
 
-  hide: boolean = true;
-
-  onSubmit() {
-    if (this.changePasswordForm.valid) {
-      this.authService
-        .resetPassword(this.changePasswordForm.value)
-        .subscribe({});
-    }
+  getErrorMessage(controlName: string): string {
+    return this.formErrorService.getErrorMessage(
+      this.passwordChangeForm,
+      controlName
+    );
   }
 
-  getErrorMessage(controlName: string) {
-    const control = this.changePasswordForm.get(controlName);
-    const messages: { [key: string]: string } = {
-      required: this.translate.instant('errors.required'),
-      minlength: this.translate.instant('errors.minLength'),
-      pattern: this.translate.instant('errors.pattern')
-    };
-    if (control && control.errors) {
-      const errorKey = Object.keys(control.errors).find(
-        key => control.errors![key]
-      );
-      if (errorKey) {
-        return messages[errorKey] || '';
-      }
+  clearForm() {
+    this.passwordChangeForm.reset();
+  }
+
+  onSubmit() {
+    if (this.passwordChangeForm.valid) {
+      this.blockUIService.start();
+      this.authService.changePassword(this.passwordChangeForm.value).subscribe({
+        next: (response: any) => {
+          this.toastService.showSuccessToast(
+            this.translateService.instant('security.changePassword.success')
+          );
+          this.blockUIService.stop();
+          this.sessionService.logout();
+        },
+        error: (error: any) => {
+          console.log("🚀 ~ ResetPasswordComponent ~ this.authService.changePassword ~ error:", error)
+          this.toastService.showErrorToast(error.error.description  );
+          this.blockUIService.stop();
+        }
+      });
     }
-    return '';
   }
 }

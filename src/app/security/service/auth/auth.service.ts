@@ -26,4 +26,8 @@ export class AuthService {
   resetPassword(data: any): Observable<any> {
     return this.http.patch(`${this.baseUrl}user/password-reset`, data);
   }
+
+  changePassword(data: any): Observable<any> {
+    return this.http.patch(`${this.baseUrl}user/passwordChange`, data);
+  }
 }

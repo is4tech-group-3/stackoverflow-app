@@ -43,4 +43,11 @@ export class UserService {
       profileId: idProfile
     });
   }
+
+  changePhotoProfile(id: number, data: any): Observable<any> {
+    return this.http.patch<any>(
+      `${this.baseUrl}user/changePhotoProfile/${id}`,
+      data
+    );
+  }
 }

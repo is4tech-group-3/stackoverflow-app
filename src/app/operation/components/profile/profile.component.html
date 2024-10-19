@@ -1,143 +1,196 @@
 <div class="w-full flex-1 rounded-lg">
-    <div class="flex flex-col gap-6 h-full">
-      <div class="p-8 rounded-lg">
-        <h2 class="text-gray-800 font-semibold text-xl mb-6">
-          {{ ('users.profileInformation' | translate) }}
-        </h2>
-        <form [formGroup]="userForm" (submit)="onSubmit()" class="w-full p-4">
-          <div class="flex flex-col items-center mb-6">
-            <h2 class="text-gray-800 font-semibold text-lg block mb-2">
-              {{ 'input.photoProfile.label' | translate }}
-            </h2>
-            <div class="relative w-32 h-32 mx-auto group mb-4">
-              <label for="image" class="w-full h-full cursor-pointer">
-                <img
-                  class="w-full h-full rounded-full border border-collapse border-sunset-orange-500"
-                  [src]="
-                    userForm.get('image')?.value ||
-                    'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg'
-                  "
-                  alt="profile"
-                />
-                <mat-icon
-                  class="absolute top-0 left-0 text-4xl w-full h-full flex justify-center items-center rounded-full cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gray-200 bg-opacity-60"
-                  aria-label="Upload icon"
-                >
-                  upload
-                </mat-icon>
-              </label>
-              <input
-                id="image"
-                type="file"
-                class="hidden"
-                multiple="multiple"
+  <div class="flex flex-col gap-6 h-full">
+    <div class="p-8 rounded-lg">
+      <h2 class="text-gray-800 font-semibold text-xl mb-6">
+        {{ 'users.profileInformation' | translate }}
+      </h2>
+      <form [formGroup]="userForm" (submit)="onSubmit()" class="w-full p-4">
+        <div class="flex flex-col items-center mb-6">
+          <h2 class="text-gray-800 font-semibold text-lg block mb-2">
+            {{ 'input.photoProfile.label' | translate }}
+          </h2>
+          <div class="relative w-32 h-32 mx-auto group mb-4">
+            <label for="image" class="w-full h-full cursor-pointer">
+              <img
+                class="w-full h-full rounded-full border border-collapse border-sunset-orange-500"
+                [src]="
+                  selectedPhoto
+                    ? selectedPhoto
+                    : 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg'
+                "
+                alt="profile"
               />
-            </div>
+              <mat-icon
+                class="absolute top-0 left-0 text-4xl w-full h-full flex justify-center items-center rounded-full cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gray-200 bg-opacity-60"
+                aria-label="Upload icon"
+              >
+                upload
+              </mat-icon>
+            </label>
+            <input
+              id="image"
+              type="file"
+              class="hidden"
+              (change)="handlerChangeImage($event)"
+            />
           </div>
-          <div class="grid grid-cols-1 gap-4">
-            <div class="relative max-w-md mx-auto w-full">
-              <label class="text-gray-800 font-semibold text-sm block" for="name">
-                {{ 'input.name.label' | translate }}
-              </label>
-              <div class="relative flex items-center group">
-                <input
-                  id="name"
-                  formControlName="name"
-                  type="text"
-                  class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-2 outline-none"
-                  placeholder="{{ 'input.name.placeholder' | translate }}"
-                />
-                <div class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal">
-                  <mat-icon aria-label="name icon">person_add</mat-icon>
-                </div>
+        </div>
+        <div class="grid grid-cols-1 gap-4 max-w-md mx-auto w-full">
+          <div class="relative">
+            <label class="text-gray-800 font-semibold text-sm block" for="name">
+              {{ 'input.name.label' | translate }}
+            </label>
+            <div class="relative flex items-center group">
+              <input
+                id="name"
+                formControlName="name"
+                type="text"
+                class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-2 outline-none"
+                placeholder="{{ 'input.name.placeholder' | translate }}"
+              />
+              <div
+                class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal"
+              >
+                <mat-icon aria-label="name icon">person_add</mat-icon>
               </div>
-              <p *ngIf="userForm.get('name')?.errors && (userForm.get('name')?.touched || userForm.get('name')?.dirty)"
-                class="absolute w-full text-red-500 text-xs text-center font-medium mt-1 h-5">
-                {{ getErrorMessage('name') }}
-              </p>
             </div>
-            <div class="relative max-w-md mx-auto w-full">
-              <label class="text-gray-800 font-semibold text-sm block" for="surname">
-                {{ 'input.surname.label' | translate }}
-              </label>
-              <div class="relative flex items-center group">
-                <input
-                  id="surname"
-                  formControlName="surname"
-                  type="text"
-                  class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-2 outline-none"
-                  placeholder="{{ 'input.surname.placeholder' | translate }}"
-                />
-                <div class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal">
-                  <mat-icon aria-label="surname icon">person_add</mat-icon>
-                </div>
-              </div>
-              <p *ngIf="userForm.get('surname')?.errors && (userForm.get('surname')?.touched || userForm.get('surname')?.dirty)"
-                class="absolute w-full text-red-500 text-xs text-center font-medium mt-1 h-5">
-                {{ getErrorMessage('surname') }}
-              </p>
-            </div>
-            <div class="relative max-w-md mx-auto w-full">
-              <label class="text-gray-800 font-semibold text-sm block" for="email">
-                {{ 'input.email.label' | translate }}
-              </label>
-              <div class="relative flex items-center group">
-                <input
-                  id="email"
-                  formControlName="email"
-                  type="text"
-                  class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-2 outline-none"
-                  placeholder="{{ 'input.email.placeholder' | translate }}"
-                />
-                <div class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal">
-                  <mat-icon aria-label="Email icon">email</mat-icon>
-                </div>
-              </div>
-              <p *ngIf="userForm.get('email')?.errors && (userForm.get('email')?.touched || userForm.get('email')?.dirty)"
-                class="absolute w-full text-red-500 text-xs text-center font-medium mt-1 h-5">
-                {{ getErrorMessage('email') }}
-              </p>
-            </div>
-  
-            <div class="relative max-w-md mx-auto w-full">
-              <label class="text-gray-800 font-semibold text-sm block" for="username">
-                {{ 'input.username.label' | translate }}
-              </label>
-              <div class="relative flex items-center group">
-                <input
-                  id="username"
-                  formControlName="username"
-                  type="text"
-                  class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-2 outline-none"
-                  placeholder="{{ 'input.username.placeholder' | translate }}"
-                />
-                <div class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal">
-                  <mat-icon aria-label="username icon">badge</mat-icon>
-                </div>
-              </div>
-              <p *ngIf="userForm.get('username')?.errors && (userForm.get('username')?.touched || userForm.get('username')?.dirty)"
-                class="absolute w-full text-red-500 text-xs text-center font-medium mt-1 h-5">
-                {{ getErrorMessage('username') }}
-              </p>
-            </div>
+            <p
+              *ngIf="
+                userForm.get('name')?.errors &&
+                (userForm.get('name')?.touched || userForm.get('name')?.dirty)
+              "
+              class="absolute w-full text-red-500 text-xs text-center font-medium mt-1 h-5"
+            >
+              {{ getErrorMessage('name') }}
+            </p>
           </div>
-          <div class="mt-4 flex justify-center items-end gap-4">
-            <button (click)="disableUser()" type="button"
-                class="p-5 inline-flex justify-center items-center text-sm h-10 bg-red-500 hover:bg-red-600 text-white rounded-md transition-all">
-                {{ ('button.disable') | translate }}
-            </button>
-            <button (click)="clearForm()" type="button" 
-              [disabled]="!formChanged" 
-              class="p-5 inline-flex justify-center items-center text-sm h-10 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded transition-all">
-              {{ ('button.cancel' | translate) }}
-            </button>
-            <button [disabled]="userForm.invalid || !formChanged" type="submit" 
-              class="p-5 inline-flex justify-center items-center h-10 text-sm bg-sunset-orange-500 rounded-md text-white focus:outline-none transition-colors duration-300 ease-in-out">
-              {{ ('button.update' | translate) }}
-            </button>
-          </div>      
-        </form>
-      </div>
+          <div class="relative">
+            <label
+              class="text-gray-800 font-semibold text-sm block"
+              for="surname"
+            >
+              {{ 'input.surname.label' | translate }}
+            </label>
+            <div class="relative flex items-center group">
+              <input
+                id="surname"
+                formControlName="surname"
+                type="text"
+                class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-2 outline-none"
+                placeholder="{{ 'input.surname.placeholder' | translate }}"
+              />
+              <div
+                class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal"
+              >
+                <mat-icon aria-label="surname icon">person_add</mat-icon>
+              </div>
+            </div>
+            <p
+              *ngIf="
+                userForm.get('surname')?.errors &&
+                (userForm.get('surname')?.touched ||
+                  userForm.get('surname')?.dirty)
+              "
+              class="absolute w-full text-red-500 text-xs text-center font-medium mt-1 h-5"
+            >
+              {{ getErrorMessage('surname') }}
+            </p>
+          </div>
+          <div class="relative">
+            <label
+              class="text-gray-800 font-semibold text-sm block"
+              for="email"
+            >
+              {{ 'input.email.label' | translate }}
+            </label>
+            <div class="relative flex items-center group">
+              <input
+                id="email"
+                formControlName="email"
+                type="text"
+                class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-2 outline-none"
+                placeholder="{{ 'input.email.placeholder' | translate }}"
+              />
+              <div
+                class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal"
+              >
+                <mat-icon aria-label="Email icon">email</mat-icon>
+              </div>
+            </div>
+            <p
+              *ngIf="
+                userForm.get('email')?.errors &&
+                (userForm.get('email')?.touched || userForm.get('email')?.dirty)
+              "
+              class="absolute w-full text-red-500 text-xs text-center font-medium mt-1 h-5"
+            >
+              {{ getErrorMessage('email') }}
+            </p>
+          </div>
+
+          <div class="relative">
+            <label
+              class="text-gray-800 font-semibold text-sm block"
+              for="username"
+            >
+              {{ 'input.username.label' | translate }}
+            </label>
+            <div class="relative flex items-center group">
+              <input
+                id="username"
+                formControlName="username"
+                type="text"
+                class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-2 outline-none"
+                placeholder="{{ 'input.username.placeholder' | translate }}"
+              />
+              <div
+                class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal"
+              >
+                <mat-icon aria-label="username icon">badge</mat-icon>
+              </div>
+            </div>
+            <p
+              *ngIf="
+                userForm.get('username')?.errors &&
+                (userForm.get('username')?.touched ||
+                  userForm.get('username')?.dirty)
+              "
+              class="absolute w-full text-red-500 text-xs text-center font-medium mt-1 h-5"
+            >
+              {{ getErrorMessage('username') }}
+            </p>
+          </div>
+        </div>
+        <div class="mt-8 flex justify-center items-end gap-4">
+          <button
+            (click)="disableUser()"
+            type="button"
+            class="p-5 inline-flex justify-center items-center text-sm h-10 bg-red-500 hover:bg-red-600 text-white rounded-md transition-all"
+          >
+            {{ 'button.disable' | translate }}
+          </button>
+          <button
+            (click)="clearForm()"
+            type="button"
+            [disabled]="!formChanged"
+            class="p-5 inline-flex justify-center items-center text-sm h-10 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded transition-all"
+          >
+            {{ 'button.cancel' | translate }}
+          </button>
+          <button
+            [disabled]="userForm.invalid || !formChanged"
+            [ngClass]="{
+              'bg-sunset-orange-500 hover:bg-sunset-orange-600':
+                userForm.valid && formChanged,
+              'bg-gray-300': userForm.invalid || !formChanged
+            }"
+            type="submit"
+            class="p-5 inline-flex justify-center items-center h-10 text-sm rounded-md text-white focus:outline-none transition-colors duration-300 ease-in-out"
+          >
+            {{ 'button.update' | translate }}
+          </button>
+        </div>
+      </form>
     </div>
   </div>
-  
+</div>
