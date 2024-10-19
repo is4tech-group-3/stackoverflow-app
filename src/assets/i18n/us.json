@@ -125,11 +125,16 @@
     "internalServerError": "Internal server error.",
     "sendEmailError": "Error sending email.",
     "errorChangePassword": "Error changing password.",
-    "unknownError": "An unknown error occurred. Please try again later."
+    "unknownError": "An unknown error occurred. Please try again later.",
+    "errorGetUser": "Error getting user.",
+    "errorChangeImage": "Error changing image.",
+    "errorUpdateUser": "Error updating user.",
+    "errorUserDisabled": "Error disabling user."
   },
   "success": {
     "Registered": "Registration successful. Please check your email for the password to access the platform.",
     "Login": "Login successful",
+    "updateUser": "User updated successfully",
     "changePassword": "Password changed successfully.",
     "PasswordRecovery": "An email with the password recovery code has been sent. Please check your email and follow the instructions to reset your password.",
     "PasswordReset": "Password reset successful. Please log in to continue.",
@@ -137,7 +142,8 @@
     "userUpdated": "User updated successfully",
     "userCreated": "User created successfully.",
     "userDisabled": "User disabled successfully.",
-    "userEnabled": "User enabled successfully."
+    "userEnabled": "User enabled successfully.",
+    "imageUpdated": "Image updated successfully"
   },
   "warning": {
     "notLoggedIn": "You must be logged in to access this page.",

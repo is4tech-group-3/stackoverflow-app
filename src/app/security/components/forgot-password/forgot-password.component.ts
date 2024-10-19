@@ -62,7 +62,17 @@ export class ForgotPasswordComponent {
           CustomValidators.containsSpecialCharacterValidator()
         ]
       ],
-      confirmPassword: ['', [Validators.required]]
+      confirmPassword: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          CustomValidators.containsUpperCaseValidator(),
+          CustomValidators.containsLowerCaseValidator(),
+          CustomValidators.containsNumberValidator(),
+          CustomValidators.containsSpecialCharacterValidator()
+        ]
+      ]
     },
     { validators: CustomValidators.passwordMatchValidator() }
   );

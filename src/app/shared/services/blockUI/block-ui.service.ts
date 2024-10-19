@@ -8,7 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class BlockUIService {
   @BlockUI() blockUI!: NgBlockUI;
 
-  constructor(private translate: TranslateService) {}
+  constructor(private readonly translate: TranslateService) {}
 
   start(): void {
     this.translate.get('utils.loading').subscribe((message: string) => {

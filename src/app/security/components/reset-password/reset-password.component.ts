@@ -83,14 +83,13 @@ export class ResetPasswordComponent {
       this.authService.changePassword(this.passwordChangeForm.value).subscribe({
         next: (response: any) => {
           this.toastService.showSuccessToast(
-            this.translateService.instant('security.changePassword.success')
+            this.translateService.instant('success.changePassword')
           );
           this.blockUIService.stop();
           this.sessionService.logout();
         },
         error: (error: any) => {
-          console.log("🚀 ~ ResetPasswordComponent ~ this.authService.changePassword ~ error:", error)
-          this.toastService.showErrorToast(error.error.description  );
+          this.toastService.showErrorToast(error.error.description);
           this.blockUIService.stop();
         }
       });

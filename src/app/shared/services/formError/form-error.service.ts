@@ -15,6 +15,7 @@ export class FormErrorService {
       required: this.translate.instant('errors.required'),
       email: this.translate.instant('errors.invalidEmail'),
       minlength: this.translate.instant('errors.minLength', { minLength: control?.errors?.['minlength']?.requiredLength }),
+      maxlength: this.translate.instant('errors.maxLength', { maxLength: control?.errors?.['maxlength']?.requiredLength }),
       pattern: this.translate.instant('errors.pattern'),
       mismatch: this.translate.instant('errors.mismatch'),
       noUppercase: this.translate.instant('errors.noUppercase'),

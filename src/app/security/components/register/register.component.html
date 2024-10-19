@@ -1,7 +1,13 @@
 <div class="bg-white lg:h-screen">
-  <div class="grid lg:grid-cols-2 items-center gap-8 h-full">
+  <a
+    [routerLink]="['/']"
+    class="absolute top-4 left-4 z-10 xl:text-white text-dark-gunmetal"
+  >
+    <mat-icon>arrow_back</mat-icon>
+  </a>
+  <div class="grid xl:grid-cols-2 items-center gap-8 h-full">
     <div
-      class="max-lg:order-1 hidden lg:block p-4 relative h-full bg-dark-gunmetal"
+      class="max-xl:order-1 hidden xl:block p-4 relative h-full bg-dark-gunmetal"
     >
       <img
         src="assets/svg/register.svg"
@@ -14,7 +20,7 @@
       <img
         alt="wave-decoration"
         src="assets/img/wave3.png"
-        class="absolute top-0 h-full -left-16 hidden lg:block object-contain"
+        class="absolute top-0 h-full -left-16 hidden xl:block object-contain"
       />
       <form
         [formGroup]="registerForm"
@@ -24,12 +30,12 @@
       >
         <div class="mb-10">
           <h3
-            class="text-sunset-orange-500 md:text-3xl text-2xl font-bold max-lg:text-center"
+            class="text-sunset-orange-500 xl:text-3xl text-2xl font-bold max-xl:text-center"
           >
             {{ 'register.SignUp' | translate }}
           </h3>
           <p
-            class="text-sm font-medium mb-6 tracking-wide text-gray-500 max-lg:text-center"
+            class="text-sm font-medium mb-6 tracking-wide text-gray-500 max-xl:text-center"
           >
             {{ 'register.description' | translate }}
           </p>
@@ -37,10 +43,10 @@
         <div class="relative w-24 h-24 mx-auto group">
           <label for="image" class="w-full h-full cursor-pointer">
             <img
-              class="w-full h-full rounded-full border-2 border-collapse border-sunset-orange-500"
+              class="w-full h-full rounded-full border border-collapse border-sunset-orange-500"
               [src]="
-                registerForm.get('image')?.value
-                  ? registerForm.get('image')?.value
+                selectedPhoto
+                  ? selectedPhoto
                   : 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg'
               "
               alt="profile"
@@ -208,7 +214,7 @@
               'opacity-60 cursor-not-allowed': registerForm.invalid,
               ' active:scale-95  hover:bg-sunset-orange-600': registerForm.valid
             }"
-            class="w-full py-3 px-6 text-base tracking-wider font-semibold bg-sunset-orange-500 rounded-md text-white focus:outline-none transition-colors duration-200 ease-in-out"
+            class="w-full py-3 px-6 text-sm font-semibold bg-sunset-orange-500 rounded-md text-white focus:outline-none transition-colors duration-300 ease-in-out"
           >
             {{ 'register.SignUp' | translate }}
           </button>

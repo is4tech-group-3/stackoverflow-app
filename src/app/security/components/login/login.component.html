@@ -1,12 +1,12 @@
 <div class="bg-white lg:h-screen">
-  <a [routerLink]="['/']" class="absolute top-4 left-4 z-10">
+  <a [routerLink]="['/']" class="absolute top-4 left-4 z-10 text-dark-gunmetal">
     <mat-icon>arrow_back</mat-icon>
   </a>
-  <div class="grid lg:grid-cols-2 items-center gap-8 h-full">
+  <div class="grid xl:grid-cols-2 items-center gap-8 h-full">
     <div class="flex relative justify-center items-center p-6 h-screen w-full">
       <img
         src="assets/img/wave3.png"
-        class="absolute top-0 h-full -right-16 rotate-180 hidden lg:block object-contain"
+        class="absolute top-0 h-full -right-16 rotate-180 hidden xl:block object-contain"
         alt="wave-decoration"
       />
       <form
@@ -16,12 +16,12 @@
       >
         <div class="mb-10">
           <h3
-            class="text-sunset-orange-500 lg:text-3xl text-2xl font-extrabold max-lg:text-center"
+            class="text-sunset-orange-500 xl:text-3xl text-2xl font-extrabold max-xl:text-center"
           >
             {{ 'login.SignIn' | translate }}
           </h3>
           <p
-            class="text-sm font-medium mb-6 tracking-wide text-gray-500 max-md:text-center"
+            class="text-sm font-medium mb-6 tracking-wide text-gray-500 max-xl:text-center"
           >
             {{ 'login.description' | translate }}
           </p>
@@ -134,7 +134,7 @@
               'opacity-60 cursor-not-allowed': loginForm.invalid,
               ' active:scale-95  hover:bg-sunset-orange-600': loginForm.valid
             }"
-            class="w-full py-3 px-6 text-base tracking-wider font-semibold bg-sunset-orange-500 rounded-md text-white focus:outline-none transition-colors duration-300 ease-in-out"
+            class="w-full py-3 px-6 text-sm font-semibold bg-sunset-orange-500 rounded-md text-white focus:outline-none transition-colors duration-300 ease-in-out"
           >
             {{ 'login.SignIn' | translate }}
           </button>

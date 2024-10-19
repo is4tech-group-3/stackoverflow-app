@@ -23,7 +23,7 @@ export class ProfileComponent implements OnInit {
       { value: '', disabled: true },
       [Validators.required, Validators.email]
     ],
-    username: ['', [Validators.required]],
+    username: [{ value: '', disabled: true }, [Validators.required]],
     image: [null]
   });
 
@@ -53,7 +53,7 @@ export class ProfileComponent implements OnInit {
   loadUserProfile(userId: string | null) {
     if (userId) {
       this.blockUIService.start();
-      this.userService.getUserById(Number(userId)).subscribe({
+      this.userService.getUserById(Number()).subscribe({
         next: (response: any) => {
           this.originalFormValues = response;
           const { image, ...rest } = response;
@@ -66,12 +66,10 @@ export class ProfileComponent implements OnInit {
         error: () => {
           this.blockUIService.stop();
           this.toastService.showErrorToast(
-            'Error al obtener el perfil del usuario'
+            this.translateService.instant('error.errorGetUser')
           );
         }
       });
-    } else {
-      this.toastService.showErrorToast('ID de usuario no encontrado');
     }
   }
 
@@ -87,19 +85,17 @@ export class ProfileComponent implements OnInit {
           next: () => {
             this.blockUIService.stop();
             this.toastService.showSuccessToast(
-              'Usuario deshabilitado correctamente'
+              this.translateService.instant('success.userDisabled')
             );
             this.logoutUser();
           },
           error: () => {
             this.blockUIService.stop();
             this.toastService.showErrorToast(
-              'Error al deshabilitar el usuario'
+              this.translateService.instant('errors.errorUserDisabled')
             );
           }
         });
-      } else {
-        this.toastService.showErrorToast('ID de usuario no encontrado');
       }
     }
   }
@@ -134,19 +130,22 @@ export class ProfileComponent implements OnInit {
 
       reader.readAsDataURL(file);
       if (id !== undefined && id !== null && id !== 0) {
-        console.log('simon  si cambiaste la imagen');
         this.blockUIService.start();
         const formData = convertFormGroupToFormData(this.userForm);
         this.userService.changePhotoProfile(id, formData).subscribe({
           next: (response: any) => {
             this.toastService.showSuccessToast(
-              'Imagen actualizada correctamente'
+              this.translateService.instant('success.imageUpdated')
             );
+            this.clearForm();
             CookieUtil.setValue('imageUrl', response.image);
+            window.location.reload();
             this.blockUIService.stop();
           },
           error: () => {
-            this.toastService.showErrorToast('Error al actualizar la imagen');
+            this.toastService.showErrorToast(
+              this.translateService.instant('errors.errorChangeImage')
+            );
             this.blockUIService.stop();
           }
         });
@@ -161,7 +160,7 @@ export class ProfileComponent implements OnInit {
       this.userService.updateUser(this.userForm.value).subscribe({
         next: () => {
           this.toastService.showSuccessToast(
-            'Perfil actualizado correctamente'
+            this.translateService.instant('success.updateUser')
           );
           this.blockUIService.stop();
           this.originalFormValues = this.userForm.value;
@@ -169,7 +168,9 @@ export class ProfileComponent implements OnInit {
         },
         error: () => {
           this.blockUIService.stop();
-          this.toastService.showErrorToast('Error al actualizar el perfil');
+          this.toastService.showErrorToast(
+            this.translateService.instant('errors.errorUpdateUser')
+          );
         }
       });
     }

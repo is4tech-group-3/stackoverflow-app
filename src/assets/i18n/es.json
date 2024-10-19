@@ -125,11 +125,16 @@
     "internalServerError": "Error interno del servidor.",
     "sendEmailError": "Error al enviar el correo electrónico.",
     "errorChangePassword": "Error al cambiar la contraseña.",
-    "unknownError": "Ocurrió un error desconocido. Por favor intenta nuevamente más tarde."
+    "unknownError": "Ocurrió un error desconocido. Por favor intenta nuevamente más tarde.",
+    "errorGetUser": "Error al obtener el usuario.",
+    "errorChangeImage": "Error al cambiar la imagen.",
+    "erroUpdateUser": "Error al actualizar el usuario.",
+    "errorUserDisabled": "Error al deshabilitar el usuario."
   },
   "success": {
     "Registered": "Registro exitoso. Por favor, revise su correo electrónico, donde encontrará su contraseña para acceder a la plataforma.",
     "Login": "Inicio de sesión exitoso",
+    "updateUser": "Usuario actualizado con éxito",
     "changePassword": "Contraseña cambiada con éxito.",
     "PasswordRecovery": "Se ha enviado un correo electrónico con el código de recuperación de la contraseña. Por favor, revise su correo electrónico y siga las instrucciones para restablecer su contraseña.",
     "PasswordReset": "Se ha restablecido la contraseña. Por favor, inicie sesión para continuar.",
@@ -137,7 +142,8 @@
     "userUpdated": "Usuario actualizado con éxito",
     "userCreated": "Usuario creado con éxito.",
     "userDisabled": "Usuario deshabilitado con éxito.",
-    "userEnabled": "Usuario habilitado con éxito."
+    "userEnabled": "Usuario habilitado con éxito.",
+    "imageUpdated": "Imagen actualizada con éxito"
   },
   "warning": {
     "notLoggedIn": "Debe estar conectado para acceder a esta página.",
@@ -222,7 +228,7 @@
     "cancel": "Cancelar",
     "close": "Cerrar",
     "save": "Guardar",
-    "disable": "Dpeshabilitar",
+    "disable": "Deshabilitar",
     "enable": "habilitar",
     "register": "Registrarse",
     "login": "Iniciar sesión",

@@ -1,5 +1,6 @@
 import { Component, computed, signal, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { forkJoin } from 'rxjs';
 
 export type MenuItem = {
   icon: string;
@@ -15,7 +16,7 @@ export type MenuItem = {
 export class DashboardComponent implements OnInit {
   menuItems = signal<MenuItem[]>([]);
 
-  constructor(private translate: TranslateService) {
+  constructor(private readonly translate: TranslateService) {
     this.loadMenuItems();
 
     this.translate.onLangChange.subscribe(() => {
@@ -26,25 +27,33 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.loadMenuItems();
   }
+
   loadMenuItems() {
-    this.menuItems.set([
-      {
-        icon: 'admin_panel_settings',
-        label: this.translate.instant('sidebar.profiles'),
-        route: 'profiles'
-      },
-      {
-        icon: 'group',
-        label: this.translate.instant('sidebar.users'),
-        route: 'users'
-      },
-      {
-        icon: 'content_paste',
-        label: this.translate.instant('sidebar.audit'),
-        route: 'audit'
-      }
-    ]);
+    forkJoin({
+      profileTranslation: this.translate.get('sidebar.profiles'),
+      usersTranslation: this.translate.get('sidebar.users'),
+      auditTranslation: this.translate.get('sidebar.audit')
+    }).subscribe(translations => {
+      this.menuItems.set([
+        {
+          icon: 'admin_panel_settings',
+          label: translations.profileTranslation,
+          route: 'profiles'
+        },
+        {
+          icon: 'group',
+          label: translations.usersTranslation,
+          route: 'users'
+        },
+        {
+          icon: 'content_paste',
+          label: translations.auditTranslation,
+          route: 'audit'
+        }
+      ]);
+    });
   }
+
   collapsed = signal(true);
 
   sidenavWidth = computed(() => (this.collapsed() ? '65px' : '250px'));
