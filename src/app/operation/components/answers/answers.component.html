@@ -1,0 +1,72 @@
+<div class="w-full p-8 flex">
+    <div class="bg-white rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.1)] p-6 max-w-5xl w-full">
+        <div class="border-b border-gray-300 pb-4 mb-6 -mx-6">
+            <h2 class="text-2xl font-semibold text-gray-700 px-6">Question</h2>
+        </div>
+
+        <div class="flex space-x-4 mb-2">
+            <img src="../../../../assets/img/Profile2.jpg" alt="User" class="w-12 h-12 rounded-full">
+            <div class="flex-1" *ngIf="question">
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <h3 class="text-lg font-semibold">{{ question.author.username }}</h3>
+                        <p class="text-sm text-gray-500 pb-8">{{ question.dateCreation | dateFormat:'FORMAT-1'}}</p>
+                    </div>
+                    <div class="space-x-4">
+                        <button class="text-blue-500 text-sm">Responder</button>
+                    </div>
+                </div>
+                <div class="text-gray-700 space-y-3">
+                    <h2 class="text-xl font-semibold mb-2">{{ question.title }}</h2>
+                </div>
+                <div class="text-gray-700 space-y-3">
+                    <p [innerHTML]="question.description"></p>
+                </div>
+                <hr class="border-t border-gray-300 my-2">
+                <div class="flex items-center text-sm font-medium flex-wrap gap-2 lowercase">
+                    <span class="flex items-center" *ngFor="let tag of question.tags"
+                        [ngClass]="getTagClass(tag.name).class">
+                        <img *ngIf="getTagClass(tag.name).iconUrl" [src]="getTagClass(tag.name).iconUrl"
+                            alt="{{tag.name}}" class="w-4 h-4 tag-icon">
+                        <span class="first-letter:uppercase">{{ tag.name }}</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="w-full p-8 flex">
+    <div class="bg-white rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.1)] p-6 max-w-5xl w-full">
+        <div class="border-b border-gray-300 pb-4 mb-6 -mx-6">
+            <h2 class="text-2xl font-semibold text-gray-700 px-6">Answers</h2>
+        </div>
+
+        <div class="flex space-x-4 mb-8">
+            <img alt="User Avatar" class="w-14 h-14 rounded-full">
+            <div class="flex-1">
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <h3 class="text-lg font-semibold">user</h3>
+                        <p class="text-sm text-gray-500">hora</p>
+                    </div>
+                    <div class="space-x-4">
+                        <button class="text-blue-500 text-sm">Responder</button>
+                    </div>
+                </div>
+                <div class="text-gray-700 space-y-3">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde dolores incidunt ab recusandae
+                        itaque autem totam temporibus quaerat minima eum pariatur modi ipsam dolorum tempore nihil, vel
+                        atque, animi molestias omnis quos magni officia velit libero? Laudantium consequatur odio
+                        corporis in provident ratione reiciendis veritatis, quae dolorem facere distinctio ad nulla id
+                        doloribus, molestiae voluptatem incidunt quaerat ipsam praesentium impedit adipisci. Nam
+                        voluptate eius accusantium nobis? Magni nam libero deserunt explicabo, eius doloremque hic
+                        maxime ab molestias quaerat voluptatibus porro dolorem inventore tempore dolores minima, aliquam
+                        eos laboriosam pariatur debitis exercitationem ipsum. Explicabo velit quaerat sapiente, illum
+                        mollitia doloremque fugit?</p>
+                </div>
+            </div>
+        </div>
+        <hr class="border-t border-gray-300 -mx-6">
+    </div>
+</div>

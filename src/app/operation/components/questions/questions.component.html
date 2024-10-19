@@ -1,26 +1,26 @@
-<div class="flex flex-col lg:flex-row gap-8 min-h-full relative">
+<div class="flex flex-col lg:flex-row gap-6 min-h-full relative p-6">
     <div class="lg:w-3/4">
-        <div *ngFor="let question of questions" class="bg-white shadow rounded-lg mb-2 p-6">
+        <div *ngFor="let question of questions" class="bg-gray-100 shadow rounded-lg mb-3 p-6 pb-2">
             <div class="flex items-start space-x-4">
+                <img src="../../../../assets/img/Profile2.jpg" alt="User" class="w-12 h-12 rounded-full">
                 <div class="flex-1">
                     <div class="flex justify-between items-center text-blue-500">
                         <h2 class="text-xl font-normal mb-2">
-                            <a href="">{{ question.title }}</a>
+                            <a [routerLink]="['/answers', question.idQuestion]">{{ question.title }}</a>
                         </h2>
                     </div>
-                    <p class="text-gray-600 mb-4">{{ question.description }}</p>
+                    <p class="text-gray-800 mb-4 text-ellipsis">{{ question.description }}</p>
+                    <hr class="border-t border-gray-300 my-2">
+                    <div class="flex items-center text-sm font-medium flex-wrap gap-2 lowercase">
+                        <span class="flex items-center" *ngFor="let tag of question.tags"
+                            [ngClass]="getTagClass(tag.name).class">
+                            <img *ngIf="getTagClass(tag.name).iconUrl" [src]="getTagClass(tag.name).iconUrl"
+                                alt="{{tag.name}}" class="w-4 h-4 tag-icon">
+                            <span class="first-letter:uppercase">{{ tag.name }}</span>
+                        </span>
+                    </div>
                 </div>
             </div>
-            <hr class="border-t border-gray-300 my-2">
-            <div class="flex items-center text-sm font-medium flex-wrap gap-2 lowercase">
-                <span class="flex items-center" *ngFor="let tag of question.tags"
-                    [ngClass]="getTagClass(tag.name).class">
-                    <img *ngIf="getTagClass(tag.name).iconUrl" [src]="getTagClass(tag.name).iconUrl" alt="{{tag.name}}"
-                        class="w-4 h-4 tag-icon">
-                    <span class="first-letter:uppercase">{{ tag.name }}</span>
-                </span>
-            </div>
-
         </div>
     </div>
 

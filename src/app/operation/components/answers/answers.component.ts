@@ -1,76 +1,48 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { QuestionModalComponent } from './question-modal/question-modal.component';
+import { Component, OnInit, AfterViewChecked } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { QuestionService } from '../../service/question/question.service';
+import hljs from 'highlight.js';
 
 @Component({
-  selector: 'app-questions',
-  templateUrl: './questions.component.html',
-  styleUrls: ['./questions.component.scss']
+  selector: 'app-answers',
+  templateUrl: './answers.component.html',
+  styleUrls: ['./answers.component.scss']
 })
-export class QuestionsComponent implements OnInit {
-  questions: any[] = [];
-  relatedTags: any[] = [];
-  visibleTags: any[] = [];
-  showAllTags: boolean = false;
-  maxVisibleTags: number = 5;
+export class AnswersComponent implements OnInit, AfterViewChecked {
+  question: any;
 
   constructor(
-    private questionService: QuestionService,
-    public dialog: MatDialog
+    private route: ActivatedRoute,
+    private questionService: QuestionService
   ) {}
 
   ngOnInit(): void {
-    this.getQuestionsList();
+    this.route.params.subscribe(params => {
+      const questionId = params['idQuestion'];
+      if (questionId && !isNaN(Number(questionId))) {
+        this.getQuestionDetails(Number(questionId));
+      } else {
+        console.error('Invalid question ID:', questionId);
+      }
+    });
   }
 
-  sanitizeDescription(html: string): string {
-    const div = document.createElement('div');
-    div.innerHTML = html;
-    return div.textContent || div.innerText || '';
-  }
-
-  getQuestionsList(): void {
-    this.questionService.getQuestions().subscribe(
+  getQuestionDetails(id: number): void {
+    this.questionService.getQuestionById(id).subscribe(
       data => {
-        this.questions = data.content.map((question: any) => ({
-          ...question,
-          description: this.sanitizeDescription(question.description)
-        }));
+        console.log('Question data:', data);
+        this.question = data;
       },
       error => {
-        console.error('Error fetching questions', error);
+        console.error('Error fetching question details', error);
       }
     );
   }
 
-  showMoreTags(): void {
-    this.showAllTags = true;
-  }
-
-  openQuestionModal(): void {
-    const dialogRef = this.dialog.open(QuestionModalComponent, {
-      width: '600px',
-      data: { page: 0 }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        const newQuestion = {
-          title: result.title,
-          description: result.description,
-          tags: result.selectedTags
-        };
-
-        this.questionService.createQuestion(newQuestion).subscribe(
-          response => {
-            this.questions.push(response);
-          },
-          error => {
-            console.error('Error al crear la pregunta', error);
-          }
-        );
-      }
+  ngAfterViewChecked(): void {
+    const blocks = document.querySelectorAll('pre code');
+    blocks.forEach(block => {
+      hljs.highlightElement(block as HTMLElement);
     });
   }
 
