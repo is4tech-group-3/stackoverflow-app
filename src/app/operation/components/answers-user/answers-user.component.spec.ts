@@ -5,6 +5,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MatDialogModule } from '@angular/material/dialog'; 
 import { AnswersUserComponent } from './answers-user.component';
 import { QuestionService } from '../../service/question/question.service'; 
+import { TranslateModule } from '@ngx-translate/core';  // Asegúrate de importar el módulo de ngx-translate
 
 describe('AnswersUserComponent', () => {
   let component: AnswersUserComponent;
@@ -14,7 +15,8 @@ describe('AnswersUserComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule, 
-        MatDialogModule 
+        MatDialogModule,
+        TranslateModule.forRoot()  // Agrega el módulo de traducción
       ],
       declarations: [AnswersUserComponent],
       providers: [

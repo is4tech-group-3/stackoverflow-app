@@ -12,6 +12,14 @@
     "haveAccount": "Already have an account?",
     "link": "Sign in"
   },
+  "question-user":{
+    "questionUserTitle":"User Questions",
+    "questionNotFound": "You dont have any question yet.",
+    "questionUserModalTitle":"Question",
+    "editQuestion": "Edit Question",
+    "descriptionModal": "Description",
+    "titleModal": "Title"
+  },
   "login": {
     "SignIn": "Sign in",
     "rememberMe": "Remember me",
@@ -71,7 +79,15 @@
   },
   "home": {
     "title": "Welcome to",
-    "description": "Find solutions, share knowledge, and connect with experts in debugging!"
+    "description": "Find solutions, share knowledge, and connect with experts in debugging!",
+    "staticsTitle": "Statics from our community",
+    "statics": "¡Discover how our community grows!",
+    "registerUsers": "Registered Users",
+    "postedQuestions": "Posted Questions",
+    "repostedAnswers": "Reposted Answers",
+    "frequentlyQuestions": "Frequent Questions",
+    "questionsDescription": "We resolve the most frequent questions on our community",
+    "questionsButton": "¿Have some question? solve it now"
   },
   "aboutUs": {
     "title": "Building Stronger Communities through Collaboration and Empowerment",

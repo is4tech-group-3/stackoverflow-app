@@ -12,6 +12,16 @@
     "haveAccount": "¿Ya tienes cuenta?",
     "link": "Iniciar sesión"
   },
+  "question-user":{
+    "questionUserTitle":"Preguntas del usuario",
+    "questionNotFound": "No tienes preguntas aún.",
+    "questionUserModalTitle":"Pregunta",
+    "editQuestion": "Editar Pregunta",
+    "descriptionModal": "Descripcion",
+    "titleModal": "Titulo"
+    
+    
+  },
   "login": {
     "SignIn": "Iniciar sesión",
     "rememberMe": "Recuérdame",
@@ -71,7 +81,15 @@
   },
   "home": {
     "title": "Bienvenido a",
-    "description": "Encuentre soluciones, comparta conocimiento y conecte con expertos en el depurador!"
+    "description": "Encuentre soluciones, comparta conocimiento y conecte con expertos en el depurador!",
+    "staticsTitle": "Estadisticas de nuestra comunidad",
+    "statics":"¡Descubre cómo crece nuestra comunidad de desarrolladores!",
+    "registerUsers": "Usuarios Registrados",
+    "postedQuestions": "Preguntas Publicadas",
+    "repostedAnswers": "Respuestas compartidas",
+    "frequentlyQuestions": "Preguntas Frecuentes",
+    "questionsDescription": "Resolvemos las dudas mas comunes de nuestra comunidad",
+    "questionsButton": "¿Tienes alguna pregunta? Resuelvela ahora"
   },
   "aboutUs": {
     "title": "Fortaleciendo Comunidades a Través de la Colaboración y el Empoderamiento",
@@ -181,6 +199,10 @@
     "surname": {
       "label": "Apellido",
       "placeholder": "Ingrese su apellido"
+    },
+    "title": {
+      "label": "Titulo",
+      "placeholder": "Titulo"
     },
     "email": {
       "label": "Correo electrónico",

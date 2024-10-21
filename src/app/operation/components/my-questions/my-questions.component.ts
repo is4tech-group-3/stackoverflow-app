@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { SessionService } from 'src/app/shared/services/sesion/session.service';
 import { CookieUtil } from 'src/app/shared/utils/CookieUtil';
 import { UserService } from 'src/app/admin/service/user.service';
+import { TranslateService } from '@ngx-translate/core';  // <-- Importa el TranslateService
 
 @Component({
   selector: 'app-my-questions',
@@ -23,7 +24,8 @@ export class MyQuestionsComponent implements OnInit {
     private questionService: QuestionService,
     private router: Router,
     private sessionService: SessionService,
-    private userService: UserService
+    private userService: UserService,
+    private translateService: TranslateService  // <-- Inyecta el servicio de traducción
   ) {}
 
   ngOnInit(): void {
@@ -58,7 +60,9 @@ export class MyQuestionsComponent implements OnInit {
         console.log('Filtered My Questions:', this.myQuestions);
       },
       error => {
-        console.error('Error fetching questions', error);
+        // Usa el servicio de traducción para mostrar mensajes traducidos
+        const errorMessage = this.translateService.instant('error.fetchingQuestions');
+        console.error(errorMessage, error);
       }
     );
   }
@@ -72,18 +76,19 @@ export class MyQuestionsComponent implements OnInit {
           this.getMyQuestions();
         },
         error: () => {
-          console.error('Error fetching user profile');
+          const errorMessage = this.translateService.instant('error.fetchingProfile');
+          console.error(errorMessage);
         }
       });
     } else {
-      console.error('User ID not found');
+      const errorMessage = this.translateService.instant('error.userIdNotFound');
+      console.error(errorMessage);
     }
   }
-  
+
   showMoreTags(): void {
     this.showAllTags = true;
   }
-  
 
   getTagClass(tag: string): { class: string; iconUrl: string } {
     switch (tag.toLowerCase()) {
