@@ -1,0 +1,59 @@
+<div class="flex flex-col lg:flex-row max-h-full-screen h-full">
+  <div class="lg:w-80 w-full p-6 flex flex-col">
+    <div class="bg-white shadow rounded-lg p-4 flex-1">
+      <h3 class="text-xl font-semibold mb-4">Preguntas del usuario</h3>
+      <div>
+        <div class="flex flex-wrap gap-2 text-sm font-medium lowercase"></div>
+      </div>
+    </div>
+  </div>
+  <div class="flex-1 overflow-auto p-6">
+    <div *ngIf="myQuestions.length === 0" class="text-center text-gray-500">
+      No tienes preguntas aún.
+    </div>
+    <div
+      *ngFor="let question of myQuestions"
+      class="bg-gray-100 shadow rounded-lg mb-3 p-6 pb-2 break-words max-h-56 overflow-hidden"
+    >
+      <div class="flex items-start space-x-4">
+        <img
+          src="../../../../assets/img/Profile2.jpg"
+          alt="User"
+          class="w-12 h-12 rounded-full"
+        />
+        <div class="break-words">
+          <div class="flex justify-between items-center text-blue-500">
+            <h2 class="text-xl font-normal mb-2 truncate">
+              <a [routerLink]="['/answers-user', question.idQuestion]">{{
+                question.title
+              }}</a>
+            </h2>
+          </div>
+          <p
+            class="text-gray-800 mb-4 whitespace-pre-line break-all overflow-hidden max-h-20"
+          >
+            {{ question.description }}
+          </p>
+          <div
+            class="flex items-center text-sm font-medium flex-wrap gap-2 lowercase"
+          >
+            <span
+              class="flex items-center bg-dark-gunmetal bg-opacity-20 text-black px-2 py-1 rounded-full"
+              *ngFor="let tag of question.tags"
+              [ngClass]="getTagClass(tag.name).class"
+            >
+              <img
+                *ngIf="getTagClass(tag.name).iconUrl"
+                [src]="getTagClass(tag.name).iconUrl"
+                alt="{{ tag.name }}"
+                class="w-4 h-4 mr-1 align-middle"
+              />
+              <span class="first-letter:uppercase">{{ tag.name }}</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="fixed bottom-6 right-6"></div>

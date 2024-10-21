@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router'; // Importa ActivatedRoute
-import { of } from 'rxjs'; // Importa of para crear un observable
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 import { AnswersComponent } from './answers.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { QuestionService } from '../../service/question/question.service';
@@ -17,7 +17,7 @@ describe('AnswersComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            params: of({ id: 1 }) // Aquí puedes mockear los parámetros que necesites
+            params: of({ idQuestion: 1 }) // Asegúrate de usar el nombre correcto del parámetro
           }
         },
         QuestionService

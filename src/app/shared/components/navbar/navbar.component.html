@@ -24,6 +24,54 @@
               {{ item.label | translate }}
             </a>
           </li>
+          <li class="relative">
+            <button
+              class="text-gray-300 transition hover:text-gray-300/75 questions-button"
+              (click)="toggleQuestionsMenu()"
+            >
+              {{ 'navbar.questions' | translate }}
+              <svg
+                class="w-2.5 h-2.5 ms-1 inline-block"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 10 6"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m1 1 4 4 4-4"
+                />
+              </svg>
+            </button>
+            <div
+              *ngIf="isQuestionsMenuOpen"
+              class="absolute left-0 mt-2 w-48 z-10 bg-dark-gunmetal text-white rounded-md shadow-lg questions-menu"
+            >
+              <ul>
+                <li>
+                  <a
+                    class="block px-4 py-2 text-sm hover:bg-sunset-orange-600"
+                    [routerLink]="['/questions']"
+                    (click)="closeQuestionsMenu()"
+                  >
+                    {{ 'navbar.communityQuestions' | translate }}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="block px-4 py-2 text-sm hover:bg-sunset-orange-600"
+                    [routerLink]="['/myQuestions']"
+                    (click)="closeQuestionsMenu()"
+                  >
+                    {{ 'navbar.myQuestions' | translate }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
 
           <li class="relative">
             <button

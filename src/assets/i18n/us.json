@@ -106,6 +106,8 @@
     "news": "News",
     "dashboard": "Dashboard",
     "questions": "Questions",
+    "communityQuestions":"community Questions",
+    "myQuestions":"My Questions",
     "settings": "Settings",
     "logout": "Logout"
   },

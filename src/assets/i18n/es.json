@@ -106,6 +106,8 @@
     "news": "Noticias",
     "dashboard": "Tablero",
     "questions": "Preguntas",
+    "communityQuestions":"Preguntas de la comunidad",
+    "myQuestions": "Mis preguntas",
     "settings": "Configuraciones",
     "logout": "Cerrar sesión"
   },

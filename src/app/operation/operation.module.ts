@@ -8,13 +8,20 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { NewsDetailComponent } from './components/news-detail/news-detail.component';
 import { AnswersComponent } from './components/answers/answers.component';
 import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
+import { MyQuestionsComponent } from './components/my-questions/my-questions.component';
+import { AnswersUserComponent } from './components/answers-user/answers-user.component';
+import { AnswerUserModalComponent } from './components/answers-user/answer-user-modal/answer-user-modal.component';
+
 
 @NgModule({
   declarations: [
     NewsComponent,
     QuestionsComponent,
     QuestionModalComponent, ProfileComponent, NewsDetailComponent,
-    AnswersComponent
+    AnswersComponent,
+    MyQuestionsComponent,
+    AnswersUserComponent,
+    AnswerUserModalComponent
   ],
   imports: [SharedModule, OperationRoutingModule, HighlightModule],
   providers: [

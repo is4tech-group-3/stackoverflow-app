@@ -13,6 +13,7 @@ import { LocalStorageUtility } from '../../utils/LocalStorageUtility';
 export class NavbarComponent implements OnInit {
   isLanguageDropdownOpen = false;
   isProfileMenuOpen = false;
+  isQuestionsMenuOpen = false;
   username: string = ' ';
   imgUrl: string = '';
   isLoggedIn = false;
@@ -22,7 +23,6 @@ export class NavbarComponent implements OnInit {
   menuItems = [
     { label: 'navbar.home', link: '/home' },
     { label: 'navbar.aboutUs', link: '/about' },
-    { label: 'navbar.questions', link: '/questions' },
     { label: 'navbar.news', link: '/news' }
   ];
 
@@ -76,6 +76,14 @@ export class NavbarComponent implements OnInit {
     this.isProfileMenuOpen = false;
   }
 
+  toggleQuestionsMenu() {
+    this.isQuestionsMenuOpen = !this.isQuestionsMenuOpen;
+  }
+
+  closeQuestionsMenu() {
+    this.isQuestionsMenuOpen = false;
+  }
+
   toggleLanguageDropdown() {
     this.isLanguageDropdownOpen = !this.isLanguageDropdownOpen;
   }
@@ -101,6 +109,9 @@ export class NavbarComponent implements OnInit {
       !target.closest('.profile-button')
     ) {
       this.isProfileMenuOpen = false;
+    }
+    if (!target.closest('.questions-menu') && !target.closest('.questions-button')) {
+      this.isQuestionsMenuOpen = false;
     }
   }
 }
