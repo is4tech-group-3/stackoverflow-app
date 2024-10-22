@@ -1,120 +1,49 @@
-<div class="bg-gray-50 sm:px-6 px-4 py-12 min-h-full-screen">
-  <div class="max-w-7xl mx-auto">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12 max-lg:max-w-lg mx-auto">
-      <a
-        *ngFor="let publication of publications"
-        class="cursor-pointer group active:scale-95 transform duration-75 ease-in-out"
-      >
-        <div class="bg-gray-100 text-gray-800 h-full flex flex-col">
-          <div class="container max-w-4xl mx-auto rounded-lg shadow-sm bg-white flex flex-col h-full ">
-            <img
-              [src]="publication.image"
-              alt="Imagen de {{ publication.title }}"
-              class="w-full h-64 object-cover rounded-t-lg"
-            />
-            <div class="flex flex-col justify-between p-4 flex-grow">
-              <div class="mb-4">
-                <div class="flex items-center justify-between">
-                  <span class="text-sm text-gray-600">{{
-                    publication.dateCreation | dateFormat: 'FORMAT-1'
-                  }}</span>
-                  <a
-                    rel="noopener noreferrer"
-                    href="#"
-                    class="px-2 py-1 font-bold rounded bg-violet-600 text-gray-50"
-                  >
-                    Javascript
-                  </a>
-                </div>
-                <h1 class="text-2xl font-bold mt-2 hover:underline">
-                  {{ publication.title }}
-                </h1>
-                <p class="mt-2 break-words overflow-hidden text-ellipsis">
-                  {{
-                    publication.description
-                  }}
-                </p>
-              </div>
-              <a href="#" class="text-blue-500 hover:underline mt-auto">Ver más</a>
-            </div>
-            <div class="flex items-center justify-between p-4">
-              <div class="flex items-center">
-                <img
-                  [src]="publication.author.avatar"
-                  alt="avatar"
-                  class="object-cover w-10 h-10 mx-4 rounded-full bg-gray-500"
-                />
-                <span class="hover:underline text-gray-600 capitalize">
-                  {{
-                    ('news.by' | translate) +
-                      ': ' +
-                      publication.author.name +
-                      ' ' +
-                      publication.author.surname
-                  }}
-                </span>
-              </div>
-            </div>
+<a
+  [routerLink]="['/add-new']"
+  mat-fab
+  class="bg-sunset-orange-500 fixed bottom-6 right-6"
+>
+  <mat-icon>add</mat-icon>
+</a>
+
+<section class="container mx-auto px-4 py-16">
+  <div class="flex items-center justify-between">
+    <h2 class="text-gray-800 font-bold text-3xl">
+      {{ 'news.title' | translate }}
+    </h2>
+  </div>
+  <div class="grid grid-cols-1 gap-8 md:grid-cols-2 mt-12 xl:grid-cols-3">
+    <div *ngFor="let publication of publications">
+      <img
+        class="object-cover object-center w-full h-64 rounded-lg lg:h-80"
+        [src]="publication.image"
+        alt=""
+      />
+      <div class="mt-8">
+        <h1 class="mt-4 text-xl font-semibold text-gray-800 truncate">
+          {{ publication.title }}
+        </h1>
+        <p class="mt-2 text-gray-500 min-h-[72px] line-clamp-3">
+          {{ publication.description }}
+        </p>
+        <div class="flex items-center justify-between mt-4">
+          <div>
+            <span
+              class="text-lg font-medium text-gray-700 0 hover:underline hover:text-gray-500 capitalize"
+            >
+              {{ publication.author.name + ' ' + publication.author.surname }}
+            </span>
+            <p class="text-sm text-gray-500">
+              {{ publication.dateCreation | dateFormat: 'FORMAT-1' }}
+            </p>
           </div>
-        </div>
-      </a>
-      <a
-      *ngFor="let publication of publications"
-      class="cursor-pointer group active:scale-95 transform duration-75 ease-in-out"
-    >
-      <div class="bg-gray-100 text-gray-800 h-full flex flex-col">
-        <div class="container max-w-4xl mx-auto rounded-lg shadow-sm bg-white flex flex-col h-full ">
-          <img
-            [src]="publication.image"
-            alt="Imagen de {{ publication.title }}"
-            class="w-full h-64 object-cover rounded-t-lg"
-          />
-          <div class="flex flex-col justify-between p-4 flex-grow">
-            <div class="mb-4">
-              <div class="flex items-center justify-between">
-                <span class="text-sm text-gray-600">{{
-                  publication.dateCreation | dateFormat: 'FORMAT-1'
-                }}</span>
-                <a
-                  rel="noopener noreferrer"
-                  href="#"
-                  class="px-2 py-1 font-bold rounded bg-violet-600 text-gray-50"
-                >
-                  Javascript
-                </a>
-              </div>
-              <h1 class="text-2xl font-bold mt-2 hover:underline">
-                {{ publication.title }}
-              </h1>
-              <p class="mt-2 break-words overflow-hidden text-ellipsis">
-                {{
-                  publication.description
-                }}aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-              </p>
-            </div>
-            <a href="#" class="text-blue-500 hover:underline mt-auto">Ver más</a>
-          </div>
-          <div class="flex items-center justify-between p-4">
-            <div class="flex items-center">
-              <img
-                [src]="publication.author.avatar"
-                alt="avatar"
-                class="object-cover w-10 h-10 mx-4 rounded-full bg-gray-500"
-              />
-              <span class="hover:underline text-gray-600 capitalize">
-                {{
-                  ('news.by' | translate) +
-                    ': ' +
-                    publication.author.name +
-                    ' ' +
-                    publication.author.surname
-                }}
-              </span>
-            </div>
-          </div>
+          <a
+            [routerLink]="['/news-detail', publication.idPublication]"
+            class="inline-block text-sky-500 underline hover:text-sky-400"
+            >{{ 'news.seeMore' | translate }}</a
+          >
         </div>
       </div>
-    </a>
     </div>
   </div>
-</div>
+</section>

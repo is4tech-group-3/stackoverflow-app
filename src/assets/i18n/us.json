@@ -58,7 +58,9 @@
     }
   },
   "news": {
-    "by": "By",
+    "written": "Written by",
+    "seeMore": "See more",
+    "createPublication": "Create publication",
     "title": "Latest news",
     "description": "  Stay updated with the latest insights, tips, and trends in our curated collection of articles. Our experts share valuable knowledge to help you navigate through various topics, inspiring creativity and innovation along the way.",
     "search": "Search...",
@@ -98,7 +100,9 @@
   "sidebar": {
     "profiles": "Profile",
     "audit": "Audit",
-    "users": "Users"
+    "users": "Users",
+    "home": "Home",
+    "welcome": "Welcome"
   },
   "navbar": {
     "home": "Home",
@@ -143,14 +147,24 @@
     "userCreated": "User created successfully.",
     "userDisabled": "User disabled successfully.",
     "userEnabled": "User enabled successfully.",
-    "imageUpdated": "Image updated successfully"
+    "imageUpdated": "Image updated successfully",
+    "createNews": "News created successfully."
   },
   "warning": {
+    "notPermission": "You do not have permission to perform this action.",
     "notLoggedIn": "You must be logged in to access this page.",
     "alreadyLoggedIn": "You are already logged in.",
     "disableUser": "Do this action will log out your account, and may be no longer active"
   },
   "input": {
+    "title": {
+      "label": "Title",
+      "placeholder": "Enter title"
+    },
+    "dropZone": {
+      "label": "Upload File",
+      "placeholder": "Drag and drop a file here or click to upload"
+    },
     "oldPassword": {
       "label": "Old Password",
       "placeholder": "Enter old password"

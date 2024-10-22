@@ -357,7 +357,9 @@
                   >
                     <td
                       class="p-5 text-center whitespace-nowrap text-sm leading-6 font-medium text-gray-900 border-r border-gray-300"
-                    ></td>
+                    >
+                      {{ (currentPage - 1) * pageSize + i + 1 }}
+                    </td>
                     <td
                       class="p-5 text-center whitespace-nowrap text-sm leading-6 font-medium text-gray-900 border-r border-gray-300"
                     >
@@ -375,19 +377,31 @@
                     </td>
                     <td
                       class="p-5 text-center whitespace-nowrap text-sm leading-6 font-black text-gray-900 border-r border-gray-300"
-                    ></td>
+                    >
+                      <span [ngClass]="getHttpMethodClass(audit.http_method)">
+                        {{ audit.http_method }}
+                      </span>
+                    </td>
                     <td
                       class="p-5 text-center whitespace-nowrap text-sm leading-6 font-medium text-gray-900 border-r border-gray-300"
-                    ></td>
+                    >
+                      <button
+                        (click)="openModal(audit)"
+                        class="text-blue-500 hover:underline"
+                      >
+                        {{ 'audit.data.seeMore' | translate }}
+                      </button>
+                    </td>
                   </tr>
                 </tbody>
               </table>
             </div>
             <mat-paginator
-              class="w-full mt-auto"
+              class="w-full"
               [hidePageSize]="true"
-              [length]="100"
-              [pageSize]="10"
+              [length]="totalAudit"
+              [pageSize]="pageSize"
+              (page)="handlePageEvent($event)"
             >
             </mat-paginator>
           </div>
@@ -396,3 +410,33 @@
     </div>
   </div>
 </div>
+<ng-template #modalContent>
+  <div class="space-y-3">
+    <p>
+      <strong>{{ 'audit.data.entity' | translate }}:</strong>
+      {{ selectedAudit?.entity }}
+    </p>
+    <p>
+      <strong>{{ 'audit.data.http_method' | translate }}:</strong>
+
+      <span [ngClass]="getHttpMethodClass(selectedAudit?.http_method)">
+        {{ selectedAudit?.http_method }}
+      </span>
+    </p>
+    <p>
+      <strong>{{ 'audit.data.email' | translate }}:</strong>
+      {{ selectedAudit?.email }}
+    </p>
+    <p>
+      <strong>{{ 'audit.data.date' | translate }}:</strong>
+      {{ selectedAudit?.date_operation | date: 'short' }}
+    </p>
+    <p>
+      <strong>{{ 'audit.data.status' | translate }}:</strong>
+      <span [ngClass]="getStatusHttpMethod(selectedAudit?.status_code)">
+        ({{ selectedAudit?.status_code }})
+        {{ selectedAudit?.status_description }}
+      </span>
+    </p>
+  </div>
+</ng-template>

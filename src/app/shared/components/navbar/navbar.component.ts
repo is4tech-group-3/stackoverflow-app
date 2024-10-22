@@ -3,8 +3,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { SessionService } from '../../services/sesion/session.service';
 import { Router } from '@angular/router';
 import { CookieUtil } from '../../utils/CookieUtil';
-import { COOKIE_KEYS, LOCAL_STORAGE_KEYS} from '../../utils/constants.utility';
+import { COOKIE_KEYS, LOCAL_STORAGE_KEYS } from '../../utils/constants.utility';
 import { LocalStorageUtility } from '../../utils/LocalStorageUtility';
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -19,11 +20,18 @@ export class NavbarComponent implements OnInit {
   activeLanguage = 'us';
   hasScrolled = false;
   isFixed: boolean = false;
+
+  // Definimos los elementos del menú con roles requeridos
   menuItems = [
-    { label: 'navbar.home', link: '/home' },
-    { label: 'navbar.aboutUs', link: '/about' },
-    { label: 'navbar.questions', link: '/questions' },
-    { label: 'navbar.news', link: '/news' }
+    { label: 'navbar.home', link: '/home', roles: [] }, // Acceso para todos
+    { label: 'navbar.aboutUs', link: '/about', roles: [] }, // Acceso para todos
+    { label: 'navbar.questions', link: '/questions', roles: [] },
+    { label: 'navbar.news', link: '/news', roles: [] },
+    {
+      label: 'navbar.dashboard',
+      link: '/admin',
+      roles: ['ROLE_ADMIN', 'ROLE_AUDIT']
+    }
   ];
 
   constructor(
@@ -44,9 +52,14 @@ export class NavbarComponent implements OnInit {
 
     this.isLoggedIn = this.sessionService.isLoggedIn();
 
-    // this.menuItems = this.isLoggedIn
-    //   ? this.menuItems
-    //   : this.menuItems.filter(item => item.requiresLogin);
+    // Obtener los roles del usuario
+    const userRoles = this.sessionService.getUserRoles();
+
+    this.menuItems = this.menuItems.filter(
+      item =>
+        item.roles.length === 0 ||
+        item.roles.some(role => userRoles.includes(role))
+    );
 
     this.router.events.subscribe(() => {
       this.checkStickyNavbar();
@@ -65,13 +78,13 @@ export class NavbarComponent implements OnInit {
 
   checkStickyNavbar() {
     const fixedRoutes = ['/home'];
-
     this.isFixed = fixedRoutes.includes(this.router.url);
   }
 
   toggleProfileMenu() {
     this.isProfileMenuOpen = !this.isProfileMenuOpen;
   }
+
   closeProfileMenu() {
     this.isProfileMenuOpen = false;
   }
@@ -83,9 +96,13 @@ export class NavbarComponent implements OnInit {
   closeLanguageDropdown() {
     this.isLanguageDropdownOpen = false;
   }
+
   switchLanguage(language: string) {
-    this.translate.use(language);
     LocalStorageUtility.setValue(LOCAL_STORAGE_KEYS.LANGUAGE, language);
+    this.translate.use(language);
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
   }
 
   logout() {

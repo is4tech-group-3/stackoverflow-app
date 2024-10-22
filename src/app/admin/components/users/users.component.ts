@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { FormErrorService } from 'src/app/shared/services/formError/form-error.service';
 import { ToastService } from 'src/app/shared/services/toast/toast.service';
@@ -9,17 +9,25 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuditService } from '../../service/audit/audit.service';
 import { convertFormGroupToFormData } from 'src/app/shared/utils/form-data.util';
 import { Params } from '@angular/router';
+import { PageEvent } from '@angular/material/paginator';
+import { ModalService } from 'src/app/shared/components/modal/service/modal.service';
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
+  @ViewChild('modalContent') modalContent!: TemplateRef<any>;
   users: any[] = [];
   profiles: any[] = [];
   audits: any[] = [];
   pageSize = 8;
+  pageSizeAudit = 8;
   totalLength = 0;
+  totalAudit = 0;
+  currentPage = 1;
+  selectedAudit: any = null;
+
   selectedPhoto = '';
   isEditable = false;
 
@@ -31,22 +39,26 @@ export class UsersComponent implements OnInit {
     private readonly blockUIService: BlockUIService,
     private readonly profileService: ProfileService,
     private readonly translate: TranslateService,
-    private readonly auditService: AuditService
+    private readonly auditService: AuditService,
+    private readonly modalService: ModalService
   ) {}
 
   ngOnInit(): void {
     this.handlerGetAllProfile();
     this.handlerGetAllUser();
-    // this.handlerGetAllAudit();
+    this.handlerGetAllAudit();
   }
 
   userForm = this.formBuilder.group({
     id: [0],
-    name: ['', [Validators.required]],
-    surname: ['', [Validators.required]],
-    email: ['', [Validators.required, Validators.email]],
-    username: ['', [Validators.required]],
-    idProfile: [''],
+    name: ['', [Validators.required, Validators.maxLength(50)]],
+    surname: ['', [Validators.required, Validators.maxLength(50)]],
+    email: [
+      '',
+      [Validators.required, Validators.email, Validators.maxLength(50)]
+    ],
+    username: ['', [Validators.required, Validators.maxLength(50)]],
+    idProfile: ['', Validators.maxLength(50)],
     image: [null]
   });
 
@@ -60,6 +72,37 @@ export class UsersComponent implements OnInit {
     this.userForm.reset();
     this.userForm.get('email')?.enable();
     this.userForm.get('username')?.enable();
+  }
+
+  getHttpMethodClass(httpMethod: string): string {
+    switch (httpMethod) {
+      case 'GET':
+        return 'text-emerald-500';
+      case 'POST':
+        return 'text-amber-500';
+      case 'PUT':
+        return 'text-blue-500';
+      case 'DELETE':
+        return 'text-rose-500';
+      case 'PATCH':
+        return 'text-purple-500';
+      default:
+        return 'text-gray-500';
+    }
+  }
+
+  getStatusHttpMethod(statusHttp: number): string {
+    if (statusHttp >= 200 && statusHttp < 300) {
+      return 'text-emerald-500';
+    } else if (statusHttp >= 300 && statusHttp < 400) {
+      return 'text-purple-500';
+    } else if (statusHttp >= 400 && statusHttp < 500) {
+      return 'text-amber-500';
+    } else if (statusHttp >= 500 && statusHttp < 600) {
+      return 'text-rose-500';
+    } else {
+      return 'text-gray-500';
+    }
   }
 
   onSubmit() {
@@ -178,7 +221,6 @@ export class UsersComponent implements OnInit {
 
       reader.readAsDataURL(file);
       if (id !== undefined && id !== null && id !== 0) {
-        console.log('simon  si cambiaste la imagen');
         this.blockUIService.start();
         const formData = convertFormGroupToFormData(this.userForm);
         this.userService.changePhotoProfile(id, formData).subscribe({
@@ -197,6 +239,22 @@ export class UsersComponent implements OnInit {
       }
     }
   }
+  openModal(audit: any) {
+    this.selectedAudit = audit;
+    this.modalService.open(
+      this.translate.instant('audit.data.details'),
+      this.modalContent
+    );
+  }
+  handlePageEvent(event: PageEvent) {
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex + 1;
+
+    this.handlerGetAllAudit({
+      limit: this.pageSize.toString(),
+      page: this.currentPage.toString()
+    });
+  }
 
   handlerGetAllProfile() {
     this.blockUIService.start();
@@ -212,10 +270,12 @@ export class UsersComponent implements OnInit {
     });
   }
 
-  handlerGetAllAudit(id: number) {
+  handlerGetAllAudit(params?: Params) {
     this.blockUIService.start();
-    this.auditService.get({ entity: 'USER' }).subscribe({
+    this.auditService.get({ ...params, entity: 'USER', limit: '8' }).subscribe({
       next: (response: any) => {
+        this.totalAudit = response.pagination.totalAudits;
+        this.currentPage = response.pagination.currentPage;
         this.audits = response.audits;
         this.blockUIService.stop();
       },
@@ -230,10 +290,6 @@ export class UsersComponent implements OnInit {
     this.blockUIService.start();
     this.userService.getAllUser(params).subscribe({
       next: (response: any) => {
-        console.log(
-          '🚀 ~ UsersComponent ~ this.userService.getAllUser ~ response:',
-          response
-        );
         this.users = response.content;
         this.totalLength = response.totalElements;
         this.blockUIService.stop();

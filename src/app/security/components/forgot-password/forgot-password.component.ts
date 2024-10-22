@@ -50,12 +50,20 @@ export class ForgotPasswordComponent {
         { value: '', disabled: true },
         [Validators.required, Validators.email]
       ],
-      code: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      code: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(4),
+          Validators.pattern('^[0-9]+$')
+        ]
+      ],
       newPassword: [
         '',
         [
           Validators.required,
           Validators.minLength(8),
+          Validators.maxLength(50),
           CustomValidators.containsUpperCaseValidator(),
           CustomValidators.containsLowerCaseValidator(),
           CustomValidators.containsNumberValidator(),
@@ -67,6 +75,7 @@ export class ForgotPasswordComponent {
         [
           Validators.required,
           Validators.minLength(8),
+          Validators.maxLength(50),
           CustomValidators.containsUpperCaseValidator(),
           CustomValidators.containsLowerCaseValidator(),
           CustomValidators.containsNumberValidator(),

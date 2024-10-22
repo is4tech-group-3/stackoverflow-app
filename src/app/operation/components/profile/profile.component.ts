@@ -17,13 +17,16 @@ export class ProfileComponent implements OnInit {
   selectedPhoto: string = '';
   userForm = this.formBuilder.group({
     id: [0],
-    name: ['', [Validators.required]],
-    surname: ['', [Validators.required]],
+    name: ['', [Validators.required, Validators.maxLength(50)]],
+    surname: ['', [Validators.required, Validators.maxLength(50)]],
     email: [
       { value: '', disabled: true },
-      [Validators.required, Validators.email]
+      [Validators.required, Validators.email, Validators.maxLength(50)]
     ],
-    username: [{ value: '', disabled: true }, [Validators.required]],
+    username: [
+      { value: '', disabled: true },
+      [Validators.required, Validators.maxLength(50)]
+    ],
     image: [null]
   });
 
@@ -53,7 +56,7 @@ export class ProfileComponent implements OnInit {
   loadUserProfile(userId: string | null) {
     if (userId) {
       this.blockUIService.start();
-      this.userService.getUserById(Number()).subscribe({
+      this.userService.getUserById(Number(userId)).subscribe({
         next: (response: any) => {
           this.originalFormValues = response;
           const { image, ...rest } = response;

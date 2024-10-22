@@ -1,7 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
+import { Params } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import * as SimpleMDE from 'simplemde';
+import { BlockUIService } from 'src/app/shared/services/blockUI/block-ui.service';
 import { PublicationService } from '../../service/publication/publication.service';
-import { FormBuilder, Validators } from '@angular/forms';
+
 @Component({
   selector: 'app-news',
   templateUrl: './news.component.html',
@@ -9,21 +18,40 @@ import { FormBuilder, Validators } from '@angular/forms';
 })
 export class NewsComponent implements OnInit {
   publications: any[] = [];
-  text: string | undefined;
+  selectedPhoto = '';
+  isDragging = false;
+  simpleMDE: SimpleMDE | undefined;
+
   constructor(
-    private publicationService: PublicationService,
-    private fb: FormBuilder,
-    private translate: TranslateService
+    private readonly publicationService: PublicationService,
+    private readonly blockUIService: BlockUIService,
+    private readonly translateServices: TranslateService
   ) {}
 
   ngOnInit(): void {
-    this.publicationService.getAll().subscribe({
+    this.handlerGetPublications();
+  }
+
+  sanitizeDescription(html: string): string {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    return div.textContent ?? div.innerText ?? '';
+  }
+
+  handlerGetPublications(params?: Params) {
+    this.blockUIService.start();
+    this.publicationService.getAll(params).subscribe({
       next: (response: any) => {
-        console.table(response);
-        this.publications = response.content;
+        this.publications = response.content.map((publication: any) => ({
+          ...publication,
+          description: this.sanitizeDescription(publication.description)
+        }));
+
+        this.blockUIService.stop();
       },
       error: error => {
         console.log(error);
+        this.blockUIService.stop();
       }
     });
   }

@@ -4,7 +4,7 @@
   <form
     [formGroup]="searchForm"
     (ngSubmit)="onSearch()"
-    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 mb-4"
+    class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6 gap-4 mb-4"
   >
     <input
       type="text"
@@ -33,6 +33,7 @@
     />
 
     <app-dropdown
+      #entityDropdown
       [options]="[
         'ROLE',
         'TAG',
@@ -43,25 +44,37 @@
         'COMMENT',
         'USER'
       ]"
-      placeholder="Choose an option"
+      placeholder="{{ 'audit.data.entity' | translate }}"
       (selected)="searchForm.controls.entity.setValue($event)"
     />
     <app-dropdown
+      #httpMethodDropdown
       [options]="['POST', 'GET', 'PUT', 'DELETE', 'PATCH']"
-      placeholder="Choose an option"
+      placeholder="{{ 'audit.data.http_method' | translate }}"
       (selected)="searchForm.controls.httpMethod.setValue($event)"
     />
-    <button
-      submit
-      [disabled]="searchForm.invalid"
-      [ngClass]="{
-        'opacity-60 cursor-not-allowed': searchForm.invalid,
-        ' active:scale-95  hover:bg-sunset-orange-600': searchForm.valid
-      }"
-      class="bg-sunset-orange-500 text-white p-2 rounded w-full"
-    >
-      {{ 'button.search' | translate }}
-    </button>
+
+    <!-- Botones en la misma columna -->
+    <div class="flex space-x-2 w-full">
+      <button
+        type="button"
+        class="bg-gray-500 text-white p-2 rounded w-full hover:bg-gray-600"
+        (click)="onReset()"
+      >
+        Reset
+      </button>
+      <button
+        submit
+        [disabled]="searchForm.invalid"
+        [ngClass]="{
+          'opacity-60 cursor-not-allowed': searchForm.invalid,
+          'active:scale-95 hover:bg-sunset-orange-600': searchForm.valid
+        }"
+        class="bg-sunset-orange-500 text-white p-2 rounded w-full"
+      >
+        {{ 'button.search' | translate }}
+      </button>
+    </div>
   </form>
 
   <!-- Tabla de resultados -->
@@ -177,13 +190,16 @@
         {{ selectedAudit?.http_method }}
       </span>
     </p>
-    <p><strong>Email del usuario:</strong> {{ selectedAudit?.email }}</p>
+    <p>
+      <strong>{{ 'audit.data.email' | translate }}:</strong>
+      {{ selectedAudit?.email }}
+    </p>
     <p>
       <strong>{{ 'audit.data.date' | translate }}:</strong>
       {{ selectedAudit?.date_operation | date: 'short' }}
     </p>
     <p>
-      <strong>Estado de la operación:</strong>
+      <strong>{{ 'audit.data.status' | translate }}:</strong>
       <span [ngClass]="getStatusHttpMethod(selectedAudit?.status_code)">
         ({{ selectedAudit?.status_code }})
         {{ selectedAudit?.status_description }}
@@ -191,7 +207,3 @@
     </p>
   </div>
 </ng-template>
-
-
-<app-modal></app-modal>
-

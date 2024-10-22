@@ -1,6 +1,8 @@
 export class CookieUtil {
   public static setValue(key: string, value: any) {
-    sessionStorage.setItem(key, value?.toString());
+    const valueToStore =
+      typeof value === 'object' ? JSON.stringify(value) : value?.toString();
+    sessionStorage.setItem(key, valueToStore);
   }
 
   public static getValue(key: string) {

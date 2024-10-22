@@ -29,8 +29,14 @@ export class LoginComponent {
   hide = true;
 
   loginForm = this.validatorForm.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(8)]]
+    email: [
+      '',
+      [Validators.required, Validators.maxLength(50), Validators.email]
+    ],
+    password: [
+      '',
+      [Validators.required, Validators.minLength(8), Validators.maxLength(50)]
+    ]
   });
 
   onSubmit() {

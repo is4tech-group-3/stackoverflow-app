@@ -5,7 +5,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { ModalService } from 'src/app/shared/components/modal/service/modal.service';
 import { AuditService } from '../../service/audit/audit.service';
 import { FormBuilder, Validators } from '@angular/forms';
-
+import { DropdownComponent } from 'src/app/shared/components/dropdown/dropdown/dropdown.component';
+import { BlockUIService } from 'src/app/shared/services/blockUI/block-ui.service';
 @Component({
   selector: 'app-audit',
   templateUrl: './audit.component.html',
@@ -14,12 +15,14 @@ import { FormBuilder, Validators } from '@angular/forms';
 export class AuditComponent implements OnInit {
   @ViewChild('modalContent') modalContent!: TemplateRef<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('entityDropdown') entityDropdown!: DropdownComponent;
+  @ViewChild('httpMethodDropdown') httpMethodDropdown!: DropdownComponent;
 
   selectedOption: string | null = null;
   audits: any[] = [];
   selectedAudit: any = null;
   paginatedAudits: any[] = [];
-  pageSize = 0;
+  pageSize = 12;
   currentPage = 1;
   startDate: string | null = null;
   endDate: string | null = null;
@@ -29,7 +32,8 @@ export class AuditComponent implements OnInit {
     private readonly auditService: AuditService,
     private readonly modalService: ModalService,
     private readonly translate: TranslateService,
-    private readonly validatorForm: FormBuilder
+    private readonly validatorForm: FormBuilder,
+    private readonly blockUIService: BlockUIService
   ) {}
 
   searchForm = this.validatorForm.group({
@@ -44,7 +48,6 @@ export class AuditComponent implements OnInit {
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex + 1;
 
-    // Enviar los filtros junto con la paginación
     this.handlerGetAudits({
       limit: this.pageSize.toString(),
       page: this.currentPage.toString(),
@@ -56,8 +59,24 @@ export class AuditComponent implements OnInit {
     });
   }
 
-  
+  onReset() {
+    this.selectedOption = null;
+    this.entityDropdown.reset();
+    this.httpMethodDropdown.reset();
 
+    this.searchForm.setValue({
+      email: '',
+      startDate: '',
+      endDate: '',
+      httpMethod: '',
+      entity: ''
+    });
+
+    this.handlerGetAudits({
+      limit: this.pageSize.toString(),
+      page: this.currentPage.toString()
+    });
+  }
   onOptionSelected(option: string) {
     this.selectedOption = option;
   }
@@ -72,6 +91,7 @@ export class AuditComponent implements OnInit {
 
   onSearch() {
     if (this.searchForm.valid) {
+      console.log(this.searchForm.value);
       this.handlerGetAudits({
         limit: this.pageSize.toString(),
         page: this.currentPage.toString(),
@@ -124,13 +144,16 @@ export class AuditComponent implements OnInit {
   }
 
   handlerGetAudits(params?: Params) {
+    this.blockUIService.start();
     this.auditService.get(params).subscribe({
       next: (response: any) => {
+        this.blockUIService.stop();
         this.audits = response?.audits || [];
         this.totalLength = response.pagination.totalAudits;
         this.currentPage = response.pagination.currentPage;
       },
       error: () => {
+        this.blockUIService.stop();
         console.log('Error al obtener los registros de auditoría');
       }
     });

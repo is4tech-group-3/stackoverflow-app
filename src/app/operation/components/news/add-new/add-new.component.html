@@ -1,0 +1,129 @@
+<form [formGroup]="publicationForm" (submit)="onSubmit()">
+  <div class="max-w-screen-xl mx-auto p-5 sm:p-8 md:p-12 relative">
+    <div class="flex items-center justify-center w-full">
+      <ng-container *ngIf="!selectedPhoto; else imagePreview">
+        <label
+          for="dropzone-file"
+          class="flex flex-col items-center justify-center w-full h-128 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
+          [ngClass]="{ 'bg-gray-200': isDragging }"
+        >
+          <div class="flex flex-col items-center justify-center pt-5 pb-6">
+            <svg
+              class="w-10 h-10 mb-3 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+              ></path>
+            </svg>
+            <p class="mb-2 text-sm text-gray-500">
+              <span class="font-semibold">{{
+                'input.dropZone.placeholder' | translate
+              }}</span>
+            </p>
+          </div>
+          <input
+            id="dropzone-file"
+            type="file"
+            class="hidden"
+            (change)="handlerChangeImage($event)"
+          />
+        </label>
+      </ng-container>
+
+      <ng-template #imagePreview>
+        <div class="relative w-full h-128">
+          <img
+            [src]="selectedPhoto"
+            alt="preview-publication"
+            class="w-full h-full object-cover rounded-lg bg-center"
+          />
+          <button
+            class="absolute bottom-6 right-6 text-white hover:text-rose-500"
+            (click)="clearImage()"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </ng-template>
+    </div>
+
+    <div class="max-w-2xl mx-auto">
+      <div>
+        <div class="mt-5">
+          <input
+            formControlName="title"
+            type="text"
+            id="title"
+            class="text-gray-900 font-bold text-3xl mb-2 border-none outline-none w-full"
+            placeholder="{{ 'input.title.placeholder' | translate }}"
+          />
+          <p
+            *ngIf="
+              publicationForm.get('title')?.errors &&
+              (publicationForm.get('title')?.touched ||
+                publicationForm.get('title')?.dirty)
+            "
+            class="w-full text-red-500 text-xs text-center font-medium mt-1 h-5"
+          >
+            {{ getErrorMessage('title') }}
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-2 justify-start mt-10">
+          <div *ngFor="let tag of tags">
+            <span
+              (click)="toggleTag(tag.idTag)"
+              [ngClass]="{
+                'bg-metallic-blue text-white': isSelected(tag.idTag),
+                'bg-gray-100 text-gray-800': !isSelected(tag.idTag)
+              }"
+              class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium cursor-pointer"
+            >
+              {{ tag.name }}
+            </span>
+          </div>
+        </div>
+        <div class="flex justify-center mt-4">
+          <button
+            (click)="previousPage()"
+            [disabled]="currentPage === 0"
+            [ngClass]="{
+              hidden: currentPage === 0
+            }"
+          >
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+
+          <button
+            (click)="nextPage()"
+            [disabled]="!hasMoreTags"
+            [ngClass]="{
+              hidden: !hasMoreTags
+            }"
+          >
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </div>
+        <div class="mt-10">
+          <textarea class="" #mdeEditor></textarea>
+        </div>
+      </div>
+      <button
+        class="w-full py-5 px-6 text-sm font-semibold bg-sunset-orange-500 rounded-md text-white focus:outline-none transition-colors duration-300 ease-in-out"
+        [disabled]="publicationForm.invalid"
+        [ngClass]="{
+          'opacity-60 cursor-not-allowed': publicationForm.invalid,
+          ' active:scale-95  hover:bg-sunset-orange-600': publicationForm.valid
+        }"
+      >
+        {{ 'button.submit' | translate }}
+      </button>
+    </div>
+  </div>
+</form>

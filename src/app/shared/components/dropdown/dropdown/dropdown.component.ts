@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, HostListener, ElementRef } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  HostListener,
+  ElementRef
+} from '@angular/core';
 
 @Component({
   selector: 'app-dropdown',
@@ -13,7 +20,7 @@ export class DropdownComponent {
   isOpen = false;
   selectedOption: string | null = null;
 
-  constructor(private elementRef: ElementRef) {}
+  constructor(private readonly elementRef: ElementRef) {}
 
   toggleDropdown() {
     this.isOpen = !this.isOpen;
@@ -25,10 +32,16 @@ export class DropdownComponent {
     this.isOpen = false;
   }
 
+  reset() {
+    this.selectedOption = null;
+    this.isOpen = false;
+  }
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
-    const dropdownElement = this.elementRef.nativeElement.querySelector('.dropdown');
+    const dropdownElement =
+      this.elementRef.nativeElement.querySelector('.dropdown');
 
     if (!dropdownElement.contains(target)) {
       this.isOpen = false;

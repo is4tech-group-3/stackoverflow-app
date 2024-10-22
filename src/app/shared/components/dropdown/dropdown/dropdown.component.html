@@ -3,12 +3,13 @@
     <button
       (click)="toggleDropdown()"
       type="button"
+
       class="inline-flex w-full items-center justify-between p-3 bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-3 outline-none"
       id="menu-button"
-      aria-expanded="isOpen"
+      [attr.aria-expanded]="isOpen"
       aria-haspopup="true"
     >
-      {{ selectedOption || 'input.dropdown.placeholder' | translate }}
+      {{ selectedOption || placeholder }}
       <svg
         class="group-focus-within:text-dark-gunmetal ml-2 h-6 w-6 text-gray-400"
         viewBox="0 0 20 20"
@@ -32,7 +33,7 @@
     aria-labelledby="menu-button"
     tabindex="-1"
   >
-    <div class="py-1" role="none">
+    <div class="py-1" role="presentation">
       <button
         *ngFor="let option of options"
         (click)="selectOption(option)"

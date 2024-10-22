@@ -14,4 +14,19 @@ export class SessionService {
     CookieUtil.clear();
     window.location.reload();
   }
+
+  getUserRoles(): string[] {
+    const roles = CookieUtil.getValue('roles');
+
+    if (roles) {
+      try {
+        return JSON.parse(roles);
+      } catch (error) {
+        console.error('Error al parsear roles: ', error);
+        return [];
+      }
+    }
+
+    return [];
+  }
 }

@@ -58,7 +58,9 @@
     }
   },
   "news": {
-    "by": "Por",
+    "written": "Escrito por",
+    "seeMore": "Ver más",
+    "createPublication": "Crear publicación",
     "title": "Últimas noticias",
     "description": "  Manténgase al día con las últimas insights, consejos y tendencias en nuestra colección de artículos curados. Nuestros expertos comparten conocimiento valioso para ayudarte a navegar por varios temas, inspirando creatividad y innovación a lo largo del camino.",
     "search": "Buscar...",
@@ -98,7 +100,9 @@
   "sidebar": {
     "profiles": "Perfiles",
     "audit": "Auditoría",
-    "users": "Usuarios"
+    "users": "Usuarios",
+    "home": "Inicio",
+    "welcome": "Bienvenido"
   },
   "navbar": {
     "home": "Inicio",
@@ -143,14 +147,24 @@
     "userCreated": "Usuario creado con éxito.",
     "userDisabled": "Usuario deshabilitado con éxito.",
     "userEnabled": "Usuario habilitado con éxito.",
-    "imageUpdated": "Imagen actualizada con éxito"
+    "imageUpdated": "Imagen actualizada con éxito",
+    "createNews": "Noticia creada con éxito."
   },
   "warning": {
+    "notPermission": "No tienes permiso para realizar esta acción.",
     "notLoggedIn": "Debe estar conectado para acceder a esta página.",
     "alreadyLoggedIn": "Ya has iniciado sesión.",
     "disableUser": "Realizar esta accion cerrara tu seccion actual, y deshabilitara tu cuenta"
   },
   "input": {
+    "title": {
+      "label": "Título",
+      "placeholder": "Ingrese un título"
+    },
+    "dropZone": {
+      "label": "Subir archivo",
+      "placeholder": "Arrastre y suelte un archivo aquí o haga clic para cargar"
+    },
     "oldPassword": {
       "label": "Contraseña anterior",
       "placeholder": "Ingrese su contraseña anterior"

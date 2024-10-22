@@ -9,10 +9,10 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AuthGuard implements CanActivate {
   constructor(
-    private sessionService: SessionService,
-    private router: Router,
-    private toastService: ToastService,
-    private translateService: TranslateService
+    private readonly sessionService: SessionService,
+    private readonly router: Router,
+    private readonly toastService: ToastService,
+    private readonly translateService: TranslateService
   ) {}
 
   canActivate(): boolean {
