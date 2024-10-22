@@ -69,6 +69,19 @@
       "noData": "No news available."
     }
   },
+  "questions": {
+    "relatedTags": "Related Tags",
+    "title": "New Question",
+    "data": {
+      "tags": "Tags"
+    }
+  },
+  "answers": {
+    "title": "Answer(s)",
+    "data": {
+      "titleModal": "Reply"
+    }
+  },
   "home": {
     "title": "Welcome to",
     "description": "Find solutions, share knowledge, and connect with experts in debugging!"
@@ -163,6 +176,18 @@
     "description": {
       "label": "Description",
       "placeholder": "Enter description"
+    },
+    "questionDescription": {
+      "label": "Description",
+      "placeholder": "Describe your question"
+    },
+    "questiontitle": {
+      "label": "Title",
+      "placeholder": "Enter title"
+    },
+    "answerDescription": {
+      "label": "Description",
+      "placeholder": "Describe your answer..."
     },
     "dropdown": {
       "label": "Select an option",

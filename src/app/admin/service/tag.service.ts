@@ -32,8 +32,11 @@ export class TagService {
   }
 
   // GET: Obtener todos los tags
-  getAllTags(page: number): Observable<any> {
-    let params = new HttpParams().set('page', page.toString());
+  getAllTags(page?: number): Observable<any> {
+    let params = new HttpParams();
+    if (page !== undefined && page !== null) {
+      params = params.set('page', page.toString());
+    }
     return this.http.get(`${this.baseUrl}`, { params });
   }
 

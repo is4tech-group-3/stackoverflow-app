@@ -8,15 +8,25 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { NewsDetailComponent } from './components/news-detail/news-detail.component';
 import { AnswersComponent } from './components/answers/answers.component';
 import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { AnswerModalComponent } from './components/answers/answer-modal/answer-modal.component';
 
 @NgModule({
   declarations: [
     NewsComponent,
     QuestionsComponent,
-    QuestionModalComponent, ProfileComponent, NewsDetailComponent,
-    AnswersComponent
+    QuestionModalComponent,
+    ProfileComponent,
+    NewsDetailComponent,
+    AnswersComponent,
+    AnswerModalComponent
   ],
-  imports: [SharedModule, OperationRoutingModule, HighlightModule],
+  imports: [
+    SharedModule,
+    OperationRoutingModule,
+    HighlightModule,
+    NgxPaginationModule
+  ],
   providers: [
     {
       provide: HIGHLIGHT_OPTIONS,

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { QuestionModalComponent } from './question-modal/question-modal.component';
 import { QuestionService } from '../../service/question/question.service';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-questions',
@@ -13,15 +14,15 @@ export class QuestionsComponent implements OnInit {
   relatedTags: any[] = [];
   visibleTags: any[] = [];
   showAllTags: boolean = false;
-  maxVisibleTags: number = 5;
-
+  totalItems: number = 0;
+  currentPage: number = 0;
   constructor(
     private questionService: QuestionService,
     public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this.getQuestionsList();
+    this.getQuestionsList(this.currentPage);
   }
 
   sanitizeDescription(html: string): string {
@@ -30,48 +31,30 @@ export class QuestionsComponent implements OnInit {
     return div.textContent || div.innerText || '';
   }
 
-  getQuestionsList(): void {
-    this.questionService.getQuestions().subscribe(
+  getQuestionsList(page: number): void {
+    this.questionService.getQuestions(page).subscribe(
       data => {
         this.questions = data.content.map((question: any) => ({
           ...question,
           description: this.sanitizeDescription(question.description)
         }));
+        this.totalItems = data.totalElements;
       },
       error => {
         console.error('Error fetching questions', error);
       }
     );
   }
-
+  handlePageEvent(event: PageEvent) {
+    this.currentPage = event.pageIndex;
+    this.getQuestionsList(this.currentPage);
+  }
   showMoreTags(): void {
     this.showAllTags = true;
   }
 
   openQuestionModal(): void {
-    const dialogRef = this.dialog.open(QuestionModalComponent, {
-      width: '600px',
-      data: { page: 0 }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        const newQuestion = {
-          title: result.title,
-          description: result.description,
-          tags: result.selectedTags
-        };
-
-        this.questionService.createQuestion(newQuestion).subscribe(
-          response => {
-            this.questions.push(response);
-          },
-          error => {
-            console.error('Error al crear la pregunta', error);
-          }
-        );
-      }
-    });
+    this.dialog.open(QuestionModalComponent);
   }
 
   getTagClass(tag: string): { class: string; iconUrl: string } {

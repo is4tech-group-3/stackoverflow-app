@@ -1,24 +1,16 @@
 <div class="flex h-full flex-col lg:flex-row">
   <div
-    class="bg-white w-full lg:w-[450px] h-full min-h-[650px] lg:min-h-[600px] rounded-[5px] pt-6 px-6 shadow-[0_2px_10px_rgba(0,0,0,0.1)] flex flex-col justify-between mb-5 lg:me-5"
-  >
+    class="bg-white w-full lg:w-[450px] h-full min-h-[650px] lg:min-h-[600px] rounded-[5px] pt-6 px-6 shadow-[0_2px_10px_rgba(0,0,0,0.1)] flex flex-col justify-between mb-5 lg:me-5">
     <div>
       <h1 class="text-left text-xl font-bold">
         {{ 'profiles.title' | translate }}
       </h1>
       <form class="mt-4 max-w-md mx-auto">
         <div class="relative flex items-center group">
-          <input
-            (input)="filterProfiles($event)"
-            name="search"
-            type="search"
-            required
+          <input (input)="filterProfiles($event)" name="search" type="search" required
             class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-3 outline-none"
-            placeholder="{{ 'input.search.placeholder' | translate }}"
-          />
-          <div
-            class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal"
-          >
+            placeholder="{{ 'input.search.placeholder' | translate }}" />
+          <div class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal">
             <mat-icon aria-label="search icon">search</mat-icon>
           </div>
         </div>
@@ -26,21 +18,13 @@
     </div>
 
     <div class="flex flex-col mt-4 overflow-auto">
-      <div
-        class="flex flex-wrap items-center mb-4 cursor-pointer hover:bg-gray-100"
-        *ngFor="let profile of filteredProfiles"
-        (click)="selectProfile(profile)"
-      >
-        <div
-          class="h-2.5 w-2.5 rounded-full me-2"
-          [ngClass]="{
+      <div class="flex flex-wrap items-center mb-4 cursor-pointer hover:bg-gray-100"
+        *ngFor="let profile of filteredProfiles" (click)="selectProfile(profile)">
+        <div class="h-2.5 w-2.5 rounded-full me-2" [ngClass]="{
             'bg-green-500': profile.status,
             'bg-red-500': !profile.status
-          }"
-        ></div>
-        <div
-          class="flex-1 flex items-center text-gray-900 whitespace-normal dark:text-black"
-        >
+          }"></div>
+        <div class="flex-1 flex items-center text-gray-900 whitespace-normal dark:text-black">
           <div class="ps-3 text-left w-full">
             <div class="text-base font-semibold">{{ profile.name }}</div>
             <div class="font-normal text-gray-500">
@@ -51,54 +35,30 @@
       </div>
     </div>
     <div class="mt-auto">
-      <mat-paginator
-        [length]="totalItems"
-        [pageIndex]="currentPage"
-        [hidePageSize]="true"
-        [pageSize]="8"
-        (page)="handlePageEvent($event)"
-      >
+      <mat-paginator [length]="totalItems" [pageIndex]="currentPage" [hidePageSize]="true" [pageSize]="8"
+        (page)="handlePageEvent($event)">
       </mat-paginator>
     </div>
   </div>
 
   <div class="flex flex-col w-full h-full">
-    <div
-      class="bg-white w-full min-h-60 lg:min-h-40 rounded-[5px] p-4 px-6 shadow-[0_2px_10px_rgba(0,0,0,0.1)] mb-5"
-    >
+    <div class="bg-white w-full min-h-60 lg:min-h-40 rounded-[5px] p-4 px-6 shadow-[0_2px_10px_rgba(0,0,0,0.1)] mb-5">
       <div class="flex justify-between items-center">
         <h1 class="text-left text-xl font-bold">
           {{ 'profiles.profileManagement' | translate }}
         </h1>
         <div class="flex space-x-1 items-center">
-          <button
-            *ngIf="selectedProfile?.idProfile"
-            class="text-sm font-bold px-3 mr-2 py-2 rounded-lg border-2 cursor-pointer"
-            [ngClass]="{
+          <button *ngIf="selectedProfile?.idProfile"
+            class="text-sm font-bold px-3 mr-2 py-2 rounded-lg border-2 cursor-pointer" [ngClass]="{
               'border-green-500 text-green-500': selectedProfile?.status,
               'border-red-500 text-red-500': !selectedProfile?.status
-            }"
-            (click)="toggleStatus()"
-          >
+            }" (click)="toggleStatus()">
             {{ selectedProfile?.status ? 'Habilitado' : 'Desactivado' }}
-          </button>
-          <button
-            class="text-white font-medium rounded-lg text-sm px-6 py-2"
-            [ngClass]="{
-              'bg-red-600': checkIfCanSave(),
-              'bg-gray-400 cursor-not-allowed': !checkIfCanSave()
-            }"
-            [disabled]="!checkIfCanSave()"
-            (click)="saveProfile()"
-          >
-            {{ 'button.save' | translate }}
           </button>
         </div>
       </div>
 
-      <div
-        class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-32 mt-2"
-      >
+      <div class="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-32 mt-2">
         <form class="w-full">
           <div class="relative">
             <div>
@@ -106,19 +66,12 @@
                 {{ 'input.nameProfile.label' | translate }}
               </label>
               <div class="relative flex items-center group">
-                <input
-                  [(ngModel)]="selectedProfile.name"
-                  name="name"
-                  type="text"
-                  required
+                <input [(ngModel)]="selectedProfile.name" name="name" type="text" required
                   class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-3 outline-none"
                   placeholder="{{
                     'input.nameProfile.placeholder' | translate
-                  }}"
-                />
-                <div
-                  class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal"
-                >
+                  }}" />
+                <div class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal">
                   <mat-icon aria-label="badge icon">badge</mat-icon>
                 </div>
               </div>
@@ -132,19 +85,12 @@
                 {{ 'input.description.label' | translate }}
               </label>
               <div class="relative flex items-center group">
-                <input
-                  [(ngModel)]="selectedProfile.description"
-                  name="description"
-                  type="text"
-                  required
+                <input [(ngModel)]="selectedProfile.description" name="description" type="text" required
                   class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-3 outline-none"
                   placeholder="{{
                     'input.description.placeholder' | translate
-                  }}"
-                />
-                <div
-                  class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal"
-                >
+                  }}" />
+                <div class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal">
                   <mat-icon aria-label="description icon">description</mat-icon>
                 </div>
               </div>
@@ -156,139 +102,90 @@
 
     <!-- Administration -->
     <div class="flex flex-col lg:flex-row w-full h-full">
-      <div
-        class="flex flex-col lg:flex-row space-y-5 lg:space-x-5 lg:space-y-0 w-full h-[915px] lg:h-full"
-      >
-        <!-- Administration container-->
+      <div class="flex flex-col lg:flex-row space-y-5 lg:space-x-5 lg:space-y-0 w-full h-[915px] lg:h-full">
         <div
-          class="bg-white w-full rounded-[5px] p-6 h-[915px] lg:h-full mb-5 lg:mb-0 shadow-[0_2px_10px_rgba(0,0,0,0.1)]"
-        >
-          <h2 class="text-lg font-semibold">
-            {{ 'profiles.administration' | translate }}
-          </h2>
-          <hr class="border-t border-gray-300 my-2" />
-
-          <!-- Container for available and assigned roles -->
-          <div
-            class="flex flex-col lg:flex-row justify-between pt-5 space-y-5 lg:space-x-5 lg:space-y-0"
-          >
-            <!-- Available roles section -->
-            <div
-              class="flex flex-col w-full lg:w-1/2 bg-white p-1 px-6 rounded-md shadow-[0_2px_10px_rgba(0,0,0,0.2)]"
-            >
-              <div class="flex items-center justify-between space-x-4">
-                <h3 class="font-semibold mt-5">
-                  {{ 'profiles.available' | translate }}
-                </h3>
-                <div class="flex-1">
-                  <div class="relative flex items-center group">
-                    <input
-                      (input)="filterRolesDisponibles($event)"
-                      name="search"
-                      type="search"
-                      required
-                      class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-3 outline-none"
-                      placeholder="{{ 'input.search.placeholder' | translate }}"
-                    />
-                    <div
-                      class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal"
-                    >
-                      <mat-icon aria-label="search icon">search</mat-icon>
+          class="bg-white w-full rounded-[5px] p-6 h-[915px] lg:h-full mb-5 lg:mb-0 shadow-[0_2px_10px_rgba(0,0,0,0.1)] flex flex-col justify-between">
+          <div>
+            <h2 class="text-lg font-semibold">
+              {{ 'profiles.administration' | translate }}
+            </h2>
+            <hr class="border-t border-gray-300 my-2" />
+            <div class="flex flex-col lg:flex-row justify-between pt-5 space-y-5 lg:space-x-5 lg:space-y-0">
+              <div
+                class="flex flex-col w-full lg:w-1/2 bg-white p-1 px-6 rounded-md shadow-[0_2px_10px_rgba(0,0,0,0.2)]">
+                <div class="flex items-center justify-between space-x-4">
+                  <h3 class="font-semibold mt-5">
+                    {{ 'profiles.available' | translate }}
+                  </h3>
+                  <div class="flex-1">
+                    <div class="relative flex items-center group">
+                      <input (input)="filterAvailableRoles($event)" name="search" type="search" required
+                        class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-3 outline-none"
+                        placeholder="{{ 'input.search.placeholder' | translate }}" />
+                      <div
+                        class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal">
+                        <mat-icon aria-label="search icon">search</mat-icon>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-
-              <!-- Container available roles -->
-              <div
-                class="roles-container mt-3 overflow-y-auto max-h-64 space-y-2"
-              >
-                <div
-                  *ngFor="let role of filteredRolesAvailable"
-                  class="flex justify-between items-center p-2"
-                >
-                  {{ role.name }}
-                  <button class="text-red-500" (click)="asignarRol(role)">
-                    <mat-icon
-                      aria-hidden="false"
-                      fontIcon="chevron_right"
-                    ></mat-icon>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Move All Buttons -->
-            <div
-              class="flex justify-center items-center lg:flex-col space-x-2 lg:space-x-0 lg:space-y-2"
-            >
-              <button
-                class="bg-red-500 text-white p-2 w-12 h-12 rounded-full"
-                (click)="moverTodosAAsignados()"
-              >
-                <mat-icon
-                  class="lg:rotate-0 rotate-90"
-                  aria-hidden="false"
-                  fontIcon="last_page"
-                ></mat-icon>
-              </button>
-              <button
-                class="bg-red-500 text-white p-2 w-12 h-12 rounded-full"
-                (click)="moverTodosADisponibles()"
-              >
-                <mat-icon
-                  class="lg:rotate-0 rotate-90"
-                  aria-hidden="false"
-                  fontIcon="first_page"
-                ></mat-icon>
-              </button>
-            </div>
-
-            <!-- Assigned Roles Section -->
-            <div
-              class="flex flex-col w-full lg:w-1/2 bg-white p-1 px-6 rounded-md shadow-[0_2px_10px_rgba(0,0,0,0.2)]"
-            >
-              <div class="flex items-center justify-between space-x-4">
-                <h3 class="font-semibold mt-5">
-                  {{ 'profiles.assigned' | translate }}
-                </h3>
-                <div class="flex-1">
-                  <div class="relative flex items-center group">
-                    <input
-                      (input)="filterRolesAsignados($event)"
-                      name="search"
-                      type="search"
-                      required
-                      class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-3 outline-none"
-                      placeholder="{{ 'input.search.placeholder' | translate }}"
-                    />
-                    <div
-                      class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal"
-                    >
-                      <mat-icon aria-label="search icon">search</mat-icon>
-                    </div>
+                <div class="roles-container mt-3 overflow-y-auto max-h-64 space-y-2">
+                  <div *ngFor="let role of filteredRolesAvailable" class="flex justify-between items-center p-2">
+                    {{ role.name }}
+                    <button class="text-red-500" (click)="assignRole(role)">
+                      <mat-icon aria-hidden="false" fontIcon="chevron_right"></mat-icon>
+                    </button>
                   </div>
                 </div>
               </div>
-
-              <!-- Assigned roles container -->
+              <div class="flex justify-center items-center lg:flex-col space-x-2 lg:space-x-0 lg:space-y-2">
+                <button class="bg-red-500 text-white p-2 w-12 h-12 rounded-full" (click)="moveAllToAssigned()">
+                  <mat-icon class="lg:rotate-0 rotate-90" aria-hidden="false" fontIcon="last_page"></mat-icon>
+                </button>
+                <button class="bg-red-500 text-white p-2 w-12 h-12 rounded-full" (click)="moveAllAvailable()">
+                  <mat-icon class="lg:rotate-0 rotate-90" aria-hidden="false" fontIcon="first_page"></mat-icon>
+                </button>
+              </div>
               <div
-                class="roles-container mt-3 overflow-y-auto max-h-64 space-y-2"
-              >
-                <div
-                  *ngFor="let role of filteredRolesAssigned"
-                  class="flex justify-between items-center p-2"
-                >
-                  {{ role.name }}
-                  <button class="text-red-500" (click)="quitarRol(role)">
-                    <mat-icon
-                      aria-hidden="false"
-                      fontIcon="chevron_left"
-                    ></mat-icon>
-                  </button>
+                class="flex flex-col w-full lg:w-1/2 bg-white p-1 px-6 rounded-md shadow-[0_2px_10px_rgba(0,0,0,0.2)]">
+                <div class="flex items-center justify-between space-x-4">
+                  <h3 class="font-semibold mt-5">
+                    {{ 'profiles.assigned' | translate }}
+                  </h3>
+                  <div class="flex-1">
+                    <div class="relative flex items-center group">
+                      <input (input)="filterAssignedRoles($event)" name="search" type="search" required
+                        class="w-full bg-transparent text-sm border-b border-gray-300 focus:border-dark-gunmetal px-2 py-3 outline-none"
+                        placeholder="{{ 'input.search.placeholder' | translate }}" />
+                      <div
+                        class="w-[18px] h-[18px] absolute right-4 text-gray-300 group-focus-within:text-dark-gunmetal">
+                        <mat-icon aria-label="search icon">search</mat-icon>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="roles-container mt-3 overflow-y-auto max-h-64 space-y-2">
+                  <div *ngFor="let role of filteredRolesAssigned" class="flex justify-between items-center p-2">
+                    {{ role.name }}
+                    <button class="text-red-500" (click)="removeRole(role)">
+                      <mat-icon aria-hidden="false" fontIcon="chevron_left"></mat-icon>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
+          <div class="flex justify-end mt-4">
+            <button *ngIf="selectedProfile?.idProfile || areFieldsFilled()"
+              class="bg-gray-500 text-white font-medium rounded-lg text-sm px-6 py-2 mr-2" (click)="cancelProfile()">
+              {{ 'button.cancel' | translate }}
+            </button>
+            <button class="text-white font-medium rounded-lg text-sm px-6 py-2" [ngClass]="{
+      'bg-sunset-orange-500': checkIfCanSave(),
+      'bg-gray-400 cursor-not-allowed': !checkIfCanSave()
+    }" [disabled]="!checkIfCanSave()" (click)="saveProfile()">
+              {{ 'button.save' | translate }}
+            </button>
           </div>
         </div>
       </div>
