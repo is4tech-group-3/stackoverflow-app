@@ -1,9 +1,6 @@
 import {
   Component,
-  ElementRef,
-  OnInit,
-  TemplateRef,
-  ViewChild
+  OnInit
 } from '@angular/core';
 import { Params } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -21,7 +18,8 @@ export class NewsComponent implements OnInit {
   selectedPhoto = '';
   isDragging = false;
   simpleMDE: SimpleMDE | undefined;
-
+  pageSize = 10;
+  totalLength = 0;
   constructor(
     private readonly publicationService: PublicationService,
     private readonly blockUIService: BlockUIService,
@@ -38,10 +36,18 @@ export class NewsComponent implements OnInit {
     return div.textContent ?? div.innerText ?? '';
   }
 
+  changePage(event: any) {
+    this.handlerGetPublications({
+      size: this.pageSize,
+      page: event.pageIndex
+    });
+  }
+
   handlerGetPublications(params?: Params) {
     this.blockUIService.start();
     this.publicationService.getAll(params).subscribe({
       next: (response: any) => {
+        this.totalLength = response.totalElements;
         this.publications = response.content.map((publication: any) => ({
           ...publication,
           description: this.sanitizeDescription(publication.description)

@@ -10,6 +10,8 @@ import { TagService } from 'src/app/admin/service/tag.service';
 import { QuestionService } from 'src/app/operation/service/question/question.service';
 import * as SimpleMDE from 'simplemde';
 import { marked } from 'marked';
+import { PageEvent } from '@angular/material/paginator';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-question-modal',
@@ -18,14 +20,11 @@ import { marked } from 'marked';
 })
 export class QuestionModalComponent implements OnInit {
   tags: any[] = [];
-  totalPages: number = 0;
+  totalItems: number = 0;
   currentPage: number = 0;
-  isLastPage: boolean = false;
-  isFirstPage: boolean = false;
   selectedTags: Set<number> = new Set();
   title: string = '';
   description: string = '';
-
   simpleMDE: SimpleMDE | undefined;
 
   @ViewChild('mdeEditor', { static: true }) mdeEditor!: ElementRef;
@@ -34,62 +33,66 @@ export class QuestionModalComponent implements OnInit {
     private tagService: TagService,
     private questionService: QuestionService,
     public dialogRef: MatDialogRef<QuestionModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
-    this.currentPage = this.data.page || 0;
     this.getTags(this.currentPage);
     this.initializeEditor();
   }
 
   initializeEditor() {
-    this.simpleMDE = new SimpleMDE({
-      element: this.mdeEditor.nativeElement,
-      initialValue: this.description,
-      placeholder: 'Describe tu pregunta...',
-      toolbar: [
-        'bold',
-        'italic',
-        '',
-        'link',
-        'quote',
-        {
-          name: 'code',
-          action: SimpleMDE.toggleCodeBlock,
-          className: 'fa fa-code',
-          title: 'Insertar código'
-        },
-        '',
-        'ordered-list',
-        'unordered-list',
-        'horizontal-rule',
-        '',
-        'undo',
-        'redo',
-        ''
-      ],
-      autosave: {
-        enabled: false,
-        uniqueId: 'questionEditor'
-      },
-      renderingConfig: {
-        codeSyntaxHighlighting: true
-      }
-    });
+    this.translate
+      .get('input.questionDescription.placeholder')
+      .subscribe(placeholder => {
+        this.simpleMDE = new SimpleMDE({
+          element: this.mdeEditor.nativeElement,
+          initialValue: this.description,
+          placeholder: placeholder,
+          toolbar: [
+            'bold',
+            'italic',
+            '|',
+            'link',
+            'quote',
+            {
+              name: 'code',
+              action: SimpleMDE.toggleCodeBlock,
+              className: 'fa fa-code',
+              title: 'Insertar código'
+            },
+            '|',
+            'ordered-list',
+            'unordered-list',
+            'horizontal-rule',
+            '|',
+            'undo',
+            'redo'
+          ],
+          autosave: {
+            enabled: false,
+            uniqueId: 'questionEditor'
+          },
+          renderingConfig: {
+            codeSyntaxHighlighting: true
+          },
+          status: false
+        });
+        this.simpleMDE.codemirror.setSize('100%', '200px');
+        this.simpleMDE.codemirror.getWrapperElement().style.minHeight = '200px';
 
-    this.simpleMDE.codemirror.on('change', () => {
-      this.description = this.simpleMDE?.value() || '';
-    });
+        this.simpleMDE.codemirror.on('change', () => {
+          this.description = this.simpleMDE?.value() || '';
+        });
+      });
   }
 
   getTags(page: number): void {
     this.tagService.getAllTags(page).subscribe(
       data => {
         this.tags = data.content;
-        this.totalPages = data.totalPages;
-        this.isLastPage = data.last;
-        this.isFirstPage = data.first;
+        this.totalItems = data.totalElements;
       },
       error => {
         console.error('Error fetching tags', error);
@@ -97,19 +100,18 @@ export class QuestionModalComponent implements OnInit {
     );
   }
 
-  changePage(increment: number): void {
-    const newPage = this.currentPage + increment;
-    if (newPage >= 0 && newPage < this.totalPages) {
-      this.currentPage = newPage;
-      this.getTags(this.currentPage);
-    }
+  handlePageEvent(event: PageEvent) {
+    this.currentPage = event.pageIndex;
+    this.getTags(this.currentPage);
   }
 
   toggleTagSelection(tagId: number) {
     if (this.selectedTags.has(tagId)) {
       this.selectedTags.delete(tagId);
     } else {
-      this.selectedTags.add(tagId);
+      if (this.selectedTags.size < 8) {
+        this.selectedTags.add(tagId);
+      }
     }
   }
 
@@ -123,9 +125,10 @@ export class QuestionModalComponent implements OnInit {
       description: marked(this.description),
       idTags: Array.from(this.selectedTags)
     };
+
     this.questionService.createQuestion(question).subscribe({
       next: response => {
-        this.dialogRef.close();
+        this.dialogRef.close('created');
       },
       error: error => {
         console.error('Error creating question:', error);

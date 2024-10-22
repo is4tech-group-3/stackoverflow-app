@@ -7,6 +7,7 @@ import { ToastService } from 'src/app/shared/services/toast/toast.service';
 import { BlockUIService } from 'src/app/shared/services/blockUI/block-ui.service';
 import { convertFormGroupToFormData } from 'src/app/shared/utils/form-data.util';
 import { FormErrorService } from 'src/app/shared/services/formError/form-error.service';
+import { CustomValidators } from 'src/app/shared/Validators/validators';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',

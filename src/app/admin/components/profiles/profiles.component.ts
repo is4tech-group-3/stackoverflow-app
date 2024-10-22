@@ -59,7 +59,7 @@ export class ProfilesComponent implements OnInit {
     this.hasChanges = true;
   }
 
-  asignarRol(role: any): void {
+  assignRole(role: any): void {
     this.assignedRoles.push(role);
     this.filteredRolesAssigned = this.assignedRoles;
     this.rolesAvailable = this.rolesAvailable.filter(
@@ -73,7 +73,7 @@ export class ProfilesComponent implements OnInit {
     this.hasChanges = true;
   }
 
-  quitarRol(role: any): void {
+  removeRole(role: any): void {
     this.assignedRoles = this.assignedRoles.filter(
       r => r.idRole !== role.idRole
     );
@@ -90,7 +90,7 @@ export class ProfilesComponent implements OnInit {
     this.hasChanges = true;
   }
 
-  filterRolesDisponibles(event: Event): void {
+  filterAvailableRoles(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     const filterValue = inputElement.value.trim().toLowerCase();
     this.filteredRolesAvailable = this.rolesAvailable.filter(role =>
@@ -125,7 +125,7 @@ export class ProfilesComponent implements OnInit {
       });
   }
 
-  filterRolesAsignados(event: Event): void {
+  filterAssignedRoles(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     const filterValue = inputElement.value.trim().toLowerCase();
     this.filteredRolesAssigned = this.assignedRoles.filter(role =>
@@ -133,14 +133,14 @@ export class ProfilesComponent implements OnInit {
     );
   }
 
-  moverTodosAAsignados(): void {
+  moveAllToAssigned(): void {
     this.assignedRoles = [...this.assignedRoles, ...this.rolesAvailable];
     this.filteredRolesAssigned = this.assignedRoles;
     this.rolesAvailable = [];
     this.filteredRolesAvailable = [];
   }
 
-  moverTodosADisponibles(): void {
+  moveAllAvailable(): void {
     this.rolesAvailable = [...this.rolesAvailable, ...this.assignedRoles];
     this.filteredRolesAvailable = this.rolesAvailable;
     this.assignedRoles = [];
@@ -239,5 +239,20 @@ export class ProfilesComponent implements OnInit {
         .join(',');
     this.hasChanges = nameChanged || descriptionChanged || rolesChanged;
     return this.hasChanges;
+  }
+
+  cancelProfile(): void {
+    this.selectedProfile = { id: null, name: '', description: '', roles: [] };
+    this.assignedRoles = [];
+    this.filteredRolesAssigned = [];
+    this.filteredRolesAvailable = this.rolesAvailable;
+    this.hasChanges = false;
+  }
+
+  areFieldsFilled(): boolean {
+    const { name, description } = this.selectedProfile;
+    return (
+      !!name?.trim() && !!description?.trim() && this.assignedRoles.length > 0
+    );
   }
 }

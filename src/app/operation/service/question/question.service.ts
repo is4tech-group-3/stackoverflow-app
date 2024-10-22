@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DATA_URL } from 'src/app/shared/utils/constants.utility';
@@ -12,8 +12,12 @@ export class QuestionService {
   constructor(private http: HttpClient) {}
 
   // GET: Obtener todas las preguntas
-  getQuestions(): Observable<any> {
-    return this.http.get(`${this.baseUrl}`);
+  getQuestions(page: number = 1, itemsPerPage: number = 10): Observable<any> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('limit', itemsPerPage.toString());
+
+    return this.http.get(`${this.baseUrl}`, { params });
   }
 
   // GET: Obtener una pregunta por ID

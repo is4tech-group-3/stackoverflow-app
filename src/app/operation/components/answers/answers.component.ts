@@ -1,6 +1,10 @@
 import { Component, OnInit, AfterViewChecked } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { QuestionService } from '../../service/question/question.service';
+import { AnswerService } from '../../service/answer/answer.service';
+import { AnswerLikeService } from '../../service/answer-like/answer-like.service';
+import { AnswerModalComponent } from './answer-modal/answer-modal.component';
 import hljs from 'highlight.js';
 
 @Component({
@@ -10,10 +14,14 @@ import hljs from 'highlight.js';
 })
 export class AnswersComponent implements OnInit, AfterViewChecked {
   question: any;
+  answers: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
-    private questionService: QuestionService
+    private questionService: QuestionService,
+    private answerService: AnswerService,
+    private answerLikeService: AnswerLikeService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -21,6 +29,7 @@ export class AnswersComponent implements OnInit, AfterViewChecked {
       const questionId = params['idQuestion'];
       if (questionId && !isNaN(Number(questionId))) {
         this.getQuestionDetails(Number(questionId));
+        this.getAnswers(Number(questionId));
       } else {
         console.error('Invalid question ID:', questionId);
       }
@@ -39,10 +48,60 @@ export class AnswersComponent implements OnInit, AfterViewChecked {
     );
   }
 
+  getAnswers(idQuestion: number): void {
+    this.answerService.getAnswersByQuestion(idQuestion).subscribe(
+      data => {
+        console.log('Respuestas obtenidas:', data);
+        this.answers = data.content;
+        this.answers.forEach(answer => {
+          this.getLikesForAnswer(answer.idAnswer);
+        });
+      },
+      error => {
+        console.error('Error al obtener respuestas', error);
+      }
+    );
+  }
+
+  getLikesForAnswer(idAnswer: number): void {
+    this.answerLikeService.getLikes(idAnswer).subscribe(
+      likes => {
+        const answer = this.answers.find(ans => ans.idAnswer === idAnswer);
+        if (answer) {
+          answer.likes = likes;
+        }
+      },
+      error => {
+        console.error(`Error fetching likes for answer ID ${idAnswer}`, error);
+      }
+    );
+  }
+
   ngAfterViewChecked(): void {
     const blocks = document.querySelectorAll('pre code');
     blocks.forEach(block => {
-      hljs.highlightElement(block as HTMLElement);
+      if (!block.hasAttribute('data-highlighted')) {
+        hljs.highlightElement(block as HTMLElement);
+        block.setAttribute('data-highlighted', 'yes');
+      }
+    });
+  }
+
+  openQuestionModal(idQuestion: number): void {
+    this.dialog.open(AnswerModalComponent, {
+      data: { idQuestion }
+    });
+  }
+
+  openAnswerModal(idAnswer?: number): void {
+    const dialogRef = this.dialog.open(AnswerModalComponent, {
+      data: { idQuestion: this.question.idQuestion, idAnswer }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.getAnswers(this.question.idQuestion);
+      }
     });
   }
 

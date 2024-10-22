@@ -71,6 +71,19 @@
       "noData": "No hay noticias disponibles."
     }
   },
+  "questions": {
+    "relatedTags": "Etiquetas relacionadas",
+    "title": "Nueva pregunta",
+    "data": {
+      "tags": "Etiquetas"
+    }
+  },
+  "answers": {
+    "title": "Respuestas",
+    "data": {
+      "titleModal": "Responder"
+    }
+  },
   "home": {
     "title": "Bienvenido a",
     "description": "Encuentre soluciones, comparta conocimiento y conecte con expertos en el depurador!"
@@ -183,6 +196,18 @@
     "description": {
       "label": "Descripción",
       "placeholder": "Ingrese una descripción"
+    },
+    "questionDescription": {
+      "label": "Descripción",
+      "placeholder": "Describe tu pregunta..."
+    },
+    "questiontitle": {
+      "label": "Título",
+      "placeholder": "Ingrese un título"
+    },
+    "answerDescription": {
+      "label": "Descripción",
+      "placeholder": "Describe tu respuesta..."
     },
     "dropdown": {
       "label": "Seleccione una opción",

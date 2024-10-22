@@ -6,7 +6,7 @@
   <mat-icon>add</mat-icon>
 </a>
 
-<section class="container mx-auto px-4 py-16">
+<section class="container min-h-full-screen mx-auto px-4 py-16">
   <div class="flex items-center justify-between">
     <h2 class="text-gray-800 font-bold text-3xl">
       {{ 'news.title' | translate }}
@@ -46,4 +46,11 @@
       </div>
     </div>
   </div>
+  <mat-paginator
+    class="w-full mt-auto"
+    [hidePageSize]="true"
+    [length]="totalLength"
+    (page)="changePage($event)"
+    [pageSize]="pageSize"
+  />
 </section>
