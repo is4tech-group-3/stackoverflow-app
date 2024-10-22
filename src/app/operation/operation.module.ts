@@ -10,6 +10,9 @@ import { AnswersComponent } from './components/answers/answers.component';
 import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AnswerModalComponent } from './components/answers/answer-modal/answer-modal.component';
+import { AnswersUserComponent } from './components/answers-user/answers-user.component';
+import { AnswersUserModalComponent } from './components/answers-user/answers-user-modal/answers-user-modal.component';
+import { MyQuestionsComponent } from './components/my-questions/my-questions.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +22,10 @@ import { AnswerModalComponent } from './components/answers/answer-modal/answer-m
     ProfileComponent,
     NewsDetailComponent,
     AnswersComponent,
-    AnswerModalComponent
+    AnswerModalComponent,
+    AnswersUserComponent,
+    AnswersUserModalComponent,
+    MyQuestionsComponent
   ],
   imports: [
     SharedModule,
