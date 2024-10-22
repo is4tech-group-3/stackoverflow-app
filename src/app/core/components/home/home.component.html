@@ -1,4 +1,6 @@
+<!-- Sección del Banner principal -->
 <section
+  id="home"
   class="relative bg-fixed bg-galaxy bg-cover bg-center bg-no-repeat overflow-hidden"
 >
   <!-- Overlay -->
@@ -26,12 +28,13 @@
         {{ 'home.description' | translate }}
       </p>
 
+      <!-- Botón de llamada a la acción -->
       <div
-        class="mt-10 flex z-50 justify-center flex-wrap gap-4 text-center lg:justify-start"
+        class="mt-10 flex justify-center flex-wrap gap-4 text-center lg:justify-start"
       >
         <a
           [routerLink]="['/auth/register']"
-          class="block w-full rounded-lg bg-sunset-orange-500 px-12 z-50 py-3 text-sm font-semibold text-white shadow-lg hover:brightness-90 hover:scale-105 transition-transform duration-200 ease-in-out active:scale-95 sm:w-auto"
+          class="block w-full rounded-lg bg-sunset-orange-500 px-12 py-3 text-sm font-semibold text-white shadow-lg hover:brightness-90 hover:scale-105 transition-transform duration-200 ease-in-out active:scale-95 sm:w-auto"
         >
           {{ 'button.join' | translate }}
         </a>
@@ -56,3 +59,4 @@
     class="hidden lg:block absolute -bottom-16 left-0 w-full"
   />
 </section>
+

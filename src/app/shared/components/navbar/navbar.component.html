@@ -134,6 +134,14 @@
                   {{ 'button.myProfile' | translate }}
                 </a>
                 <a
+                  [routerLink]="['/myQuestions']"
+                  (click)="closeProfileMenu()"
+                  class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                  role="menuitem"
+                >
+                  {{ 'navbar.question' | translate }}
+                </a>
+                <a
                   [routerLink]="['/auth/change-password']"
                   (click)="closeProfileMenu()"
                   class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"

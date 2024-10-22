@@ -1,27 +1,23 @@
 import { Component, OnInit, AfterViewChecked } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { QuestionService } from '../../service/question/question.service';
-import { AnswerService } from '../../service/answer/answer.service';
-import { AnswerLikeService } from '../../service/answer-like/answer-like.service';
-import { AnswerModalComponent } from './answer-modal/answer-modal.component';
 import hljs from 'highlight.js';
+import { MatDialog } from '@angular/material/dialog';
+import { AnswersUserModalComponent } from './answers-user-modal/answers-user-modal.component';
 
 @Component({
-  selector: 'app-answers',
-  templateUrl: './answers.component.html',
-  styleUrls: ['./answers.component.scss']
+  selector: 'app-answers-user',
+  templateUrl: './answers-user.component.html',
+  styleUrls: ['./answers-user.component.scss']
 })
-export class AnswersComponent implements OnInit, AfterViewChecked {
+export class AnswersUserComponent implements OnInit, AfterViewChecked {
   question: any;
-  answers: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private questionService: QuestionService,
-    private answerService: AnswerService,
-    private answerLikeService: AnswerLikeService,
-    public dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -29,8 +25,8 @@ export class AnswersComponent implements OnInit, AfterViewChecked {
       const questionId = params['idQuestion'];
       if (questionId && !isNaN(Number(questionId))) {
         this.getQuestionDetails(Number(questionId));
-        this.getAnswers(Number(questionId));
       } else {
+        console.error('Invalid question ID:', questionId);
       }
     });
   }
@@ -38,35 +34,11 @@ export class AnswersComponent implements OnInit, AfterViewChecked {
   getQuestionDetails(id: number): void {
     this.questionService.getQuestionById(id).subscribe(
       data => {
+        console.log('Question data:', data);
         this.question = data;
       },
       error => {
-      }
-    );
-  }
-
-  getAnswers(idQuestion: number): void {
-    this.answerService.getAnswersByQuestion(idQuestion).subscribe(
-      data => {
-        this.answers = data.content;
-        this.answers.forEach(answer => {
-          this.getLikesForAnswer(answer.idAnswer);
-        });
-      },
-      error => {
-      }
-    );
-  }
-
-  getLikesForAnswer(idAnswer: number): void {
-    this.answerLikeService.getLikes(idAnswer).subscribe(
-      likes => {
-        const answer = this.answers.find(ans => ans.idAnswer === idAnswer);
-        if (answer) {
-          answer.likes = likes;
-        }
-      },
-      error => {
+        console.error('Error fetching question details', error);
       }
     );
   }
@@ -74,28 +46,7 @@ export class AnswersComponent implements OnInit, AfterViewChecked {
   ngAfterViewChecked(): void {
     const blocks = document.querySelectorAll('pre code');
     blocks.forEach(block => {
-      if (!block.hasAttribute('data-highlighted')) {
-        hljs.highlightElement(block as HTMLElement);
-        block.setAttribute('data-highlighted', 'yes');
-      }
-    });
-  }
-
-  openQuestionModal(idQuestion: number): void {
-    this.dialog.open(AnswerModalComponent, {
-      data: { idQuestion }
-    });
-  }
-
-  openAnswerModal(idAnswer?: number): void {
-    const dialogRef = this.dialog.open(AnswerModalComponent, {
-      data: { idQuestion: this.question.idQuestion, idAnswer }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === true) {
-        this.getAnswers(this.question.idQuestion);
-      }
+      hljs.highlightElement(block as HTMLElement);
     });
   }
 
@@ -295,4 +246,36 @@ export class AnswersComponent implements OnInit, AfterViewChecked {
         return { class: 'tag-default', iconUrl: '' };
     }
   }
+
+  openEditModal(): void {
+    const dialogRef = this.dialog.open(AnswersUserModalComponent, {
+      data: { question: this.question }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Actualizar la pregunta en la vista, si fue editada
+        this.question = result;
+      }
+    });
+  }
+
+  deleteQuestion(questionId: number) {
+    if (questionId) {
+      this.questionService.deleteQuestion(questionId).subscribe({
+        next: response => {
+          console.log('Pregunta eliminada con éxito:', response);
+          // Redirigir a "mis preguntas" después de eliminar
+          this.router.navigate(['/myQuestions']);
+        },
+        error: error => {
+          console.error('Error al eliminar la pregunta:', error);
+        }
+      });
+    } else {
+      console.error('ID de pregunta es undefined.');
+    }
+  }
+
+  closeModal(): void {}
 }

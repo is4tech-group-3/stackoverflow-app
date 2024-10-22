@@ -1,102 +1,96 @@
-import { Component, OnInit, AfterViewChecked } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { QuestionService } from '../../service/question/question.service';
-import { AnswerService } from '../../service/answer/answer.service';
-import { AnswerLikeService } from '../../service/answer-like/answer-like.service';
-import { AnswerModalComponent } from './answer-modal/answer-modal.component';
-import hljs from 'highlight.js';
+import { Router } from '@angular/router';
+import { SessionService } from 'src/app/shared/services/sesion/session.service';
+import { CookieUtil } from 'src/app/shared/utils/CookieUtil';
+import { UserService } from 'src/app/admin/service/user.service';
+import { TranslateService } from '@ngx-translate/core'; // <-- Importa el TranslateService
 
 @Component({
-  selector: 'app-answers',
-  templateUrl: './answers.component.html',
-  styleUrls: ['./answers.component.scss']
+  selector: 'app-my-questions',
+  templateUrl: './my-questions.component.html',
+  styleUrls: ['./my-questions.component.scss']
 })
-export class AnswersComponent implements OnInit, AfterViewChecked {
-  question: any;
-  answers: any[] = [];
+export class MyQuestionsComponent implements OnInit {
+  myQuestions: any[] = [];
+  relatedTags: any[] = [];
+  visibleTags: any[] = [];
+  user: any = null;
+  showAllTags: boolean = false;
+  maxVisibleTags: number = 5;
+  currentUserId: string | null = null;
 
   constructor(
-    private route: ActivatedRoute,
     private questionService: QuestionService,
-    private answerService: AnswerService,
-    private answerLikeService: AnswerLikeService,
-    public dialog: MatDialog
+    private router: Router,
+    private sessionService: SessionService,
+    private userService: UserService,
+    private translateService: TranslateService // <-- Inyecta el servicio de traducción
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      const questionId = params['idQuestion'];
-      if (questionId && !isNaN(Number(questionId))) {
-        this.getQuestionDetails(Number(questionId));
-        this.getAnswers(Number(questionId));
-      } else {
-      }
-    });
+    if (this.sessionService.isLoggedIn()) {
+      this.getCurrentUserId();
+      this.loadUserProfile();
+    }
   }
 
-  getQuestionDetails(id: number): void {
-    this.questionService.getQuestionById(id).subscribe(
+  sanitizeDescription(html: string): string {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    return div.textContent || div.innerText || '';
+  }
+
+  getCurrentUserId(): void {
+    this.currentUserId = CookieUtil.getValue('userId');
+    console.log('Current User ID:', this.currentUserId);
+  }
+
+  getMyQuestions(): void {
+    this.questionService.getQuestions().subscribe(
       data => {
-        this.question = data;
+        this.myQuestions = data.content
+          .filter(
+            (question: any) =>
+              question.author.idUser === Number(this.currentUserId)
+          )
+          .map((question: any) => ({
+            ...question,
+            description: this.sanitizeDescription(question.description)
+          }));
+
       },
       error => {
+        // Usa el servicio de traducción para mostrar mensajes traducidos
+        const errorMessage = this.translateService.instant(
+          'error.fetchingQuestions'
+        );
       }
     );
   }
 
-  getAnswers(idQuestion: number): void {
-    this.answerService.getAnswersByQuestion(idQuestion).subscribe(
-      data => {
-        this.answers = data.content;
-        this.answers.forEach(answer => {
-          this.getLikesForAnswer(answer.idAnswer);
-        });
-      },
-      error => {
-      }
-    );
-  }
-
-  getLikesForAnswer(idAnswer: number): void {
-    this.answerLikeService.getLikes(idAnswer).subscribe(
-      likes => {
-        const answer = this.answers.find(ans => ans.idAnswer === idAnswer);
-        if (answer) {
-          answer.likes = likes;
+  loadUserProfile(): void {
+    if (this.currentUserId) {
+      this.userService.getUserById(Number(this.currentUserId)).subscribe({
+        next: response => {
+          this.user = response;
+          this.getMyQuestions();
+        },
+        error: () => {
+          const errorMessage = this.translateService.instant(
+            'error.fetchingProfile'
+          );
         }
-      },
-      error => {
-      }
-    );
+      });
+    } else {
+      const errorMessage = this.translateService.instant(
+        'error.userIdNotFound'
+      );
+    }
   }
 
-  ngAfterViewChecked(): void {
-    const blocks = document.querySelectorAll('pre code');
-    blocks.forEach(block => {
-      if (!block.hasAttribute('data-highlighted')) {
-        hljs.highlightElement(block as HTMLElement);
-        block.setAttribute('data-highlighted', 'yes');
-      }
-    });
-  }
-
-  openQuestionModal(idQuestion: number): void {
-    this.dialog.open(AnswerModalComponent, {
-      data: { idQuestion }
-    });
-  }
-
-  openAnswerModal(idAnswer?: number): void {
-    const dialogRef = this.dialog.open(AnswerModalComponent, {
-      data: { idQuestion: this.question.idQuestion, idAnswer }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === true) {
-        this.getAnswers(this.question.idQuestion);
-      }
-    });
+  showMoreTags(): void {
+    this.showAllTags = true;
   }
 
   getTagClass(tag: string): { class: string; iconUrl: string } {
@@ -294,5 +288,9 @@ export class AnswersComponent implements OnInit, AfterViewChecked {
       default:
         return { class: 'tag-default', iconUrl: '' };
     }
+  }
+
+  viewQuestion(questionId: number): void {
+    this.router.navigate(['/answers-user', questionId]);
   }
 }

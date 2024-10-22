@@ -1,102 +1,159 @@
-import { Component, OnInit, AfterViewChecked } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
-import { QuestionService } from '../../service/question/question.service';
-import { AnswerService } from '../../service/answer/answer.service';
-import { AnswerLikeService } from '../../service/answer-like/answer-like.service';
-import { AnswerModalComponent } from './answer-modal/answer-modal.component';
-import hljs from 'highlight.js';
+import {
+  Component,
+  Inject,
+  OnInit,
+  ElementRef,
+  ViewChild
+} from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { TagService } from 'src/app/admin/service/tag.service';
+import { QuestionService } from 'src/app/operation/service/question/question.service';
+import * as SimpleMDE from 'simplemde';
+import { marked } from 'marked';
+import { PageEvent } from '@angular/material/paginator';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-answers',
-  templateUrl: './answers.component.html',
-  styleUrls: ['./answers.component.scss']
+  selector: 'app-answer-user-modal',
+  templateUrl: './answers-user-modal.component.html',
+  styleUrls: ['./answers-user-modal.component.scss']
 })
-export class AnswersComponent implements OnInit, AfterViewChecked {
-  question: any;
-  answers: any[] = [];
+export class AnswersUserModalComponent implements OnInit {
+  tags: any[] = [];
+  totalItems: number = 0;
+  currentPage: number = 0;
+  selectedTags: Set<any> = new Set();
+  title: string = '';
+  description: string = '';
+  simpleMDE: SimpleMDE | undefined;
+
+  @ViewChild('mdeEditor', { static: true }) mdeEditor!: ElementRef;
 
   constructor(
-    private route: ActivatedRoute,
+    private tagService: TagService,
     private questionService: QuestionService,
-    private answerService: AnswerService,
-    private answerLikeService: AnswerLikeService,
-    public dialog: MatDialog
+    public dialogRef: MatDialogRef<AnswersUserModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      const questionId = params['idQuestion'];
-      if (questionId && !isNaN(Number(questionId))) {
-        this.getQuestionDetails(Number(questionId));
-        this.getAnswers(Number(questionId));
-      } else {
-      }
-    });
-  }
-
-  getQuestionDetails(id: number): void {
-    this.questionService.getQuestionById(id).subscribe(
-      data => {
-        this.question = data;
-      },
-      error => {
-      }
+    this.currentPage = this.data.page || 0;
+    this.title = this.data.question.title;
+    this.description = this.data.question.description;
+    this.selectedTags = new Set(
+      this.data.question.tags.map((tag: any) => tag.idTag)
     );
+    this.getTags(this.currentPage);
+    this.initializeEditor();
   }
 
-  getAnswers(idQuestion: number): void {
-    this.answerService.getAnswersByQuestion(idQuestion).subscribe(
-      data => {
-        this.answers = data.content;
-        this.answers.forEach(answer => {
-          this.getLikesForAnswer(answer.idAnswer);
+  initializeEditor() {
+    this.translate
+      .get('input.questionDescription.placeholder')
+      .subscribe(placeholder => {
+        this.simpleMDE = new SimpleMDE({
+          element: this.mdeEditor.nativeElement,
+          initialValue: this.description,
+          placeholder: placeholder,
+          toolbar: [
+            'bold',
+            'italic',
+            '|',
+            'link',
+            'quote',
+            {
+              name: 'code',
+              action: SimpleMDE.toggleCodeBlock,
+              className: 'fa fa-code',
+              title: 'Insertar código'
+            },
+            '|',
+            'ordered-list',
+            'unordered-list',
+            'horizontal-rule',
+            '|',
+            'undo',
+            'redo'
+          ],
+          autosave: {
+            enabled: false,
+            uniqueId: 'questionEditor'
+          },
+          renderingConfig: {
+            codeSyntaxHighlighting: true
+          },
+          status: false
         });
+        this.simpleMDE.codemirror.setSize('100%', '200px');
+        this.simpleMDE.codemirror.getWrapperElement().style.minHeight = '200px';
+
+        this.simpleMDE.codemirror.on('change', () => {
+          this.description = this.simpleMDE?.value() || '';
+        });
+      });
+  }
+
+  getTags(page: number): void {
+    this.tagService.getAllTags(page).subscribe(
+      data => {
+        this.tags = data.content;
+        this.totalItems = data.totalElements;
       },
       error => {
+        console.error('Error fetching tags', error);
       }
     );
   }
 
-  getLikesForAnswer(idAnswer: number): void {
-    this.answerLikeService.getLikes(idAnswer).subscribe(
-      likes => {
-        const answer = this.answers.find(ans => ans.idAnswer === idAnswer);
-        if (answer) {
-          answer.likes = likes;
+  handlePageEvent(event: PageEvent) {
+    this.currentPage = event.pageIndex;
+    this.getTags(this.currentPage);
+  }
+
+  toggleTagSelection(tag: any) {
+    const tagId = tag.idTag;
+    if (this.selectedTags.has(tagId)) {
+      this.selectedTags.delete(tagId);
+    } else {
+      if (this.selectedTags.size < 8) {
+        this.selectedTags.add(tagId);
+      }
+    }
+  }
+
+  isTagSelected(tag: any): boolean {
+    return this.selectedTags.has(tag.idTag);
+  }
+
+  saveQuestion() {
+    const question = {
+      title: this.title,
+      description: marked(this.description),
+      idTags: Array.from(this.selectedTags)
+    };
+
+    const questionId = this.data.question.idQuestion;
+
+    console.log('Selected tags:', Array.from(this.selectedTags));
+    console.log('Question object to save:', question);
+
+    if (questionId) {
+      this.questionService.updateQuestion(questionId, question).subscribe({
+        next: response => {
+          this.dialogRef.close(response);
+        },
+        error: error => {
+          console.error('Error updating question:', error);
         }
-      },
-      error => {
-      }
-    );
+      });
+    } else {
+      console.error('Question ID is undefined.');
+    }
   }
 
-  ngAfterViewChecked(): void {
-    const blocks = document.querySelectorAll('pre code');
-    blocks.forEach(block => {
-      if (!block.hasAttribute('data-highlighted')) {
-        hljs.highlightElement(block as HTMLElement);
-        block.setAttribute('data-highlighted', 'yes');
-      }
-    });
-  }
-
-  openQuestionModal(idQuestion: number): void {
-    this.dialog.open(AnswerModalComponent, {
-      data: { idQuestion }
-    });
-  }
-
-  openAnswerModal(idAnswer?: number): void {
-    const dialogRef = this.dialog.open(AnswerModalComponent, {
-      data: { idQuestion: this.question.idQuestion, idAnswer }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === true) {
-        this.getAnswers(this.question.idQuestion);
-      }
-    });
+  close(): void {
+    this.dialogRef.close();
   }
 
   getTagClass(tag: string): { class: string; iconUrl: string } {

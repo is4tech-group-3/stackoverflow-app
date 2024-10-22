@@ -11,6 +11,9 @@ import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
 import { AddNewComponent } from './components/news/add-new/add-new.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AnswerModalComponent } from './components/answers/answer-modal/answer-modal.component';
+import { AnswersUserComponent } from './components/answers-user/answers-user.component';
+import { AnswersUserModalComponent } from './components/answers-user/answers-user-modal/answers-user-modal.component';
+import { MyQuestionsComponent } from './components/my-questions/my-questions.component';
 
 @NgModule({
   declarations: [
@@ -18,17 +21,28 @@ import { AnswerModalComponent } from './components/answers/answer-modal/answer-m
     QuestionsComponent,
     QuestionModalComponent,
 
+   
     ProfileComponent,
 
+   
     NewsDetailComponent,
     AnswersComponent,
     AddNewComponent,
-    AnswerModalComponent
+    AnswerModalComponent,
+    AnswerModalComponent,
+    AnswersUserComponent,
+    AnswersUserModalComponent,
+    MyQuestionsComponent
   ],
   imports: [
+    
     SharedModule,
+   
     OperationRoutingModule,
+   
     HighlightModule,
+    NgxPaginationModule
+  ,
     NgxPaginationModule
   ],
   providers: [
