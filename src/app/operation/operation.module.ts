@@ -17,9 +17,9 @@ import { AnswerModalComponent } from './components/answers/answer-modal/answer-m
     NewsComponent,
     QuestionsComponent,
     QuestionModalComponent,
-   
+
     ProfileComponent,
-   
+
     NewsDetailComponent,
     AnswersComponent,
     AddNewComponent,
